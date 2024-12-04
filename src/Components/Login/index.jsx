@@ -32,7 +32,8 @@ export default function Login() {
       localStorage.setItem("apellido", response.data.apellido);
       navigate("/home")
     } catch (error) {
-      setError("El usuario o la contraseña son incorrectos");
+      setError(true);
+      console.log(error);
     }
   };
 
@@ -40,23 +41,15 @@ export default function Login() {
     <Grid
       container
       sx={{
-        height: "100vh",
+        width: "70vw",
         justifyContent: "center",
-        alignItems: "center",
         backgroundColor: "#f9f9fb",
+        textAlign:"center",
+        borderRadius:"15px",
+        overflow: "hidden",
+
       }}
     >
-      <Grid
-        container
-        sx={{
-          width: 1200,
-          height: 700,
-          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-          borderRadius: "17px",
-          overflow: "hidden",
-          backgroundColor: "white",
-        }}
-      >
         <Grid
           item
           size={6}
@@ -65,6 +58,7 @@ export default function Login() {
             borderRight: "1px solid #ddd",
             display: "flex",
             flexDirection: "column",
+            justifyContent: "space-evenly",
           }}
         >
           <Typography
@@ -97,6 +91,7 @@ export default function Login() {
                   sx={{
                     marginBottom: "5px",
                     color: "#616161",
+                    textAlign:"left",
                   }}
                 >
                   E-mail address
@@ -128,6 +123,7 @@ export default function Login() {
                   sx={{
                     marginBottom: "5px",
                     color: "#616161",
+                    textAlign:"left",
                   }}
                 >
                   Password
@@ -155,7 +151,7 @@ export default function Login() {
                 />
                 {error && (
                   <Typography color="error" sx={{ marginTop: "20px", textAlign:"center" }}>
-                    {error}
+                    El usuario o la contraseña son incorrectos
                   </Typography>
                 )}
               </Grid>
@@ -188,16 +184,17 @@ export default function Login() {
             backgroundRepeat: 'no-repeat',
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-evenly",
+            justifyContent: "space-between",
             alignItems: "center",
             padding: "60px",
             textAlign: "center",
+
           }}
         >
           <Typography
             sx={{
               color: "#F9F9F9",
-              marginBottom: "20px",
+              marginBottom: "40px",
               fontWeight: "bold",
               fontSize: "4rem",
               letterSpacing: "2px",
@@ -230,7 +227,6 @@ export default function Login() {
             Sign Up
           </Button>
         </Grid>
-      </Grid>
     </Grid>
   );
 }

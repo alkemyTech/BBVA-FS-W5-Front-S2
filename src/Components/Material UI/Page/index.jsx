@@ -6,7 +6,7 @@ export default function Page({children}) {
   return (
     <div> 
         <Header/>
-        <main>
+        <main style={{display:"flex",alignItems:"center", justifyContent:"center", minHeight:"86vh"}}>
             {children}
         </main>
         <Footer/>
