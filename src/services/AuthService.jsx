@@ -5,14 +5,17 @@ const AuthService = {
   getToken: () => {
     return localStorage.getItem("token");
   },
-  getUsername: () => {
-    return localStorage.getItem("username");
+  getEmail: () => {
+    return localStorage.getItem("email");
   },
   getNombre: () => {
     return localStorage.getItem("nombre");
   },
   getApellido: () => {
     return localStorage.getItem("apellido");
+  },
+  GetRol: () => {
+    return localStorage.getRol("rol");
   },
   logout: () => {
     localStorage.removeItem("token");
