@@ -43,7 +43,7 @@ export default function Login() {
       sx={{
         width: "70vw",
         justifyContent: "center",
-        backgroundColor: "#f9f9fb",
+        backgroundColor: "#FFFFFF",
         textAlign:"center",
         borderRadius:"15px",
         overflow: "hidden",
@@ -215,7 +215,7 @@ export default function Login() {
           </Typography>
           <Button
             sx={{
-              backgroundColor: "white",
+              backgroundColor: "#FFFFFF",
               color: "#016a85",
               fontWeight: "bold",
               padding: "15px 35px",
