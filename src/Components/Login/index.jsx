@@ -52,7 +52,7 @@ export default function Login() {
             return;
         }
         try {
-            const response = await api.post("http://localhost:8080/auth/login", { username: user.username, password: user.password });
+            const response = await api.post("/auth/login", { username: user.username, password: user.password });
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("username", user.username);
             localStorage.setItem("nombre", response.data.nombre);
@@ -244,10 +244,9 @@ export default function Login() {
                     justifyContent: "space-around"
                 }}
                 >
-                <Grid container>
+                <Grid container spacing={12}>
                     <Grid item size={12}>
                     <Typography
-                        variant="h3"
                         sx={{
                         color: 'white',
                         marginBottom: '20px',
@@ -255,6 +254,7 @@ export default function Login() {
                         letterSpacing: '2px', 
                         fontSize: "54px",
                         textShadow: '2px 2px 4px rgba(0, 0, 0, 0.6)', 
+                        fontSize: "4rem",
                         }}
                     >
                         New here?
@@ -278,7 +278,6 @@ export default function Login() {
                     <Grid item size={12}>
                     <Button
                         sx={{
-                        marginTop:"190px",
                         background: 'white',
                         width: "60vh",
                         padding: "15px 35px",
