@@ -117,7 +117,7 @@ export default function Login() {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <MailRoundedIcon />
+                        <MailRoundedIcon  sx={{ color: "#016a85" }}/>
                       </InputAdornment>
                     ),
                   },
@@ -152,12 +152,12 @@ export default function Login() {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <LockRoundedIcon />
+                        <LockRoundedIcon  sx={{ color: "#016a85" }}/>
                       </InputAdornment>
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton
+                        <IconButton sx={{ color: "#016a85" }}
                           aria-label={showPassword ? 'hide password' : 'show password'}
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
