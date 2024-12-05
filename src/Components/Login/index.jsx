@@ -120,7 +120,7 @@ export default function Login() {
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
-                          <MailRoundedIcon sx={{ color: "#71DB77" }} />
+                          <MailRoundedIcon sx={{ color: "#43A047" }} />
                         </InputAdornment>
                       ),
                     },
@@ -146,13 +146,13 @@ export default function Login() {
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
-                          <LockRoundedIcon sx={{ color: "#71DB77" }} />{" "}
+                          <LockRoundedIcon sx={{ color: "#43A047" }} />{" "}
                         </InputAdornment>
                       ),
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
-                            sx={{ color: "#66BB6A" }}
+                            sx={{ color: "#43A047" }}
                             aria-label={
                               showPassword ? "hide password" : "show password"
                             }
@@ -189,7 +189,7 @@ export default function Login() {
                   variant="contained"
                   sx={{
                     marginTop: "40px",
-                    background: "#71DB77",
+                    background: "#43A047",
                     padding: "15px 35px",
                     borderRadius: "25px",
                     fontWeight: "bold",

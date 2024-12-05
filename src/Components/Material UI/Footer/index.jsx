@@ -15,7 +15,7 @@ import PinterestIcon from '@mui/icons-material/Pinterest';
 
 export default function Footer() {
   return (
-    <Grid container spacing={3} sx={{ justifyContent: "space-between", textAlign: "center", backgroundColor: "#71DB77", p: 2, color: "#fff" }}>
+    <Grid container spacing={3} sx={{ justifyContent: "space-between", textAlign: "center", backgroundColor: "#43A047", p: 2, color: "#fff" }}>
       <Grid item size={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px" }}>
         <Grid container spacing={2} sx={{ borderRight: "1px solid #FFFFFF", flexGrow: 1 }}>
           <Grid item size={12}>

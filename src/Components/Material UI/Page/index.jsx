@@ -7,7 +7,7 @@ export default function Page({ children }) {
     <div>
       <Header />
       <main style={{
-        display: "flex", alignItems: "center", justifyContent: "center", minHeight: "85vh", 
+        display: "flex", alignItems: "center", justifyContent: "center", minHeight: "85vh", marginTop:"5vh", marginBottom:"5vh", 
       }}>
         {children}
       </main>
