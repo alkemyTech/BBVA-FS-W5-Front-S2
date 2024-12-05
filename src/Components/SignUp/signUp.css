@@ -1,0 +1,29 @@
+.form-title {
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 4rem;
+  letter-spacing: 2px;
+}
+
+.grid-container {
+  width: 60vw;
+  justify-content: center;
+  background-color: #ffffff;
+  text-align: center;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.grid-item {
+  padding: 30px;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.error-message {
+  margin-top: 15px;
+  color: #f44336;
+}
