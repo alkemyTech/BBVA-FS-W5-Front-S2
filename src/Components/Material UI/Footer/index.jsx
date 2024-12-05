@@ -14,8 +14,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 export default function Footer() {
   return (
-    <Grid container sx={{ display:"flex", justifyContent: "space-around",textAlign:"center",backgroundColor: "#5B9C96", color: "#fff", padding: "30px 50px" }}>
-      <Grid item size={4} sx={{ display: "flex", flexDirection: "column", gap:2, justifyContent:"center", alignItems:"center"}}>
+    <Grid container sx={{ display:"flex", justifyContent: "space-around",textAlign:"center",backgroundColor: "#43A047", color: "#fff", padding: "30px 50px" }}>
+      <Grid item size={4} sx={{ borderRight:"1px solid #FFFF", display: "flex", flexDirection: "column", gap:2, justifyContent:"center", alignItems:"center"}}>
         <Typography variant="h6">Contacto</Typography>
         <Grid container sx={{display:"flex",flexDirection:"column",gap: 2, color: "#fff",justifyContent: "center"}}>
           <Grid item  sx={{ display:"flex"}}>
@@ -32,7 +32,7 @@ export default function Footer() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item size={4} sx={{display:"flex", flexDirection:"column",gap:2}}>
+      <Grid item size={4} sx={{borderRight:"1px solid #FFFF", display:"flex", flexDirection:"column",gap:2}}>
         <Typography variant="h6">Navegación</Typography>
         <Link href="/terms" underline="hover" color="#fff">Términos y condiciones</Link>
         <Link href="/privacy" underline="hover" color="#fff">Política de privacidad</Link>
