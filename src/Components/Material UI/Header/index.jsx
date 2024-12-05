@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from "../../../assets/img/logo.png";// Asegúrate de que la ruta sea correcta
+import logo from "../../../assets/img/logo.png";
 
 export default function Header() {
   
