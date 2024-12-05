@@ -66,7 +66,7 @@ export default function Login() {
       <Grid
         container
         sx={{
-          width: "60vw",
+          width: "50vw",
           justifyContent: "center",
           backgroundColor: "#FFFFFF",
           textAlign: "center",
@@ -120,7 +120,7 @@ export default function Login() {
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
-                          <MailRoundedIcon sx={{ color: "#43A047" }} />
+                          <MailRoundedIcon sx={{ color: "#71DB77" }} />
                         </InputAdornment>
                       ),
                     },
@@ -146,7 +146,7 @@ export default function Login() {
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
-                          <LockRoundedIcon sx={{ color: "#43A047" }} />{" "}
+                          <LockRoundedIcon sx={{ color: "#71DB77" }} />{" "}
                         </InputAdornment>
                       ),
                       endAdornment: (
@@ -189,7 +189,7 @@ export default function Login() {
                   variant="contained"
                   sx={{
                     marginTop: "40px",
-                    background: "#43A047",
+                    background: "#71DB77",
                     padding: "15px 35px",
                     borderRadius: "25px",
                     fontWeight: "bold",

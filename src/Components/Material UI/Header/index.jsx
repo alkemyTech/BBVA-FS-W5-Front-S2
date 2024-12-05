@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from "../../../assets/img/logo.png";
+import logo from "../../../assets/img/lynxlogo.png";
+import nombre from "../../../assets/img/lynxnombre2.png";
 
 export default function Header() {
   
@@ -25,58 +26,42 @@ export default function Header() {
     <Grid 
       container
       sx={{
-        padding: '20px',
-        borderRadius: '20px',
-        border: "1px solid #43A047",
         backgroundColor: '#FFFFFF', 
         textAlign: 'center',
-        margin: '2vh auto', 
-        maxWidth: '70%',
+        padding:"15px 0px",
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-        alignItems: 'center'
+        justifyContent:"space-evenly",
+        display:"flex",
+
       }}
     >
+      <Grid item size={2}sx={{ display: 'flex',  alignItems: 'center',  }}>  
+        <Link to="/home">
+          <img src={logo} width={"100px"} alt="Logo" />
+        </Link>
+        <Link to="/home">
+          <img src={nombre} width={"100px"} alt="Marca" />
+        </Link>
+      
+      </Grid>
+      <Grid item size={8}sx={{ display: 'flex',  alignItems: 'center',  }}>
+        <Link to="/info1" style={{ textDecoration: 'none', color: '#000000' }}>
+          <Typography variant="body1"></Typography>
+        </Link>
+        <Link to="/info2" style={{ textDecoration: 'none', color: '#000000' }}>
+          <Typography variant="body1">Transacciones</Typography>
+        </Link>
+        <Link to="/info3" style={{ textDecoration: 'none', color: '#000000' }}>
+          <Typography variant="body1">Inversiones</Typography>
+        </Link>
+      </Grid>
       <Grid 
         item 
         size={2}
         sx={{
-          display: 'flex',  
-          alignItems: 'center', 
-          gap: 2, 
-        }}
-      >  
-        <Link to="/home">
-          <img src={logo} width={"50px"} alt="Logo" />
-        </Link>
-        <Typography variant="h3">Lynx</Typography>
-        
-      </Grid>
-      <Grid 
-        item 
-        size={6}
-        sx={{
           display: 'flex',
           justifyContent: 'center',
-          gap: 4,
-        }}
-      >
-        <Link to="/info1" style={{ textDecoration: 'none', color: '#000000' }}>
-          <Typography variant="body1">Información</Typography>
-        </Link>
-        <Link to="/info2" style={{ textDecoration: 'none', color: '#000000' }}>
-          <Typography variant="body1">Información 2</Typography>
-        </Link>
-        <Link to="/info3" style={{ textDecoration: 'none', color: '#000000' }}>
-          <Typography variant="body1">Información 3</Typography>
-        </Link>
-      </Grid>
-
-      <Grid 
-        item 
-        size={4}
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
+          gap:1,
         }}
       >
         {isAuthenticated ? (
@@ -101,26 +86,20 @@ export default function Header() {
               type="submit"
               variant="contained"
               sx={{
-                background: "#43A047",
-                padding: "15px 20px",
+                background: "#71DB77",
                 borderRadius: "25px",
                 fontWeight: "bold",
                 width: "10vw",
-                mx:2,
               }}
             >
               Login
             </Button>
             <Button 
               type="submit"
-              variant="outlined"
               sx={{
-                color:"#43A047",
-                padding: "15px 20px",
+                color:"#71DB77",
                 borderRadius: "25px",
-                border:"1px solid #43a047",
                 fontWeight: "bold",
-                width: "10vw",
               }}
             >
               Register
