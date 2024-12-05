@@ -3,6 +3,8 @@ import {Button, Typography} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import {Link, useNavigate} from 'react-router-dom';
 import AuthService from '../../../services/AuthService'; // Asegúrate de importar AuthService
+import logo from "../../../assets/img/logo.png";
+
 
 export default function Header() {
   
@@ -22,9 +24,11 @@ export default function Header() {
 
 
   return (
-    <Grid container sx={{padding: '1% 50px', margin: '1vh 1vh', borderRadius: "0px"}}>
+    <Grid container sx={{padding: '1% 50px', margin: '1vh 1vh', borderRadius: "0px", backgroundColor:"#5B9C96"}}>
       <Grid item size={2} sx={{display: "flex", justifyContent: "center", gap: 2 }}>
-        <Typography>Logo</Typography>
+        <Link to="/home">
+          <img src={logo} width={"50px"} alt="Logo" />
+        </Link>
       </Grid>
       <Grid item size={8} sx={{display: "flex", justifyContent: "center", Gap: 4 }}>
         <Typography>Informacion</Typography>

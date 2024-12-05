@@ -82,7 +82,7 @@ export default function Login() {
             letterSpacing: "2px",
           }}
         >
-          Sign In
+            Iniciar sesion
         </Typography>
         <Typography
           variant="h6"
@@ -92,7 +92,7 @@ export default function Login() {
             color: "#3A3A3A",
           }}
         >
-          Please enter your details
+          Porfavor ingresa tus datos
         </Typography>
         <form onSubmit={handleLogin}>
           <Grid container spacing={3}>
@@ -105,11 +105,11 @@ export default function Login() {
                   textAlign: "left",
                 }}
               >
-                E-mail address
+                E-mail
               </Typography>
               <TextField
                 fullWidth
-                placeholder="Type your e-mail"
+                placeholder="Ingresa tu email"
                 variant="outlined"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -139,11 +139,11 @@ export default function Login() {
                   textAlign: "left",
                 }}
               >
-                Password
+                Contraseña
               </Typography>
               <TextField
                 fullWidth
-                placeholder="Type your password"
+                placeholder="Ingresa tu contraseña"
                 type={showPassword ? 'text' : 'password'}
                 variant="outlined"
                 value={password}
@@ -184,7 +184,7 @@ export default function Login() {
                   textAlign: "right",
                 }}
               >
-                Forgot password?
+                Olvide mi contraseña
               </Typography>
               {error && (
                 <Typography color="error" sx={{ marginTop: "20px", textAlign: "center" }}>
@@ -206,7 +206,7 @@ export default function Login() {
                   width: "20vw",
                 }}
               >
-                Login
+                Iniciar sesion
               </Button>
             </Grid>
           </Grid>
@@ -216,10 +216,7 @@ export default function Login() {
         item
         size={5}
         sx={{
-          backgroundImage: `url(${fondo2})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          backgroundColor:"#5B9C96",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -238,7 +235,7 @@ export default function Login() {
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)",
           }}
         >
-          New here?
+          Sos nuevo?
         </Typography>
         <Typography
           sx={{
@@ -248,7 +245,7 @@ export default function Login() {
             lineHeight: 1.5,
           }}
         >
-          Sign up and discover a great amount of new opportunities
+          Crea tu cuenta y descubri los mejores beneficios para vos
         </Typography>
         <Button
           sx={{
@@ -261,7 +258,7 @@ export default function Login() {
           }}
           onClick={() => navigate("/register")}
         >
-          Sign Up
+            Registrarse
         </Button>
       </Grid>
     </Grid>
