@@ -51,20 +51,20 @@ export default function Login() {
     <Grid
       container
       sx={{
-        width: "60vw",
+        width: "50vw",
         justifyContent: "center",
         backgroundColor: "#FFFFFF",
         textAlign: "center",
         borderRadius: "25px",
         overflow: "hidden",
+        padding: "10px",
+
       }}
     >
       <Grid
         item
-        size={12}
+        size={5}
         sx={{
-          padding: "30px",
-          borderRight: "1px solid #ddd",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-evenly",
@@ -149,13 +149,13 @@ export default function Login() {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <LockRoundedIcon sx={{ color: "#43A047" }} /> {/* Cambié el verde aquí */}
+                        <LockRoundedIcon sx={{ color: "#43A047" }} ></LockRoundedIcon>
                       </InputAdornment>
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
-                          sx={{ color: "#66BB6A" }} // Cambié el verde aquí
+                          sx={{ color: "#66BB6A" }} 
                           aria-label={showPassword ? 'hide password' : 'show password'}
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}

@@ -12,7 +12,12 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Mulish, sans-serif',
   },
+  grid:{
+    bgColor:"background.paper",
+  }
 });
+
+
 
 
 
