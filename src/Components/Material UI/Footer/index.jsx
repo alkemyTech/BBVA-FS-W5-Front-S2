@@ -70,7 +70,7 @@ export default function Footer() {
       </Grid>
       <Grid item size={12}>
         <Typography variant="body2">
-          © 2024 Billetera Virtual. Todos los derechos reservados.
+          © 2024 Lynx. Todos los derechos reservados.
         </Typography>
       </Grid>
     </Grid>
