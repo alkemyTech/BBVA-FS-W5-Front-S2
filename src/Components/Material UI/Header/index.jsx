@@ -96,7 +96,7 @@ export default function Header() {
           Logout
             </Button>
         ) : (
-          <Link to="/login" style={{ textDecoration: 'none' }}>
+          <Link to="/" style={{ textDecoration: 'none' }}>
             <Button 
               type="submit"
               variant="contained"
