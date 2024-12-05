@@ -7,7 +7,7 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import fondo from "../../assets/img/fondo.png";
+import fondo2 from "../../assets/img/fondo2.png";
 import Grid from "@mui/material/Grid2";
 import api from "../../services/api";
 import AuthService from "../../services/AuthService";
@@ -23,8 +23,6 @@ export default function Login() {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -53,19 +51,19 @@ export default function Login() {
     <Grid
       container
       sx={{
-        width: "70vw",
+        width: "60vw",
         justifyContent: "center",
         backgroundColor: "#FFFFFF",
         textAlign: "center",
-        borderRadius: "15px",
+        borderRadius: "25px",
         overflow: "hidden",
       }}
     >
       <Grid
         item
-        size={6}
+        size={12}
         sx={{
-          padding: "60px",
+          padding: "30px",
           borderRight: "1px solid #ddd",
           display: "flex",
           flexDirection: "column",
@@ -77,12 +75,11 @@ export default function Login() {
             marginBottom: "10px",
             textAlign: "center",
             fontWeight: "bold",
-            color: "#016a85",
             fontSize: "4rem",
             letterSpacing: "2px",
           }}
         >
-          Sign In
+          Iniciar sesión
         </Typography>
         <Typography
           variant="h6"
@@ -92,7 +89,7 @@ export default function Login() {
             color: "#3A3A3A",
           }}
         >
-          Please enter your details
+          Por favor ingresa tus datos
         </Typography>
         <form onSubmit={handleLogin}>
           <Grid container spacing={3}>
@@ -105,11 +102,11 @@ export default function Login() {
                   textAlign: "left",
                 }}
               >
-                E-mail address
+                E-mail
               </Typography>
               <TextField
                 fullWidth
-                placeholder="Type your e-mail"
+                placeholder="Ingresa tu email"
                 variant="outlined"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -117,7 +114,7 @@ export default function Login() {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <MailRoundedIcon  sx={{ color: "#016a85" }}/>
+                        <MailRoundedIcon sx={{ color: "#43A047" }} /> 
                       </InputAdornment>
                     ),
                   },
@@ -139,11 +136,11 @@ export default function Login() {
                   textAlign: "left",
                 }}
               >
-                Password
+                Contraseña
               </Typography>
               <TextField
                 fullWidth
-                placeholder="Type your password"
+                placeholder="Ingresa tu contraseña"
                 type={showPassword ? 'text' : 'password'}
                 variant="outlined"
                 value={password}
@@ -152,12 +149,13 @@ export default function Login() {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <LockRoundedIcon  sx={{ color: "#016a85" }}/>
+                        <LockRoundedIcon sx={{ color: "#43A047" }} /> {/* Cambié el verde aquí */}
                       </InputAdornment>
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton sx={{ color: "#016a85" }}
+                        <IconButton
+                          sx={{ color: "#66BB6A" }} // Cambié el verde aquí
                           aria-label={showPassword ? 'hide password' : 'show password'}
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
@@ -176,83 +174,57 @@ export default function Login() {
                 }}
                 error={error}
               />
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  marginBottom: "10px",
+                  color:"#43A047",
+                  textAlign: "right",
+                }}
+              >
+                Olvidé mi contraseña
+              </Typography>
               {error && (
                 <Typography color="error" sx={{ marginTop: "20px", textAlign: "center" }}>
                   El usuario o la contraseña son incorrectos
                 </Typography>
               )}
             </Grid>
+
             <Grid item size={12}>
               <Button
                 type="submit"
                 variant="contained"
-                fullWidth
                 sx={{
                   marginTop: "40px",
-                  background: "#016a85",
+                  background: "#43A047",
                   padding: "15px 35px",
                   borderRadius: "25px",
                   fontWeight: "bold",
+                  width: "20vw",
                 }}
               >
-                Login
+                Iniciar sesión
               </Button>
+              <Typography
+                variant="body2"
+                sx={{
+                marginTop: "15px",
+                color: "#66BB6A",
+                cursor: "pointer",
+                textDecoration: "underline",
+                }}
+                onClick={() => navigate("/signup")}
+            >
+                ¿No tienes cuenta? Crea una aquí
+            </Typography>
+            
+                
             </Grid>
           </Grid>
         </form>
       </Grid>
-      <Grid
-        item
-        size={6}
-        sx={{
-          backgroundImage: `url(${fondo})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "60px",
-          textAlign: "center",
-        }}
-      >
-        <Typography
-          sx={{
-            color: "#F9F9F9",
-            marginBottom: "40px",
-            fontWeight: "bold",
-            fontSize: "4rem",
-            letterSpacing: "2px",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)",
-          }}
-        >
-          New here?
-        </Typography>
-        <Typography
-          sx={{
-            color: "#f9f9f9dd",
-            marginBottom: "60px",
-            fontSize: "2.1rem",
-            lineHeight: 1.5,
-          }}
-        >
-          Sign up and discover a great amount of new opportunities
-        </Typography>
-        <Button
-          sx={{
-            backgroundColor: "#FFFFFF",
-            color: "#016a85",
-            fontWeight: "bold",
-            padding: "15px 35px",
-            borderRadius: "25px",
-            width: "30vw",
-          }}
-          onClick={() => navigate("/register")}
-        >
-          Sign Up
-        </Button>
-      </Grid>
+      
     </Grid>
   );
 }
