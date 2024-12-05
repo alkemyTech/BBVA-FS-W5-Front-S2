@@ -7,56 +7,72 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import Box from '@mui/material/Box';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import PinterestIcon from '@mui/icons-material/Pinterest';
 
 export default function Footer() {
   return (
-    <Grid container sx={{ display:"flex", justifyContent: "space-around",textAlign:"center",backgroundColor: "#43A047", color: "#fff", padding: "30px 50px" }}>
-      <Grid item size={4} sx={{ borderRight:"1px solid #FFFF", display: "flex", flexDirection: "column", gap:2, justifyContent:"center", alignItems:"center"}}>
-        <Typography variant="h6">Contacto</Typography>
-        <Grid container sx={{display:"flex",flexDirection:"column",gap: 2, color: "#fff",justifyContent: "center"}}>
-          <Grid item  sx={{ display:"flex"}}>
-            <EmailIcon sx={{mx:1}}/>
+    <Grid container spacing={3} sx={{ justifyContent: "space-between", textAlign: "center", backgroundColor: "#43A047", p: 2, color: "#fff" }}>
+      <Grid item size={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px" }}>
+        <Grid container spacing={2} sx={{ borderRight: "1px solid #FFFFFF", flexGrow: 1 }}>
+          <Grid item size={12}>
+            <Typography variant="h6">Contacto</Typography>
+          </Grid>
+          <Grid item size={12} sx={{ display: "flex", justifyContent: "center" }}>
+            <EmailIcon sx={{ mr: 1, fontSize: "20px" }} />
             <Typography>Correo: marca@billetera.com</Typography>
           </Grid>
-          <Grid item sx={{ display:"flex"}}>
-            <PhoneIcon sx={{mx:1}}/>
-            <Typography>Telefono: +54 11 1234-5678</Typography>
+          <Grid item size={12} sx={{ display: "flex", justifyContent: "center" }}>
+            <PhoneIcon sx={{ mr: 1, fontSize: "20px" }} />
+            <Typography>Teléfono: +54 11 1234-5678</Typography>
           </Grid>
-          <Grid item sx={{ display:"flex"}}>
-            <AccessTimeIcon sx={{mx:1}}/>
+          <Grid item size={12} sx={{ display: "flex", justifyContent: "center" }}>
+            <AccessTimeIcon sx={{ mr: 1, fontSize: "20px" }} />
             <Typography>Horario: Lun-Vie 9:00 a 18:00</Typography>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item size={4} sx={{borderRight:"1px solid #FFFF", display:"flex", flexDirection:"column",gap:2}}>
-        <Typography variant="h6">Navegación</Typography>
-        <Link href="/terms" underline="hover" color="#fff">Términos y condiciones</Link>
-        <Link href="/privacy" underline="hover" color="#fff">Política de privacidad</Link>
-        <Link href="/faq" underline="hover" color="#fff">Preguntas frecuentes</Link>
-      </Grid>
-      <Grid item size={4} sx={{display:"flex", flexDirection:"column", gap:2}}>
-        <Typography variant="h6">Seguinos</Typography>
-        <Grid container>
+      <Grid item size={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px" }}>
+        <Grid container spacing={2} sx={{ borderRight: "1px solid #FFFFFF", flexGrow: 1 }}>
           <Grid item size={12}>
-            <FacebookIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
-            <TwitterIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
+            <Typography variant="h6">Navegación</Typography>
           </Grid>
           <Grid item size={12}>
-            <InstagramIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
-            <LinkedInIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
+            <Link href="/terms" underline="hover" color="#fff">Términos y condiciones</Link>
+          </Grid>
+          <Grid item size={12}>
+            <Link href="/privacy" underline="hover" color="#fff">Política de privacidad</Link>
+          </Grid>
+          <Grid item size={12}>
+            <Link href="/faq" underline="hover" color="#fff">Preguntas frecuentes</Link>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item size={12} sx={{ textAlign: "center", mt: 5, alignItems:"center",}}>
+      <Grid item size={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px" }}>
+        <Grid container spacing={2} sx={{ justifyContent: "center", flexGrow: 1 }}>
+          <Grid item size={12}>
+            <Typography variant="h6">Redes</Typography>
+          </Grid>
+          <Grid item size={12}>
+            <FacebookIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
+            <TwitterIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
+            <InstagramIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
+          </Grid>
+          <Grid item size={12}>
+            <PinterestIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
+            <LinkedInIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
+            <YouTubeIcon sx={{ color: "#fff", fontSize: "36px", mx: 1 }} />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item size={12}>
         <Typography variant="body2">
           © 2024 Billetera Virtual. Todos los derechos reservados.
         </Typography>
       </Grid>
-
     </Grid>
   );
 }

@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/img/logo.png"; // Asegúrate de que la ruta sea correcta
+=======
+import React, { useState, useEffect } from 'react';
+import { Button, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from "../../../assets/img/logo.png";
+>>>>>>> 7a3a03bedb2e31f61a811accf32bf022564ca47a
 
 export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -92,8 +100,13 @@ export default function Header() {
             Logout
           </Button>
         ) : (
+<<<<<<< HEAD
           <Link to="/login" style={{ textDecoration: "none" }}>
             <Button
+=======
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <Button 
+>>>>>>> 7a3a03bedb2e31f61a811accf32bf022564ca47a
               type="submit"
               variant="contained"
               sx={{
