@@ -7,7 +7,7 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import fondo from "../../assets/img/fondo.png";
+import fondo2 from "../../assets/img/fondo2.png";
 import Grid from "@mui/material/Grid2";
 import api from "../../services/api";
 import AuthService from "../../services/AuthService";
@@ -53,7 +53,7 @@ export default function Login() {
     <Grid
       container
       sx={{
-        width: "70vw",
+        width: "60vw",
         justifyContent: "center",
         backgroundColor: "#FFFFFF",
         textAlign: "center",
@@ -63,9 +63,9 @@ export default function Login() {
     >
       <Grid
         item
-        size={6}
+        size={7}
         sx={{
-          padding: "60px",
+          padding: "30px",
           borderRight: "1px solid #ddd",
           display: "flex",
           flexDirection: "column",
@@ -77,7 +77,7 @@ export default function Login() {
             marginBottom: "10px",
             textAlign: "center",
             fontWeight: "bold",
-            color: "#016a85",
+            color: "#5B9C96",
             fontSize: "4rem",
             letterSpacing: "2px",
           }}
@@ -117,7 +117,7 @@ export default function Login() {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <MailRoundedIcon  sx={{ color: "#016a85" }}/>
+                        <MailRoundedIcon  sx={{ color: "#5B9C96" }}/>
                       </InputAdornment>
                     ),
                   },
@@ -152,12 +152,12 @@ export default function Login() {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <LockRoundedIcon  sx={{ color: "#016a85" }}/>
+                        <LockRoundedIcon  sx={{ color: "#5B9C96" }}/>
                       </InputAdornment>
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton sx={{ color: "#016a85" }}
+                        <IconButton sx={{ color: "#5B9C96" }}
                           aria-label={showPassword ? 'hide password' : 'show password'}
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
@@ -176,23 +176,34 @@ export default function Login() {
                 }}
                 error={error}
               />
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  marginBottom: "10px",
+                  color: "#5B9C96",
+                  textAlign: "right",
+                }}
+              >
+                Forgot password?
+              </Typography>
               {error && (
                 <Typography color="error" sx={{ marginTop: "20px", textAlign: "center" }}>
                   El usuario o la contraseña son incorrectos
                 </Typography>
               )}
             </Grid>
+            
             <Grid item size={12}>
               <Button
                 type="submit"
                 variant="contained"
-                fullWidth
                 sx={{
                   marginTop: "40px",
-                  background: "#016a85",
+                  background: "#5B9C96",
                   padding: "15px 35px",
                   borderRadius: "25px",
                   fontWeight: "bold",
+                  width: "20vw",
                 }}
               >
                 Login
@@ -203,9 +214,9 @@ export default function Login() {
       </Grid>
       <Grid
         item
-        size={6}
+        size={5}
         sx={{
-          backgroundImage: `url(${fondo})`,
+          backgroundImage: `url(${fondo2})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -213,7 +224,7 @@ export default function Login() {
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "60px",
+          padding: "30px",
           textAlign: "center",
         }}
       >
@@ -242,11 +253,11 @@ export default function Login() {
         <Button
           sx={{
             backgroundColor: "#FFFFFF",
-            color: "#016a85",
+            color: "#5B9C96",
             fontWeight: "bold",
             padding: "15px 35px",
             borderRadius: "25px",
-            width: "30vw",
+            width: "20vw",
           }}
           onClick={() => navigate("/register")}
         >

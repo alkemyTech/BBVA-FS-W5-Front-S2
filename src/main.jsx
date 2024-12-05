@@ -8,12 +8,20 @@ import './index.css';
 
 import App from './App.jsx';
 
+const theme = createTheme({
+  typography: {
+    fontFamily: 'Mulish, sans-serif',
+  },
+});
+
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
         <App />
-      </BrowserRouter>
+      </ThemeProvider>
+    </BrowserRouter>
   </StrictMode>
 );
