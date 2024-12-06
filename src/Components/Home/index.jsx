@@ -46,9 +46,8 @@ export default function Home() {
   }, []);
 
   const cardStyle = {
-    margin: 1,
+    margin: "10px",
     borderRadius: "5px",
-    p: 3,
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     borderTop: "4px solid #9cd99e",
   };
@@ -63,8 +62,8 @@ export default function Home() {
 
   return (
     <Grid container size={12} spacing={12} sx={{ display: "flex", justifyContent: "cener", padding: 1,  }}>
-      <Grid item size={9}>
-        <Grid container size={12} sx={{ gap: 2,marginTop: 2, padding: "16px", justifyContent: "center", }}>
+      <Grid item size={8}>
+        <Grid container size={12} sx={{ gap: 1,marginTop: 1, padding: "10px", justifyContent: "center", }}>
           {accounts.map((account) => (
             <Grid item size={10} key={account.id}>
               <Card sx={cardStyle}>
@@ -93,7 +92,7 @@ export default function Home() {
                   ${account.balance}
                 </Typography>
               </CardContent>
-                <Grid container size={12} sx={{ gap: 2, textAlign: "center", marginTop: 2, borderTop: "1px solid #2b6a2f", padding: "16px", justifyContent: "center" }}>
+                <Grid container size={12} sx={{ gap:2, textAlign: "center", marginTop: 2, borderTop: "1px solid #2b6a2f", padding: "16px", justifyContent: "center" }}>
                   <Grid item size={5}>
                     <Typography variant="body2" fullWidth sx={buttons}>Depositar</Typography>
                   </Grid>
@@ -104,7 +103,7 @@ export default function Home() {
               </Card>
             </Grid>
           ))}
-            <Grid container size={12} sx={{ gap: 2, textAlign: "center", marginTop: 2, padding: "16px", justifyContent: "center" }}>
+            <Grid container size={12} sx={{ gap: 2, textAlign: "center", marginTop: 2, padding: "10px", justifyContent: "center" }}>
               <Grid item size={5}>
                 <Card>
                   <CardMedia
@@ -152,7 +151,7 @@ export default function Home() {
             </Grid>
         </Grid>
       </Grid>
-      <Grid item size={3}>
+      <Grid item size={4}>
         <Typography>Transacciones</Typography>
       </Grid>
     </Grid>
