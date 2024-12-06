@@ -92,7 +92,7 @@ export default function Home() {
                   ${account.balance}
                 </Typography>
               </CardContent>
-                <Grid container size={12} sx={{ gap:2, textAlign: "center", marginTop: 2, borderTop: "1px solid #2b6a2f", padding: "16px", justifyContent: "center" }}>
+                <Grid container size={12} sx={{ gap:2, textAlign: "center", marginTop: 2,padding: "10px", justifyContent: "center" }}>
                   <Grid item size={5}>
                     <Typography variant="body2" fullWidth sx={buttons}>Depositar</Typography>
                   </Grid>
