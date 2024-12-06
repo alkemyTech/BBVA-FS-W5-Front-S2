@@ -153,14 +153,13 @@ export default function Login() {
                         <InputAdornment position="end">
                           <IconButton
                             sx={{ color: "#43A047" }}
-                            aria-label={
-                              showPassword ? "hide password" : "show password"
-                            }
+                            aria-label={showPassword ? "hide password" : "show password"}
                             onClick={handleClickShowPassword}
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+
                           </IconButton>
                         </InputAdornment>
                       ),

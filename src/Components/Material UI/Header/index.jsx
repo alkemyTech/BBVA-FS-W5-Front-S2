@@ -40,9 +40,10 @@ export default function Header() {
     background: "#",
     borderRadius: "25px",
     padding:"6px 16px",
-    color: "#43A047",
+    color: "#2b6a2f",
+    fontWeight:"bold",
     "&:hover": {
-      backgroundColor: "#4CAF50",
+      backgroundColor: "#9cd99e",
       color: "#FFFFFF",
     }
   };
@@ -57,6 +58,9 @@ export default function Header() {
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
         justifyContent: "space-around",
         alignItems:"center",
+        position: "sticky", 
+        top: 0,            
+        zIndex: 1000, 
       }}
     >
       <Grid item size={2} sx={{ display: 'flex', alignItems: 'center',justifyContent:"center", }}>
