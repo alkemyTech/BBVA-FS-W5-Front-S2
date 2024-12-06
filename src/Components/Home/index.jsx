@@ -22,7 +22,7 @@ export default function Home() {
 
       if (!token) {
         console.error("Token no encontrado");
-        window.location.href = "/login";
+        window.location.href = "/";
         return;
       }
 
@@ -36,7 +36,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error al obtener datos:", error);
       if (error.response && error.response.status === 401) {
-        window.location.href = "/login";
+        window.location.href = "/";
       }
     }
   };
