@@ -61,11 +61,11 @@ export default function Home() {
   };
 
   return (
-    <Grid container size={12} spacing={12} sx={{ display: "flex", justifyContent: "cener", padding: 1,  }}>
-      <Grid item size={8}>
-        <Grid container size={12} sx={{ gap: 1,marginTop: 1, padding: "10px", justifyContent: "center", }}>
+    <Grid container spacing={12} sx={{ display: "flex", justifyContent: "cener", padding: 1,  }}>
+      <Grid item size={9}>
+        <Grid container  sx={{marginTop: 1, padding: "10px", justifyContent: "center", }}>
           {accounts.map((account) => (
-            <Grid item size={10} key={account.id}>
+            <Grid item size={6} key={account.id}>
               <Card sx={cardStyle}>
               <CardHeader
                 sx={{
@@ -103,6 +103,7 @@ export default function Home() {
               </Card>
             </Grid>
           ))}
+          <Grid item size={12}>
             <Grid container size={12} sx={{ gap: 2, textAlign: "center", marginTop: 2, padding: "10px", justifyContent: "center" }}>
               <Grid item size={5}>
                 <Card>
@@ -149,9 +150,10 @@ export default function Home() {
                 </Card>
               </Grid>
             </Grid>
+          </Grid>
         </Grid>
       </Grid>
-      <Grid item size={4}>
+      <Grid item size={3}>
         <Typography>Transacciones</Typography>
       </Grid>
     </Grid>

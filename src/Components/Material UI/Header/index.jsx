@@ -53,7 +53,6 @@ export default function Header() {
       container
       sx={{
         backgroundColor: '#FFFFFF', 
-        textAlign: 'center',
         padding: "15px 0px",
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
         justifyContent: "space-around",
@@ -63,7 +62,10 @@ export default function Header() {
         zIndex: 1000, 
       }}
     >
-      <Grid item size={2} sx={{ display: 'flex', alignItems: 'center',justifyContent:"center", }}>
+      <Grid item size={2} sx={{ 
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center", }}>
         <Link to="/home">
           <img src={logo} width={"100px"} alt="Logo" />
         </Link>
