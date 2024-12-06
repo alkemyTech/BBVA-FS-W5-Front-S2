@@ -15,9 +15,10 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedName = localStorage.getItem("nombre");
+    const storedLastName = localStorage.getItem("apellido");
     const storedRole = localStorage.getItem("rol");
     setIsAuthenticated(!!token);
-    if (token && storedName) setUserName(storedName);
+    if (token && storedName) setUserName(storedName + ' ' + storedLastName);
     if (storedRole) setUserRole(storedRole);
   }, []);
 
