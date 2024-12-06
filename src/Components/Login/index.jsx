@@ -66,7 +66,7 @@ export default function Login() {
       <Grid
         container
         sx={{
-          width: "60vw",
+          width: "50vw",
           justifyContent: "center",
           backgroundColor: "#FFFFFF",
           textAlign: "center",
@@ -152,15 +152,14 @@ export default function Login() {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
-                            sx={{ color: "#66BB6A" }}
-                            aria-label={
-                              showPassword ? "hide password" : "show password"
-                            }
+                            sx={{ color: "#43A047" }}
+                            aria-label={showPassword ? "hide password" : "show password"}
                             onClick={handleClickShowPassword}
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+
                           </IconButton>
                         </InputAdornment>
                       ),

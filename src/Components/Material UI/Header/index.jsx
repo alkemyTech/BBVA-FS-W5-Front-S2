@@ -1,32 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { Typography, Menu, MenuItem, Button } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Button, Typography, Menu, MenuItem } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from "../../../assets/img/lynxlogo.png";
+import nombre from "../../../assets/img/lynxnombre2.png";
 
 export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState("");
-  const [userRole, setUserRole] = useState(""); // Estado para almacenar el rol
+  const [userRole, setUserRole] = useState("");
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const storedName = localStorage.getItem("nombre"); // Nombre del usuario guardado
-    const storedRole = localStorage.getItem("rol"); // Rol del usuario guardado (admin, user, etc.)
-    setIsAuthenticated(!!token); // Establece la autenticación según el token
-    if (token && storedName) {
-      setUserName(storedName);
-    }
-    if (storedRole) {
-      setUserRole(storedRole); // Establece el rol
-    }
+    const storedName = localStorage.getItem("nombre");
+    const storedRole = localStorage.getItem("rol");
+    setIsAuthenticated(!!token);
+    if (token && storedName) setUserName(storedName);
+    if (storedRole) setUserRole(storedRole);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("nombre");
-    localStorage.removeItem("role");
+    localStorage.clear();
     setIsAuthenticated(false);
     setUserRole("");
     navigate("/");
@@ -41,96 +37,80 @@ export default function Header() {
   };
 
   const buttonStyles = {
-    textTransform: "none",
-    color: "#43A047",
-    border: "2px solid transparent",
-    margin: "0 5px",
-    padding: "6px 5px",
+    background: "#",
+    borderRadius: "25px",
+    padding:"6px 16px",
+    color: "#2b6a2f",
+    fontWeight:"bold",
     "&:hover": {
-      backgroundColor: "#43A047",
-      color: "#fff",
-      border: "2px solid #43A047",
-      borderRadius: "12px",
-    },
+      backgroundColor: "#9cd99e",
+      color: "#FFFFFF",
+    }
   };
 
   return (
-    <Grid
+    <Grid 
       container
       sx={{
-        padding: "20px",
-        borderRadius: "20px",
-        border: "1px solid #43A047",
-        backgroundColor: "#FFFFFF",
-        textAlign: "center",
-        margin: "2vh auto",
-        maxWidth: "70%",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-        alignItems: "center",
+        backgroundColor: '#FFFFFF', 
+        textAlign: 'center',
+        padding: "15px 0px",
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+        justifyContent: "space-around",
+        alignItems:"center",
+        position: "sticky", 
+        top: 0,            
+        zIndex: 1000, 
       }}
     >
-      {/* Logo */}
-      <Grid
-        item
-        size={2}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
+      <Grid item size={2} sx={{ display: 'flex', alignItems: 'center',justifyContent:"center", }}>
         <Link to="/home">
-          <img src="logo.png" width={"50px"} alt="Logo" />
+          <img src={logo} width={"100px"} alt="Logo" />
         </Link>
-        <Typography variant="h3">Lynx</Typography>
+        <Link to="/home">
+          <img src={nombre} width={"100px"} alt="Marca" />
+        </Link>
       </Grid>
 
-      {/* Navbar completo si está autenticado */}
       {isAuthenticated && (
         <Grid
           item
-          size={6}
+          size={8}
           sx={{
             display: "flex",
             justifyContent: "center",
-            gap: 2,
-            flexWrap: "wrap", // Asegura que los botones se acomoden en la misma línea
+            alignItems: "center",
+            gap:4,
           }}
         >
-          <Button sx={buttonStyles} component={Link} to="/transferencias">
-            Transferencias
-          </Button>
-          <Button sx={buttonStyles} component={Link} to="/nuevoPago">
-            Nuevo Pago
-          </Button>
-          <Button sx={buttonStyles} component={Link} to="/misPagos">
-            Balance
-          </Button>
-          <Button sx={buttonStyles} component={Link} to="/tarjetas">
-            Tarjetas
-          </Button>
-          <Button sx={buttonStyles} component={Link} to="/inversiones">
-            Inversiones
-          </Button>
-
-          {/* Mostrar el botón de "Usuarios" solo si el rol es admin */}
+          <Link to="/Transferencias" style={{ textDecoration: 'none', color: '#' }}>
+            <Typography sx={buttonStyles} variant="body1">Transferencias</Typography>
+          </Link>
+          <Link to="/Pago" style={{ textDecoration: 'none', color: '#' }}>
+            <Typography sx={buttonStyles} variant="body1">Nuevo Pago</Typography>
+          </Link>
+          <Link to="/Balance" style={{ textDecoration: 'none', color: '#' }}>
+            <Typography sx={buttonStyles} variant="body1">Balance</Typography>
+          </Link>
+          <Link to="/Inversiones" style={{ textDecoration: 'none', color: '#' }}>
+            <Typography sx={buttonStyles} variant="body1">Inversiones</Typography>
+          </Link>
           {userRole === "ADMIN" && (
-            <Button sx={buttonStyles} component={Link} to="/usuarios">
-              Usuarios
-            </Button>
+            <Link to="/Usuarios" style={{ textDecoration: 'none', color: '#' }}>
+              <Typography sx={buttonStyles} variant="body1">Usuarios</Typography>
+            </Link>
           )}
         </Grid>
       )}
 
-      {/* Solo mostrar el saludo y opciones de usuario si está autenticado */}
       {isAuthenticated && (
         <Grid
           item
-          size={4}
+          size={2}
           sx={{
             display: "flex",
-            justifyContent: "flex-end",
             alignItems: "center",
+            justifyContent:"center",
           }}
         >
           <Typography
