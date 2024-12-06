@@ -10,9 +10,6 @@ import PlazosFijos from "../../assets/img/Plazos Fijos.jpg";
 import CardActionArea from '@mui/material/CardActionArea';
 import CardMedia from '@mui/material/CardMedia';
 
-
-
-
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
 
