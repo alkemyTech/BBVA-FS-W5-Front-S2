@@ -13,6 +13,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
+      state.id = action.payload.id;
       state.email = action.payload.email;
       state.nombre = action.payload.nombre;
       state.apellido = action.payload.apellido;
@@ -22,6 +23,7 @@ const userSlice = createSlice({
       localStorage.setItem("user", JSON.stringify(action.payload));
     },
     logout: (state) => {
+      state.id = '';
       state.email = '';
       state.nombre = '';
       state.apellido = '';
