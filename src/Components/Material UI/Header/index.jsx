@@ -1,30 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Typography, Menu, MenuItem } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Button, Typography, Menu, MenuItem } from "@mui/material";
+import { useSelector, useDispatch } from 'react-redux'; 
+import Grid from "@mui/material/Grid2";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/img/lynxlogo.png";
 import nombre from "../../../assets/img/lynxnombre2.png";
+import { setUser, logout } from "../../../services/UserSlice";
 
 export default function Header() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState("");
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+  const isAuthenticated = Boolean(user.token);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedName = localStorage.getItem("nombre");
-    const storedRole = localStorage.getItem("rol");
-    setIsAuthenticated(!!token);
-    if (token && storedName) setUserName(storedName);
-    if (storedRole) setUserRole(storedRole);
-  }, []);
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      dispatch(setUser(parsedUser));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setUserName(`${user.nombre} ${user.apellido}`);
+      setUserRole(user.rol);
+    }
+  }, [isAuthenticated, user]);
 
   const handleLogout = () => {
-    localStorage.clear();
-    setIsAuthenticated(false);
-    setUserRole("");
+    dispatch(logout());
     navigate("/");
   };
 
@@ -39,27 +47,28 @@ export default function Header() {
   const buttonStyles = {
     background: "#",
     borderRadius: "25px",
-    padding:"6px 16px",
-    color: "#2b6a2f",
-    fontWeight:"bold",
+    padding: "6px 16px",
+    color: "#2B6A2F",
+    fontWeight: "bold",
     "&:hover": {
-      backgroundColor: "#9cd99e",
+      backgroundColor: "#9CD99E",
       color: "#FFFFFF",
-    }
+    },
   };
 
   return (
-    <Grid 
+    <Grid
       container
       sx={{
-        backgroundColor: '#FFFFFF', 
+        backgroundColor: "#FFFFFF",
+        textAlign: "center",
         padding: "15px 0px",
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
         justifyContent: "space-around",
-        alignItems:"center",
-        position: "sticky", 
-        top: 0,            
-        zIndex: 1000, 
+        alignItems: "center",
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
       }}
     >
       <Grid item size={2} sx={{ 
@@ -73,7 +82,6 @@ export default function Header() {
           <img src={nombre} width={"100px"} alt="Marca" />
         </Link>
       </Grid>
-
       {isAuthenticated && (
         <Grid
           item
@@ -82,29 +90,28 @@ export default function Header() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap:4,
+            gap: 4,
           }}
         >
-          <Link to="/Transferencias" style={{ textDecoration: 'none', color: '#' }}>
+          <Link to="/Transferencias" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">Transferencias</Typography>
           </Link>
-          <Link to="/Pago" style={{ textDecoration: 'none', color: '#' }}>
+          <Link to="/Pago" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">Nuevo Pago</Typography>
           </Link>
-          <Link to="/Balance" style={{ textDecoration: 'none', color: '#' }}>
+          <Link to="/Balance" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">Balance</Typography>
           </Link>
-          <Link to="/Inversiones" style={{ textDecoration: 'none', color: '#' }}>
+          <Link to="/Inversiones" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">Inversiones</Typography>
           </Link>
           {userRole === "ADMIN" && (
-            <Link to="/Usuarios" style={{ textDecoration: 'none', color: '#' }}>
+            <Link to="/Usuarios" style={{ textDecoration: "none", color: "#" }}>
               <Typography sx={buttonStyles} variant="body1">Usuarios</Typography>
             </Link>
           )}
         </Grid>
       )}
-
       {isAuthenticated && (
         <Grid
           item
@@ -112,7 +119,7 @@ export default function Header() {
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent:"center",
+            justifyContent: "center",
           }}
         >
           <Typography

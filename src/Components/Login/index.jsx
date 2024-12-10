@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../services/UserSlice';
 import {
   TextField,
   Button,
@@ -28,6 +30,7 @@ export default function Login() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (location.state?.success) {
@@ -41,16 +44,20 @@ export default function Login() {
     e.preventDefault();
     try {
       const response = await api.post("/auth/login", { email, password });
+      
+      // Despacha los datos al Redux Store
+      dispatch(setUser({
+        email,
+        nombre: response.data.nombre,
+        apellido: response.data.apellido,
+        rol: response.data.rol,
+        token: response.data.token,
+      }));
+      
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("email", email);
-      localStorage.setItem("nombre", response.data.nombre);
-      localStorage.setItem("apellido", response.data.apellido);
-      localStorage.setItem("rol", response.data.rol);
       navigate("/home");
     } catch (error) {
       setError(true);
-      setEmail("");
-      setPassword("");
       console.log(error);
     }
   };
