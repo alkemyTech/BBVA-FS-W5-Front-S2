@@ -6,11 +6,9 @@ import Home from './Components/Home'
 import SignUp from './Components/SignUp/signUp'
 import Balance from './Components/Balance/Balance'
 import PlazoFijo from './Components/FixedTermDeposit/FixedTermDeposit'
-import Page from './Components/Material UI/Page'
 import {Routes, Route,} from 'react-router-dom';
 import Users from './Components/Users/Users';
 import Page from './Components/Material UI/Page'
-import {Routes, Route,} from 'react-router-dom';
 
 
 import './App.css'
