@@ -26,10 +26,15 @@ export default function Header() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      setUserName(`${user.nombre} ${user.apellido}`);
+      const capitalize = (text) =>
+        text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+      const formattedName = capitalize(user.nombre || "");
+      const formattedSurname = capitalize(user.apellido || "");
+      setUserName(`${formattedName} ${formattedSurname}`);
       setUserRole(user.rol);
     }
   }, [isAuthenticated, user]);
+  
 
   const handleLogout = () => {
     dispatch(logout());
@@ -99,7 +104,7 @@ export default function Header() {
           <Link to="/Pago" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">Nuevo Pago</Typography>
           </Link>
-          <Link to="/Balance" style={{ textDecoration: "none", color: "#" }}>
+          <Link to="Balance" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">Balance</Typography>
           </Link>
           <Link to="/Inversiones" style={{ textDecoration: "none", color: "#" }}>
