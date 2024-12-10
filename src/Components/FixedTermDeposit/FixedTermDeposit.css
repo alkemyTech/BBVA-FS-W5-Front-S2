@@ -1,0 +1,42 @@
+/* Aseguramos que haya espacio superior en el contenedor de la página */
+.grid-container {
+  width: 70vw;
+  justify-content: center;
+  background-color: #ffffff;
+  text-align: center;
+  border-radius: 25px;
+  overflow: hidden;
+  margin-top: 40px; /* Añadir espacio superior */
+  margin-bottom: 40px; /* Añadir espacio inferior */
+}
+
+/* Agregar más separación entre el formulario y el contenido */
+.grid-item {
+  padding: 30px;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin-top: 30px; /* Más separación entre formulario y contenido previo */
+  margin-bottom: 30px; /* Más separación con otros elementos debajo */
+}
+
+/* Título del formulario */
+.form-title {
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 4rem;
+  letter-spacing: 2px;
+}
+
+/* Agregar un margen al formulario para darle espacio respecto al header */
+form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Para los botones dentro del formulario */
+button {
+  margin-top: 20px;
+}

@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Button, Typography, Menu, MenuItem } from "@mui/material";
-import { useSelector, useDispatch } from 'react-redux'; 
+import { useSelector, useDispatch } from "react-redux";
 import Grid from "@mui/material/Grid2";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/img/lynxlogo.png";
 import nombre from "../../../assets/img/lynxnombre2.png";
 import { setUser, logout } from "../../../services/UserSlice";
-
 export default function Header() {
   const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState("");
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
   const isAuthenticated = Boolean(user.token);
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -23,7 +28,6 @@ export default function Header() {
       dispatch(setUser(parsedUser));
     }
   }, [dispatch]);
-
   useEffect(() => {
     if (isAuthenticated) {
       const capitalize = (text) =>
@@ -34,21 +38,16 @@ export default function Header() {
       setUserRole(user.rol);
     }
   }, [isAuthenticated, user]);
-  
-
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
   };
-
   const handleUserMenuOpen = (event) => {
     setUserMenuAnchorEl(event.currentTarget);
   };
-
   const handleUserMenuClose = () => {
     setUserMenuAnchorEl(null);
   };
-
   const buttonStyles = {
     background: "#",
     borderRadius: "25px",
@@ -60,7 +59,6 @@ export default function Header() {
       color: "#FFFFFF",
     },
   };
-
   return (
     <Grid
       container
@@ -99,21 +97,45 @@ export default function Header() {
             gap: 4,
           }}
         >
-          <Link to="/Transferencias" style={{ textDecoration: "none", color: "#" }}>
-            <Typography sx={buttonStyles} variant="body1">Transferencias</Typography>
+          <Link
+            to="/Transferencias"
+            style={{ textDecoration: "none", color: "#" }}
+          >
+            <Typography sx={buttonStyles} variant="body1">
+              Transferencias
+            </Typography>
           </Link>
           <Link to="/Pago" style={{ textDecoration: "none", color: "#" }}>
-            <Typography sx={buttonStyles} variant="body1">Nuevo Pago</Typography>
+            <Typography sx={buttonStyles} variant="body1">
+              Nuevo Pago
+            </Typography>
           </Link>
-          <Link to="Balance" style={{ textDecoration: "none", color: "#" }}>
-            <Typography sx={buttonStyles} variant="body1">Balance</Typography>
+          <Link to="/Balance" style={{ textDecoration: "none", color: "#" }}>
+            <Typography sx={buttonStyles} variant="body1">
+              Balance
+            </Typography>
           </Link>
-          <Link to="/Inversiones" style={{ textDecoration: "none", color: "#" }}>
-            <Typography sx={buttonStyles} variant="body1">Inversiones</Typography>
+          <Link
+            to="/Inversiones"
+            style={{ textDecoration: "none", color: "#" }}
+          >
+            <Typography sx={buttonStyles} variant="body1">
+              Inversiones
+            </Typography>
+          </Link>
+          <Link
+            to="/PlazoFijo"
+            style={{ textDecoration: "none", color: "#" }}
+          >
+            <Typography sx={buttonStyles} variant="body1">
+              Plazo Fijo
+            </Typography>
           </Link>
           {userRole === "ADMIN" && (
             <Link to="/Usuarios" style={{ textDecoration: "none", color: "#" }}>
-              <Typography sx={buttonStyles} variant="body1">Usuarios</Typography>
+              <Typography sx={buttonStyles} variant="body1">
+                Usuarios
+              </Typography>
             </Link>
           )}
         </Grid>
