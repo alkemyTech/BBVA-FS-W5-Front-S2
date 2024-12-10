@@ -6,15 +6,15 @@ export const fetchAccountBalance = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("accounts/balance");
-      return response.data; 
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error al obtener el balance");
     }
   }
 );
 
-const accountSlice = createSlice({
-  name: "account",
+const balanceSlice = createSlice({
+  name: "balance",
   initialState: {
     balance: null,
     loading: false,
@@ -38,4 +38,4 @@ const accountSlice = createSlice({
   },
 });
 
-export default accountSlice.reducer;
+export default balanceSlice.reducer;
