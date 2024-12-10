@@ -5,9 +5,9 @@ import Login from './Components/Login'
 import Home from './Components/Home'
 import SignUp from './Components/SignUp/signUp'
 import Balance from './Components/Balance/Balance'
+import Users from './Components/Users/Users';
 import Page from './Components/Material UI/Page'
 import {Routes, Route,} from 'react-router-dom';
-
 
 
 import './App.css'
@@ -24,6 +24,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/signup" element={<SignUp/>}/>
           <Route path="/Balance" element={<Balance />} />
+          <Route path="/Usuarios" element={<Users/>} />
       </Routes>
     </Page>
   )
