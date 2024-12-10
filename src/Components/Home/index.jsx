@@ -9,9 +9,16 @@ import Prestamos from "../../assets/img/Prestamos.jpg";
 import PlazosFijos from "../../assets/img/Plazos Fijos.jpg";
 import CardActionArea from '@mui/material/CardActionArea';
 import CardMedia from '@mui/material/CardMedia';
+import { useNavigate, useLocation } from "react-router-dom";
+import Notification from "../Notification/Notification";
 
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
+  const location = useLocation();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [loading, setLoading] = useState(false);
 
   const fetchAccounts = async () => {
     try {
@@ -39,6 +46,14 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (location.state?.success) {
+      setSnackbarMessage("Plazo fijo creado con éxito");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     fetchAccounts();
   }, []);
 
@@ -58,6 +73,7 @@ export default function Home() {
   };
 
   return (
+    <div>
     <Grid container size={12} spacing={12} sx={{ display: "flex", justifyContent: "cener", padding: 1,  }}>
       <Grid item size={8}>
         <Grid container size={12} sx={{ gap: 1,marginTop: 1, padding: "10px", justifyContent: "center", }}>
@@ -152,5 +168,14 @@ export default function Home() {
         <Typography>Transacciones</Typography>
       </Grid>
     </Grid>
+
+<Notification
+openSnackbar={openSnackbar}
+snackbarMessage={snackbarMessage}
+snackbarSeverity={snackbarSeverity}
+setOpenSnackbar={setOpenSnackbar}
+loading={loading}
+/>
+</div>
   );
 }
