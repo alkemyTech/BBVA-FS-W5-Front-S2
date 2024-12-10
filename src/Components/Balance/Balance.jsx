@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAccountBalance } from "../../services/BalanceSlice";
 import {
@@ -9,6 +10,8 @@ import {
   Box,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import Paginado from "../Paginate/Paginado";
+
 const formatCurrency = (amount, currency) => {
   if (amount == null || currency == null) {
     return "$ 0.00";
@@ -26,12 +29,17 @@ const formatCurrency = (amount, currency) => {
 const Balance = () => {
   const dispatch = useDispatch();
   const { balance, loading, error } = useSelector((state) => state.balance);
+
   const token = localStorage.getItem("token");
   if (!token) {
     console.error("Token no encontrado");
     window.location.href = "/";
     return;
   }
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 1; // Mostrar 1 plazo fijo por página
+
   useEffect(() => {
     dispatch(fetchAccountBalance());
   }, [dispatch]);
@@ -52,6 +60,14 @@ const Balance = () => {
     justifyContent: "center",
     gap: "20px",
   };
+
+  const totalPages = Math.ceil(
+    (balance?.fixedTerms?.length || 0) / itemsPerPage
+  );
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentFixedTerms =
+    balance?.fixedTerms?.slice(startIndex, startIndex + itemsPerPage) || [];
+
   return (
     <Grid container style={gridContainerStyle}>
       {/* Card para Resumen de Balance */}
@@ -118,8 +134,8 @@ const Balance = () => {
             >
               Plazos Fijos
             </Typography>
-            {balance?.fixedTerms?.length > 0 ? (
-              balance.fixedTerms.map((term, index) => (
+            {currentFixedTerms.length > 0 ? (
+              currentFixedTerms.map((term, index) => (
                 <Box key={index} sx={{ marginBottom: 2 }}>
                   <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
                     Monto: {term.amount} {term.currency}
@@ -140,6 +156,14 @@ const Balance = () => {
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
                 No tienes plazos fijos registrados.
               </Typography>
+            )}
+            {/* Componente de paginación */}
+            {currentFixedTerms.length > 0 && (
+              <Paginado
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
             )}
           </CardContent>
         </Card>
