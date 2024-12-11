@@ -106,7 +106,7 @@ export default function SignUp() {
           Completa el formulario para crear tu cuenta
         </Typography>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={3} direction="column">
+          <Grid container spacing={2} direction="column">
             {[{
               name: "firstName",
               label: "Nombre",
