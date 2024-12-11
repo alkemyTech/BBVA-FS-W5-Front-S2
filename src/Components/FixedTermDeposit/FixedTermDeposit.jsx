@@ -16,7 +16,7 @@ import CardHeader from "@mui/material/CardHeader";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { NumericFormat } from "react-number-format";
-import api from "../../services/Api";
+import api from "../../services/api";
 import "./FixedTermDeposit.css";
 import Notification from "../Notification/Notification";
 import dayjs from "dayjs";
@@ -230,7 +230,7 @@ const FixedTermDepositForm = () => {
           >
             {accounts.map((account) => (
               <Grid item xs={12} sm={6} md={4} key={account.id}>
-                <Card sx={cardStyle(account.id === selectedAccount?.id)}>
+                <Card sx={cardStyle(isSelectedAccount && account.id === selectedAccount?.id)}>
                   <CardHeader
                     sx={{
                       display: "flex",
