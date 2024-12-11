@@ -230,7 +230,7 @@ const FixedTermDepositForm = () => {
           >
             {accounts.map((account) => (
               <Grid item xs={12} sm={6} md={4} key={account.id}>
-                <Card sx={cardStyle(account.id === selectedAccount?.id)}>
+                <Card sx={cardStyle(isSelectedAccount && account.id === selectedAccount?.id)}>
                   <CardHeader
                     sx={{
                       display: "flex",
