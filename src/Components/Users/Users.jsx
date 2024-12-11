@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Notification from "../../components/Notification/Notification";
+import Paginado from "../../Components/Paginate/Paginado";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -26,6 +27,10 @@ const Users = () => {
     snackbarSeverity: "success",
     loading: false,
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8); // Mantener la cantidad fija de usuarios por página
+  const [totalPages, setTotalPages] = useState(0);
 
   const token = localStorage.getItem("token");
   if (!token) {
@@ -40,8 +45,9 @@ const Users = () => {
     api
       .get("/users")
       .then((response) => {
-        console.log("Usuarios recibidos:", response.data);
-        setUsers(response.data);
+        const totalUsers = response.data.length;
+        setUsers(response.data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage));
+        setTotalPages(Math.ceil(totalUsers / itemsPerPage));
       })
       .catch((error) => {
         console.error("Error al obtener los usuarios:", error);
@@ -54,7 +60,7 @@ const Users = () => {
       .finally(() => {
         setNotification((prev) => ({ ...prev, loading: false }));
       });
-  }, []);
+  }, [currentPage]);
 
   const handleShowAccounts = (userId) => {
     const user = users.find((u) => u.id === userId);
@@ -102,6 +108,10 @@ const Users = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const buttonStyles = {
@@ -192,6 +202,12 @@ const Users = () => {
         )}
       </Grid>
 
+      <Paginado
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
+
       {selectedUser && (
         <Dialog open={open} onClose={handleClose} maxWidth="md" >
           <DialogTitle sx={{ color: "#2B6A2F", fontWeight: "bold" }}>
@@ -229,11 +245,10 @@ const Users = () => {
             </Grid>
           </DialogContent>
           <DialogActions sx={{ justifyContent: "center" }}>
-  <Button onClick={handleClose} sx={buttonStyles}>
-    Cerrar
-  </Button>
-</DialogActions>
-
+            <Button onClick={handleClose} sx={buttonStyles}>
+              Cerrar
+            </Button>
+          </DialogActions>
         </Dialog>
       )}
 
