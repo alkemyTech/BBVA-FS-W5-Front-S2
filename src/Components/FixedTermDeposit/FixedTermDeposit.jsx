@@ -111,15 +111,22 @@ const FixedTermDepositForm = () => {
 
   const validate = () => {
     const errors = {};
-    if (!formData.amount) {
-      errors.amount = "El monto es obligatorio";
+
+    // Validar monto
+    if (!formData.amount || parseFloat(formData.amount) === 0) {
+      errors.amount = "Debe ingresar un monto";
     }
+
+    // Validar fecha de fin
     if (!formData.days) {
-      errors.days = "Los días son obligatorios";
+      errors.days = "La fecha de fin es obligatoria";
     }
+
+    // Validar cuenta seleccionada
     if (!formData.cbu) {
       errors.cbu = "Debe seleccionar una cuenta";
     }
+
     return errors;
   };
 
@@ -230,7 +237,11 @@ const FixedTermDepositForm = () => {
           >
             {accounts.map((account) => (
               <Grid item xs={12} sm={6} md={4} key={account.id}>
-                <Card sx={cardStyle(isSelectedAccount && account.id === selectedAccount?.id)}>
+                <Card
+                  sx={cardStyle(
+                    isSelectedAccount && account.id === selectedAccount?.id
+                  )}
+                >
                   <CardHeader
                     sx={{
                       display: "flex",
@@ -395,7 +406,12 @@ const FixedTermDepositForm = () => {
                       borderRadius: "25px",
                       fontWeight: "bold",
                     }}
-                    disabled={isSimulated || !formData.amount || !formData.days}
+                    disabled={
+                      isSimulated ||
+                      !formData.amount ||
+                      parseFloat(formData.amount) === 0 ||
+                      !formData.days
+                    }
                   >
                     {loading ? (
                       <CircularProgress size={24} sx={{ color: "#fff" }} />
