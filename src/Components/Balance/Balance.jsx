@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAccountBalance } from "../../services/BalanceSlice";
-import {
-  CircularProgress,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-} from "@mui/material";
+import {CircularProgress, Card, CardContent, Typography, Box } from "@mui/material";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Paginado from "../Paginate/Paginado";
+import api from "../../services/api";
+
+
 
 const formatCurrency = (amount, currency) => {
   if (amount == null || currency == null) {
@@ -25,9 +23,11 @@ const formatCurrency = (amount, currency) => {
     return "$0.00";
   }
 };
+
 const Balance = () => {
   const dispatch = useDispatch();
   const { balance, loading, error } = useSelector((state) => state.balance);
+  const [accounts, setAccounts] = useState([]);
 
   const token = localStorage.getItem("token");
   if (!token) {
@@ -37,13 +37,28 @@ const Balance = () => {
   }
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 1; // Mostrar 1 plazo fijo por página
+  const itemsPerPage = 3; // Mostrar 1 plazo fijo por página
 
   useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        const response = await api.get("/accounts", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAccounts(response.data);
+      } catch (err) {
+        console.error("Error al obtener las cuentas:", err);
+      }
+    };
+    fetchAccounts();
     dispatch(fetchAccountBalance());
-  }, [dispatch]);
+  }, [dispatch, token]);
+
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
+
   const cardStyle = {
     margin: "10px",
     borderRadius: "5px",
@@ -54,6 +69,7 @@ const Balance = () => {
     display: "flex",
     flexDirection: "column",
   };
+
   const gridContainerStyle = {
     display: "flex",
     justifyContent: "center",
@@ -74,61 +90,96 @@ const Balance = () => {
         <Card sx={cardStyle}>
           <CardContent>
             <Typography
-              sx={{ fontSize: "1.35rem", color: "#2B6A2F", fontWeight: "bold" }}
+              sx={{
+                fontSize: "1.35rem",
+                color: "#2B6A2F",
+                fontWeight: "bold",
+              }}
               gutterBottom
             >
               Balance de Cuentas
             </Typography>
-            <Typography sx={{ fontSize: "1.25rem", color: "#3A3A3A" }}>
-              ARS ${" "}
-              {new Intl.NumberFormat("en-US").format(
-                balance?.accountArs?.balance
-              )}
-            </Typography>
-            <Typography sx={{ fontSize: "1.25rem", color: "#3A3A3A" }}>
-              USD ${" "}
-              {new Intl.NumberFormat("en-US").format(
-                balance?.accountUsd?.balance
-              )}
-            </Typography>
+            {accounts.map((account, index) => (
+              <Box key={index} sx={{ marginBottom: 2 }}>
+                <Typography
+                  sx={{
+                    fontSize: "1.25rem",
+                    color: "#3A3A3A",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {formatCurrency(account.balance, account.currency)}
+                </Typography>
+                <Typography sx={{ fontSize: "0.875rem", color: "#6C6C6C" }}>
+                  CBU: {account.cbu}
+                </Typography>
+              </Box>
+            ))}
           </CardContent>
         </Card>
       </Grid>
+
       {/* Card para Historial de Transacciones */}
       <Grid item xs={12} sm={5} md={5}>
         <Card sx={cardStyle}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: "1.35rem", color: "#2B6A2F", fontWeight: "bold" }}
-              gutterBottom
-            >
-              Historial de Transacciones
-            </Typography>
-            <Box sx={{ marginTop: 2 }}>
-              {balance?.history?.map((transaction, index) => (
-                <Box key={index} sx={{ marginBottom: 2 }}>
-                  <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
-                    {transaction.description} -{" "}
-                    {formatCurrency(transaction.amount, transaction.currency)}
-                  </Typography>
-                  <Typography sx={{ fontSize: "0.875rem", color: "#6C6C6C" }}>
-                    CBU Origen: {transaction.cbuOrigen}
-                  </Typography>
-                  <Typography sx={{ fontSize: "0.875rem", color: "#6C6C6C" }}>
-                    CBU Destino: {transaction.cbuDestino}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </CardContent>
+        <CardContent>
+  <Typography
+    sx={{
+      fontSize: "1.35rem",
+      color: "#2B6A2F",
+      fontWeight: "bold",
+    }}
+    gutterBottom
+  >
+    Historial de Transacciones
+  </Typography>
+  {balance?.history?.length > 0 ? (
+    <Box sx={{ marginTop: 2 }}>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Detalle</TableCell>
+              <TableCell>CBU Origen</TableCell>
+              <TableCell>CBU Destino</TableCell>
+              <TableCell>Moneda</TableCell>
+              <TableCell>Monto</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {balance.history.map((transaction, index) => (
+              <TableRow key={index}>
+                <TableCell>{transaction.description}</TableCell>
+                <TableCell>{transaction.cbuOrigen}</TableCell>
+                <TableCell>{transaction.cbuDestino}</TableCell>
+                <TableCell>{transaction.currency}</TableCell>
+                <TableCell>{(transaction.amount)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  ) : (
+    <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
+      No tienes transacciones registradas.
+    </Typography>
+  )}
+</CardContent>
+
         </Card>
       </Grid>
+
       {/* Card para Plazos Fijos */}
       <Grid item xs={12} sm={5} md={5}>
         <Card sx={cardStyle}>
           <CardContent>
             <Typography
-              sx={{ fontSize: "1.35rem", color: "#2B6A2F", fontWeight: "bold" }}
+              sx={{
+                fontSize: "1.35rem",
+                color: "#2B6A2F",
+                fontWeight: "bold",
+              }}
               gutterBottom
             >
               Plazos Fijos
@@ -170,4 +221,5 @@ const Balance = () => {
     </Grid>
   );
 };
+
 export default Balance;
