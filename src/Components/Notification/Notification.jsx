@@ -8,6 +8,10 @@ const Notification = ({ openSnackbar, snackbarMessage, snackbarSeverity, setOpen
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left'
+        }}
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
