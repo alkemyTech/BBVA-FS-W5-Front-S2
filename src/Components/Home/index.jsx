@@ -162,7 +162,7 @@ export default function Home() {
   return (
     <div>
       <Grid container spacing={4} sx={{ margin:"30px", p: 1 }}>
-        <Grid item size={8}>
+        <Grid className="cardsssss" item size={9}>
           <Grid container>
             {accounts.map((account) => (
               <Grid item size={6} key={account.id}>
@@ -193,7 +193,7 @@ export default function Home() {
                         <Typography
                           sx={{ fontSize: "2rem", color: "#000000", fontWeight: "bold" }}
                         >
-                          {showBalance ? `$${account.balance}` : "******"}
+                          {showBalance ? `$${account.balance}` : "****"}
                         </Typography>
                       </Grid>
                       <Grid item size={2} >
@@ -283,7 +283,7 @@ export default function Home() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid size={4}>
+        <Grid size={3}>
           <Card sx={cardStyle}>
             <CardHeader
               sx={{ display: "flex", textAlign: "center" }}
