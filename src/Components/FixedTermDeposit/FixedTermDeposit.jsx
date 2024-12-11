@@ -16,7 +16,7 @@ import CardHeader from "@mui/material/CardHeader";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { NumericFormat } from "react-number-format";
-import api from "../../services/api";
+import api from "../../services/Api";
 import "./FixedTermDeposit.css";
 import Notification from "../Notification/Notification";
 import dayjs from "dayjs";
