@@ -97,7 +97,7 @@ export default function Header() {
           }}
         >
           <Link
-            to="/Transferencias"
+            to="/Transacciones"
             style={{ textDecoration: "none", color: "#" }}
           >
             <Typography sx={buttonStyles} variant="body1">

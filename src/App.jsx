@@ -12,6 +12,7 @@ import Page from './Components/Material UI/Page'
 
 
 import './App.css'
+import Transactions from './Components/Transactions'
 function App() {
   const [count, setCount] = useState(0)
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/Balance" element={<Balance />} />
           <Route path="/PlazoFijo" element={<PlazoFijo />} />
           <Route path="/Usuarios" element={<Users/>} />
+          <Route path="/Transacciones" element={<Transactions/>}/>
       </Routes>
     </Page>
   )
