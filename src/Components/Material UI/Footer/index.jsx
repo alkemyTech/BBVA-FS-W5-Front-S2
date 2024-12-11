@@ -44,7 +44,7 @@ export default function Footer() {
             <Typography sx={{ fontSize: "14px" }}>Telefono: +54 11 1234-5678</Typography>
           </Grid>
           <Grid item size={12} sx={{ display: "flex", justifyContent: "center" }}>
-            <Typography sx={{ fontSize: "14px" }}>Email: Lynx@virtual.com</Typography>
+            <Typography sx={{ fontSize: "14px" }}>Email: lynx@virtual.com</Typography>
           </Grid>
         </Grid>
       </Grid>

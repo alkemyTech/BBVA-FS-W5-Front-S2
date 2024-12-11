@@ -11,30 +11,48 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import Notification from "../../components/Notification/Notification";
 
 const Users = () => {
-  const [users, setUsers] = useState([]); // Asegúrate de que users sea un arreglo vacío inicialmente
+  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [open, setOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertSeverity, setAlertSeverity] = useState("success"); // 'success' | 'error'
+  const [notification, setNotification] = useState({
+    openSnackbar: false,
+    snackbarMessage: "",
+    snackbarSeverity: "success",
+    loading: false,
+  });
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token no encontrado");
+    window.location.href = "/";
+    return null;
+  }
 
   // Cargar los usuarios desde la API
   useEffect(() => {
+    setNotification((prev) => ({ ...prev, loading: true }));
     api
       .get("/users")
       .then((response) => {
-        console.log("Usuarios recibidos:", response.data); // Verificar la respuesta de la API
-        setUsers(response.data); // Actualizar el estado con los usuarios
+        console.log("Usuarios recibidos:", response.data);
+        setUsers(response.data);
       })
       .catch((error) => {
         console.error("Error al obtener los usuarios:", error);
+        setNotification({
+          openSnackbar: true,
+          snackbarMessage: "Error al cargar usuarios.",
+          snackbarSeverity: "error",
+        });
+      })
+      .finally(() => {
+        setNotification((prev) => ({ ...prev, loading: false }));
       });
   }, []);
 
@@ -46,23 +64,28 @@ const Users = () => {
 
   const handleDeleteUser = () => {
     if (selectedUser) {
+      setNotification((prev) => ({ ...prev, loading: true }));
       api
         .delete(`/users/${selectedUser.id}`)
         .then(() => {
           setUsers(users.filter((user) => user.id !== selectedUser.id));
-          setAlertMessage("Se eliminó al usuario correctamente.");
-          setAlertSeverity("success");
+          setNotification({
+            openSnackbar: true,
+            snackbarMessage: "Usuario eliminado correctamente.",
+            snackbarSeverity: "success",
+          });
         })
         .catch((error) => {
           console.error("Error al eliminar usuario:", error);
-          setAlertMessage(
-            "No se pudo eliminar el usuario. Inténtalo de nuevo."
-          );
-          setAlertSeverity("error");
+          setNotification({
+            openSnackbar: true,
+            snackbarMessage: "No se pudo eliminar el usuario. Inténtalo de nuevo.",
+            snackbarSeverity: "error",
+          });
         })
         .finally(() => {
           setDeleteDialogOpen(false);
-          setAlertOpen(true); // Mostrar el Snackbar con el mensaje
+          setNotification((prev) => ({ ...prev, loading: false }));
         });
     }
   };
@@ -116,7 +139,6 @@ const Users = () => {
         Usuarios
       </Typography>
 
-      {/* Mostrar los usuarios en Cards */}
       <Grid container spacing={3} justifyContent="center">
         {users.length > 0 ? (
           users.map((user) => (
@@ -170,82 +192,51 @@ const Users = () => {
         )}
       </Grid>
 
-      {/* Diálogo para mostrar cuentas */}
       {selectedUser && (
-        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <Dialog open={open} onClose={handleClose} maxWidth="md" >
           <DialogTitle sx={{ color: "#2B6A2F", fontWeight: "bold" }}>
             Cuentas de {selectedUser.firstName} {selectedUser.lastName}
           </DialogTitle>
           <DialogContent>
-            <Grid container spacing={3} justifyContent="center">
-              <Grid item xs={3}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#2B6A2F", fontWeight: "bold" }}
-                >
-                  CBU
-                </Typography>
-              </Grid>
-              <Grid item xs={3}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#2B6A2F", fontWeight: "bold" }}
-                >
-                  Moneda
-                </Typography>
-              </Grid>
-              <Grid item xs={3}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#2B6A2F", fontWeight: "bold" }}
-                >
-                  Límite
-                </Typography>
-              </Grid>
-              <Grid item xs={3}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#2B6A2F", fontWeight: "bold" }}
-                >
-                  Saldo
-                </Typography>
-              </Grid>
+            <Grid container spacing={3}>
+              {selectedUser.accounts?.map((account) => (
+                <Grid item xs={12} sm={6} key={account.id}>
+                  <Card
+                    sx={{
+                      boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+                      borderRadius: "10px",
+                      width: "100%",
+                      padding: 2,
+                    }}
+                  >
+                    <CardContent>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>CBU:</strong> {account.cbu}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Moneda:</strong> {account.currency}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Límite:</strong> {account.transactionLimit}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Saldo:</strong> {account.balance}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
-
-            {selectedUser.accounts?.map((account) => (
-              <Grid
-                container
-                spacing={3}
-                key={account.id}
-                justifyContent="center"
-                sx={{ mt: 1 }}
-              >
-                <Grid item xs={3}>
-                  <Typography align="center">{account.cbu}</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography align="center">{account.currency}</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography align="center">
-                    {account.transactionLimit}
-                  </Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography align="center">{account.balance}</Typography>
-                </Grid>
-              </Grid>
-            ))}
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} sx={buttonStyles}>
-              Cerrar
-            </Button>
-          </DialogActions>
+          <DialogActions sx={{ justifyContent: "center" }}>
+  <Button onClick={handleClose} sx={buttonStyles}>
+    Cerrar
+  </Button>
+</DialogActions>
+
         </Dialog>
       )}
 
-      {/* Diálogo para confirmar eliminación */}
       <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
         <DialogTitle sx={{ color: "#C62828", fontWeight: "bold" }}>
           ¿Estás seguro de que deseas eliminar a {selectedUser?.firstName}{" "}
@@ -261,21 +252,15 @@ const Users = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar para mensajes de alerta */}
-      <Snackbar
-        open={alertOpen}
-        autoHideDuration={4000}
-        onClose={() => setAlertOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "left" }}
-      >
-        <Alert
-          onClose={() => setAlertOpen(false)}
-          severity={alertSeverity}
-          sx={{ width: "100%" }}
-        >
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <Notification
+        openSnackbar={notification.openSnackbar}
+        snackbarMessage={notification.snackbarMessage}
+        snackbarSeverity={notification.snackbarSeverity}
+        setOpenSnackbar={(value) =>
+          setNotification((prev) => ({ ...prev, openSnackbar: value }))
+        }
+        loading={notification.loading}
+      />
     </Box>
   );
 };
