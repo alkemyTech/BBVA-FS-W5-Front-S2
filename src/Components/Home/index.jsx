@@ -1,29 +1,40 @@
-import { Dialog, Tooltip, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material'; 
-import Grid from '@mui/material/Grid2';
-import { Typography, Card, CardContent, Box, TableHead, InputAdornment,} from "@mui/material";
-import React, { useState, useEffect } from 'react';
+import {
+  Dialog,
+  Tooltip,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import {
+  Typography,
+  Card,
+  CardContent,
+  Box,
+  TableHead,
+  InputAdornment,
+} from "@mui/material";
+import React, { useState, useEffect } from "react";
 import api from "../../services/api";
-import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
-import CardHeader from '@mui/material/CardHeader';
-import IconButton from '@mui/material/IconButton';
+import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
+import CardHeader from "@mui/material/CardHeader";
+import IconButton from "@mui/material/IconButton";
 import PlazosFijos from "../../assets/img/Plazos Fijos.jpg";
-import CardMedia from '@mui/material/CardMedia';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
-import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
+import CardMedia from "@mui/material/CardMedia";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowCircleDownRoundedIcon from "@mui/icons-material/ArrowCircleDownRounded";
+import ArrowCircleUpRoundedIcon from "@mui/icons-material/ArrowCircleUpRounded";
 import { useNavigate, useLocation } from "react-router-dom";
 import Notification from "../Notification/Notification";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
-
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [fixedTerms, setFixedTerms] = useState([]);
   const [showBalance, setBalance] = useState(false);
-
 
   const location = useLocation();
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -48,7 +59,7 @@ export default function Home() {
 
   const fetchTransactions = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (!token) {
         console.error("Token no encontrado");
@@ -58,8 +69,8 @@ export default function Home() {
 
       const response = await api.get("/transactions/user", {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       setTransactions(response.data);
@@ -73,7 +84,7 @@ export default function Home() {
 
   const fetchFixedTerms = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (!token) {
         console.error("Token no encontrado");
@@ -83,8 +94,8 @@ export default function Home() {
 
       const response = await api.get("/fixed-term-deposits", {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       console.log("Datos obtenidos:", response.data);
       setFixedTerms(response.data);
@@ -98,7 +109,7 @@ export default function Home() {
 
   const fetchAccounts = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (!token) {
         console.error("Token no encontrado");
@@ -108,8 +119,8 @@ export default function Home() {
 
       const response = await api.get("/accounts", {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       console.log("Datos obtenidos:", response.data);
       setAccounts(response.data);
@@ -157,11 +168,9 @@ export default function Home() {
     fontWeight: "bold",
   };
 
-  
-
   return (
     <div>
-      <Grid container spacing={4} sx={{ margin:"30px", p: 1 }}>
+      <Grid container spacing={4} sx={{ margin: "30px", p: 1 }}>
         <Grid className="cardsssss" item size={9}>
           <Grid container>
             {accounts.map((account) => (
@@ -171,13 +180,20 @@ export default function Home() {
                     action={
                       <Tooltip title={`CBU: ${account.cbu}`} arrow>
                         <IconButton aria-label="settings">
-                          <BadgeOutlinedIcon sx={{ color: "#2b6a2f", fontSize: "1.5rem" }} />
+                          <BadgeOutlinedIcon
+                            sx={{ color: "#2b6a2f", fontSize: "1.5rem" }}
+                          />
                         </IconButton>
                       </Tooltip>
                     }
-                   
                     title={
-                      <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
+                      <Typography
+                        sx={{
+                          fontSize: "1.35rem",
+                          color: "#2b6a2f",
+                          fontWeight: "bold",
+                        }}
+                      >
                         {`Cuenta en ${account.currency}`}
                       </Typography>
                     }
@@ -185,21 +201,33 @@ export default function Home() {
                   <CardContent>
                     <Grid container>
                       <Grid item size={12}>
-                        <Typography sx={{ fontSize: "1.25rem", color: "#3A3A3A", marginBottom: "8px" }}>
+                        <Typography
+                          sx={{
+                            fontSize: "1.25rem",
+                            color: "#3A3A3A",
+                            marginBottom: "8px",
+                          }}
+                        >
                           Dinero disponible
                         </Typography>
                       </Grid>
-                      <Grid item size={4}  sx={{textAlign:"center"}}>
+                      <Grid item size={4} sx={{ textAlign: "center" }}>
                         <Typography
-                          sx={{ fontSize: "2rem", color: "#000000", fontWeight: "bold" }}
+                          sx={{
+                            fontSize: "2rem",
+                            color: "#000000",
+                            fontWeight: "bold",
+                          }}
                         >
                           {showBalance ? `$${account.balance}` : "****"}
                         </Typography>
                       </Grid>
-                      <Grid item size={2} >
+                      <Grid item size={2}>
                         <IconButton
                           sx={{ color: "#43A047" }}
-                          aria-label={showBalance ? "hide balance" : "show balance"}
+                          aria-label={
+                            showBalance ? "hide balance" : "show balance"
+                          }
                           onClick={handleClickShowBalance}
                           onMouseDown={handleMouseDownBalance}
                           edge="end"
@@ -209,12 +237,26 @@ export default function Home() {
                       </Grid>
                     </Grid>
                   </CardContent>
-                  <Grid container size={12} sx={{ gap: 2, textAlign: "center", marginTop: 2, padding: "10px", justifyContent: "center" }}>
+                  <Grid
+                    container
+                    size={12}
+                    sx={{
+                      gap: 2,
+                      textAlign: "center",
+                      marginTop: 2,
+                      padding: "10px",
+                      justifyContent: "center",
+                    }}
+                  >
                     <Grid item size={5}>
-                      <Typography variant="body2" fullWidth sx={buttons}>Depositar</Typography>
+                      <Typography variant="body2" fullWidth sx={buttons}>
+                        Depositar
+                      </Typography>
                     </Grid>
                     <Grid item size={5}>
-                      <Typography variant="body2" sx={buttons}>Transferir</Typography>
+                      <Typography variant="body2" sx={buttons}>
+                        Transferir
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Card>
@@ -227,7 +269,13 @@ export default function Home() {
                 <CardHeader
                   style={{ textAlign: "center" }}
                   title={
-                    <Typography style={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
+                    <Typography
+                      style={{
+                        fontSize: "1.35rem",
+                        color: "#2b6a2f",
+                        fontWeight: "bold",
+                      }}
+                    >
                       Plazos fijos
                     </Typography>
                   }
@@ -246,28 +294,50 @@ export default function Home() {
                           }}
                         >
                           <Grid item size={4}>
-                            <Typography style={{ fontWeight: "bold", color: "#000", fontSize: "1rem" }}>
+                            <Typography
+                              style={{
+                                fontWeight: "bold",
+                                color: "#000",
+                                fontSize: "1rem",
+                              }}
+                            >
                               Plazo fijo {index + 1}
                             </Typography>
-                            <Typography style={{ color: "#3A3A3A", fontSize: "0.85rem" }}>
+                            <Typography
+                              style={{ color: "#3A3A3A", fontSize: "0.85rem" }}
+                            >
                               CBU: {fixedTerm.accountCBU}
                             </Typography>
                           </Grid>
                           <Grid item size={4} style={{ textAlign: "center" }}>
                             <Typography style={{ fontSize: "0.90rem" }}>
                               Fecha de inicio:{" "}
-                              {new Date(fixedTerm.startDate).toLocaleString("es-ES", { dateStyle: "medium" })}
+                              {new Date(fixedTerm.startDate).toLocaleString(
+                                "es-ES",
+                                { dateStyle: "medium" }
+                              )}
                             </Typography>
                             <Typography style={{ fontSize: "0.90rem" }}>
                               Fecha de fin:{" "}
-                              {new Date(fixedTerm.endDate).toLocaleString("es-ES", { dateStyle: "medium" })}
+                              {new Date(fixedTerm.endDate).toLocaleString(
+                                "es-ES",
+                                { dateStyle: "medium" }
+                              )}
                             </Typography>
                           </Grid>
                           <Grid item size={4} style={{ textAlign: "right" }}>
-                            <Typography style={{ fontWeight: "bold", color: "#000", fontSize: "1rem" }}>
+                            <Typography
+                              style={{
+                                fontWeight: "bold",
+                                color: "#000",
+                                fontSize: "1rem",
+                              }}
+                            >
                               Monto: ${fixedTerm.amount}
                             </Typography>
-                            <Typography style={{ color: "gray", fontSize: "0.85rem" }}>
+                            <Typography
+                              style={{ color: "gray", fontSize: "0.85rem" }}
+                            >
                               Tasa de interés: {fixedTerm.interestRate}%
                             </Typography>
                           </Grid>
@@ -275,7 +345,11 @@ export default function Home() {
                       </Grid>
                     ))}
                   </Grid>
-                  <Grid container justifyContent="center" style={{ marginTop: 16 }}>
+                  <Grid
+                    container
+                    justifyContent="center"
+                    style={{ marginTop: 16 }}
+                  >
                     <Button style={buttons}>Ver más</Button>
                   </Grid>
                 </CardContent>
@@ -288,7 +362,13 @@ export default function Home() {
             <CardHeader
               sx={{ display: "flex", textAlign: "center" }}
               title={
-                <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
+                <Typography
+                  sx={{
+                    fontSize: "1.35rem",
+                    color: "#2b6a2f",
+                    fontWeight: "bold",
+                  }}
+                >
                   Últimos movimientos
                 </Typography>
               }
@@ -310,35 +390,84 @@ export default function Home() {
                       >
                         <Grid item size={2}>
                           {transaction.type === "DEPOSITO" && (
-                            <ArrowCircleUpRoundedIcon sx={{ fontSize: "36px", color: "#43A047" }} />
+                            <ArrowCircleUpRoundedIcon
+                              sx={{ fontSize: "36px", color: "#43A047" }}
+                            />
                           )}
                           {transaction.type === "INGRESO" && (
-                            <ArrowUpwardIcon sx={{ fontSize: "36px", color: "#D32F2F" }} />
+                            <ArrowCircleUpRoundedIcon
+                              sx={{ fontSize: "36px", color: "#43A047" }}
+                            />
                           )}
                           {transaction.type === "PAGO" && (
-                            <ArrowCircleDownRoundedIcon sx={{ fontSize: "36px", color: "#FF0000" }} />
+                            <ArrowCircleDownRoundedIcon
+                              sx={{ fontSize: "36px", color: "#FF0000" }}
+                            />
                           )}
                         </Grid>
                         <Grid item size={10}>
                           <Grid container>
                             <Grid item size={6}>
-                              <Typography sx={{ fontWeight: "bold", color: "#000000", fontSize: "1rem" }}>
-                                {transaction.account.firstName} {transaction.account.lastName}
+                              <Typography
+                                sx={{
+                                  fontWeight: "bold",
+                                  color: "#000000",
+                                  fontSize: "1rem",
+                                }}
+                              >
+                                {transaction.type === "PAGO" ||
+                                transaction.type === "DEPOSITO"
+                                  ? `${
+                                      transaction.accountDestino?.firstName ||
+                                      ""
+                                    } ${
+                                      transaction.accountDestino?.lastName || ""
+                                    }`
+                                  : `${
+                                      transaction.accountOrigen?.firstName || ""
+                                    } ${
+                                      transaction.accountOrigen?.lastName || ""
+                                    }`}
                               </Typography>
                             </Grid>
                             <Grid item size={6} sx={{ textAlign: "right" }}>
-                              <Typography sx={{ fontWeight: "bold", color: "#000000", fontSize: "1rem" }}>
-                                {transaction.type === "PAGO" ? `- $${transaction.amount}` : `+ $${transaction.amount}`} {transaction.account.currency}
+                              <Typography
+                                sx={{
+                                  fontWeight: "bold",
+                                  color: "#000000",
+                                  fontSize: "1rem",
+                                }}
+                              >
+                                {transaction.type === "PAGO"
+                                  ? `- $${transaction.amount} ${
+                                      transaction.accountDestino?.currency || ""
+                                    }`
+                                  : `+ $${transaction.amount} ${
+                                      transaction.type === "INGRESO"
+                                        ? transaction.accountOrigen?.currency ||
+                                          ""
+                                        : transaction.accountDestino
+                                            ?.currency || ""
+                                    }`}
                               </Typography>
                             </Grid>
+
                             <Grid item size={6}>
                               <Typography>{transaction.concept}</Typography>
                             </Grid>
                             <Grid item size={6} sx={{ textAlign: "right" }}>
-                              <Typography sx={{ color: "text.secondary", fontSize: "0.85rem" }}>
-                                {new Date(transaction.timestamp).toLocaleString("es-ES", {
-                                  timeStyle: "short",
-                                })}
+                              <Typography
+                                sx={{
+                                  color: "text.secondary",
+                                  fontSize: "0.85rem",
+                                }}
+                              >
+                                {new Date(transaction.timestamp).toLocaleString(
+                                  "es-ES",
+                                  {
+                                    timeStyle: "short",
+                                  }
+                                )}
                               </Typography>
                             </Grid>
                           </Grid>
@@ -352,8 +481,6 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
-
-      
 
       <Notification
         openSnackbar={openSnackbar}
