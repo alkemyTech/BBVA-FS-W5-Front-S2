@@ -1,5 +1,6 @@
+import { Dialog, Tooltip, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material'; 
 import Grid from '@mui/material/Grid2';
-import { Typography, Card, CardContent, Box, TableHead } from "@mui/material";
+import { Typography, Card, CardContent, Box, TableHead, InputAdornment,} from "@mui/material";
 import React, { useState, useEffect } from 'react';
 import api from "../../services/api";
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
@@ -12,15 +13,38 @@ import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRound
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 import { useNavigate, useLocation } from "react-router-dom";
 import Notification from "../Notification/Notification";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+
 
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [fixedTerms, setFixedTerms] = useState([]);
+  const [showBalance, setBalance] = useState(false);
+
+
   const location = useLocation();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickShowBalance = () => setBalance((show) => !show);
+
+  const handleMouseDownBalance = (event) => {
+    event.preventDefault();
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const fetchTransactions = async () => {
     try {
@@ -39,6 +63,31 @@ export default function Home() {
       });
 
       setTransactions(response.data);
+    } catch (error) {
+      console.error("Error al obtener datos:", error);
+      if (error.response && error.response.status === 401) {
+        window.location.href = "/";
+      }
+    }
+  };
+
+  const fetchFixedTerms = async () => {
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        console.error("Token no encontrado");
+        window.location.href = "/";
+        return;
+      }
+
+      const response = await api.get("/fixed-term-deposits", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log("Datos obtenidos:", response.data);
+      setFixedTerms(response.data);
     } catch (error) {
       console.error("Error al obtener datos:", error);
       if (error.response && error.response.status === 401) {
@@ -73,6 +122,12 @@ export default function Home() {
   };
 
   useEffect(() => {
+    fetchAccounts();
+    fetchTransactions();
+    fetchFixedTerms();
+  }, []);
+
+  useEffect(() => {
     if (location.state?.success) {
       setSnackbarMessage("Plazo fijo creado con éxito");
       setSnackbarSeverity("success");
@@ -80,21 +135,16 @@ export default function Home() {
     }
   }, [location.state]);
 
-  useEffect(() => {
-    fetchAccounts();
-    fetchTransactions();
-  }, []);
-
   const cardStyle = {
-    margin: "10px",
+    margin: "8px",
     borderRadius: "5px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     borderTop: "4px solid #9cd99e",
   };
 
-  const cardTransactionStyle = {
+  const cardFixedTermStyle = {
     borderRadius: "5px",
-    margin: "10px",
+    margin: "8px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     borderBottom: "4px solid #9cd99e",
   };
@@ -107,9 +157,11 @@ export default function Home() {
     fontWeight: "bold",
   };
 
+  
+
   return (
     <div>
-      <Grid container spacing={2} sx={{ marginTop: 1, p: 1 }}>
+      <Grid container spacing={4} sx={{ margin:"30px", p: 1 }}>
         <Grid item size={8}>
           <Grid container>
             {accounts.map((account) => (
@@ -117,10 +169,13 @@ export default function Home() {
                 <Card sx={cardStyle}>
                   <CardHeader
                     action={
-                      <IconButton arial-label="settings">
-                        <BadgeOutlinedIcon sx={{ color: "#2b6a2f", fontSize: "1.5rem" }} />
-                      </IconButton>
+                      <Tooltip title={`CBU: ${account.cbu}`} arrow>
+                        <IconButton aria-label="settings">
+                          <BadgeOutlinedIcon sx={{ color: "#2b6a2f", fontSize: "1.5rem" }} />
+                        </IconButton>
+                      </Tooltip>
                     }
+                   
                     title={
                       <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
                         {`Cuenta en ${account.currency}`}
@@ -128,12 +183,31 @@ export default function Home() {
                     }
                   />
                   <CardContent>
-                    <Typography sx={{ fontSize: "1.25rem", color: "#3A3A3A", marginBottom: "8px" }}>
-                      Dinero disponible
-                    </Typography>
-                    <Typography sx={{ fontSize: "2rem", color: "#000000", fontWeight: "bold" }}>
-                      ${account.balance}
-                    </Typography>
+                    <Grid container>
+                      <Grid item size={12}>
+                        <Typography sx={{ fontSize: "1.25rem", color: "#3A3A3A", marginBottom: "8px" }}>
+                          Dinero disponible
+                        </Typography>
+                      </Grid>
+                      <Grid item size={4}  sx={{textAlign:"center"}}>
+                        <Typography
+                          sx={{ fontSize: "2rem", color: "#000000", fontWeight: "bold" }}
+                        >
+                          {showBalance ? `$${account.balance}` : "******"}
+                        </Typography>
+                      </Grid>
+                      <Grid item size={2} >
+                        <IconButton
+                          sx={{ color: "#43A047" }}
+                          aria-label={showBalance ? "hide balance" : "show balance"}
+                          onClick={handleClickShowBalance}
+                          onMouseDown={handleMouseDownBalance}
+                          edge="end"
+                        >
+                          {showBalance ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </Grid>
+                    </Grid>
                   </CardContent>
                   <Grid container size={12} sx={{ gap: 2, textAlign: "center", marginTop: 2, padding: "10px", justifyContent: "center" }}>
                     <Grid item size={5}>
@@ -146,40 +220,73 @@ export default function Home() {
                 </Card>
               </Grid>
             ))}
-            <Grid item>
-              <Grid container>
-                <Grid item size={6}>
-                  <Card sx={cardStyle}>
-                    <CardMedia
-                      component="img"
-                      alt="Plazos fijos"
-                      height="140"
-                      image={PlazosFijos}
-                      width="100%"
-                      sx={{ objectFit: 'cover' }}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        Plazos fijos
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        ¡Hacé crecer tu dinero hoy! Descubrí la seguridad y rentabilidad de nuestro plazo fijo.
-                        Invertí fácil y seguro, ¡tu futuro te lo agradecerá!
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item size={12}>
+              <Card style={cardStyle}>
+                <CardHeader
+                  style={{ textAlign: "center" }}
+                  title={
+                    <Typography style={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
+                      Plazos fijos
+                    </Typography>
+                  }
+                />
+                <CardContent>
+                  <Grid container spacing={2}>
+                    {fixedTerms.slice(0, 5).map((fixedTerm, index) => (
+                      <Grid item size={12} key={index}>
+                        <Grid
+                          container
+                          spacing={2}
+                          style={{
+                            padding: "8px",
+                            borderRadius: "8px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Grid item size={4}>
+                            <Typography style={{ fontWeight: "bold", color: "#000", fontSize: "1rem" }}>
+                              Plazo fijo {index + 1}
+                            </Typography>
+                            <Typography style={{ color: "#3A3A3A", fontSize: "0.85rem" }}>
+                              CBU: {fixedTerm.accountCBU}
+                            </Typography>
+                          </Grid>
+                          <Grid item size={4} style={{ textAlign: "center" }}>
+                            <Typography style={{ fontSize: "0.90rem" }}>
+                              Fecha de inicio:{" "}
+                              {new Date(fixedTerm.startDate).toLocaleString("es-ES", { dateStyle: "medium" })}
+                            </Typography>
+                            <Typography style={{ fontSize: "0.90rem" }}>
+                              Fecha de fin:{" "}
+                              {new Date(fixedTerm.endDate).toLocaleString("es-ES", { dateStyle: "medium" })}
+                            </Typography>
+                          </Grid>
+                          <Grid item size={4} style={{ textAlign: "right" }}>
+                            <Typography style={{ fontWeight: "bold", color: "#000", fontSize: "1rem" }}>
+                              Monto: ${fixedTerm.amount}
+                            </Typography>
+                            <Typography style={{ color: "gray", fontSize: "0.85rem" }}>
+                              Tasa de interés: {fixedTerm.interestRate}%
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    ))}
+                  </Grid>
+                  <Grid container justifyContent="center" style={{ marginTop: 16 }}>
+                    <Button style={buttons}>Ver más</Button>
+                  </Grid>
+                </CardContent>
+              </Card>
             </Grid>
           </Grid>
         </Grid>
         <Grid size={4}>
           <Card sx={cardStyle}>
             <CardHeader
-              sx={{
-                display: "flex",
-                textAlign: "center",
-              }}
+              sx={{ display: "flex", textAlign: "center" }}
               title={
                 <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
                   Últimos movimientos
@@ -188,7 +295,7 @@ export default function Home() {
             />
             <CardContent>
               <Grid container spacing={1}>
-                {transactions.slice(0, 6).map((transaction, index) => (
+                {transactions.slice(0, 8).map((transaction, index) => (
                   <Grid item size={12} key={index}>
                     <Grid item size={12}>
                       <Grid
@@ -198,7 +305,7 @@ export default function Home() {
                           display: "flex",
                           alignItems: "center",
                           padding: "10px 12px",
-                          justifyContent: "space-between",
+                          justifyContent: "space-around",
                         }}
                       >
                         <Grid item size={2}>
@@ -245,6 +352,8 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
+
+      
 
       <Notification
         openSnackbar={openSnackbar}

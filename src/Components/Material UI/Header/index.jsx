@@ -104,22 +104,9 @@ export default function Header() {
               Transferencias
             </Typography>
           </Link>
-          <Link to="/Pago" style={{ textDecoration: "none", color: "#" }}>
-            <Typography sx={buttonStyles} variant="body1">
-              Nuevo Pago
-            </Typography>
-          </Link>
           <Link to="/Balance" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">
               Balance
-            </Typography>
-          </Link>
-          <Link
-            to="/Inversiones"
-            style={{ textDecoration: "none", color: "#" }}
-          >
-            <Typography sx={buttonStyles} variant="body1">
-              Inversiones
             </Typography>
           </Link>
           <Link
