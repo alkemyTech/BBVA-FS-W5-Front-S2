@@ -25,10 +25,16 @@ const formatCurrency = (amount, currency) => {
     return "$0.00";
   }
 };
-
 const Balance = () => {
   const dispatch = useDispatch();
   const { balance, loading, error } = useSelector((state) => state.balance);
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token no encontrado");
+    window.location.href = "/";
+    return;
+  }
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 1; // Mostrar 1 plazo fijo por página
@@ -36,21 +42,18 @@ const Balance = () => {
   useEffect(() => {
     dispatch(fetchAccountBalance());
   }, [dispatch]);
-
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
-
   const cardStyle = {
     margin: "10px",
     borderRadius: "5px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    borderTop: "4px solid #9cd99e",
+    borderTop: "4px solid #9CD99E",
     width: "100%",
     maxWidth: "800px",
     display: "flex",
     flexDirection: "column",
   };
-
   const gridContainerStyle = {
     display: "flex",
     justifyContent: "center",
@@ -71,7 +74,7 @@ const Balance = () => {
         <Card sx={cardStyle}>
           <CardContent>
             <Typography
-              sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}
+              sx={{ fontSize: "1.35rem", color: "#2B6A2F", fontWeight: "bold" }}
               gutterBottom
             >
               Balance de Cuentas
@@ -91,13 +94,12 @@ const Balance = () => {
           </CardContent>
         </Card>
       </Grid>
-
       {/* Card para Historial de Transacciones */}
       <Grid item xs={12} sm={5} md={5}>
         <Card sx={cardStyle}>
           <CardContent>
             <Typography
-              sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}
+              sx={{ fontSize: "1.35rem", color: "#2B6A2F", fontWeight: "bold" }}
               gutterBottom
             >
               Historial de Transacciones
@@ -121,13 +123,12 @@ const Balance = () => {
           </CardContent>
         </Card>
       </Grid>
-
       {/* Card para Plazos Fijos */}
       <Grid item xs={12} sm={5} md={5}>
         <Card sx={cardStyle}>
           <CardContent>
             <Typography
-              sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}
+              sx={{ fontSize: "1.35rem", color: "#2B6A2F", fontWeight: "bold" }}
               gutterBottom
             >
               Plazos Fijos
@@ -169,5 +170,4 @@ const Balance = () => {
     </Grid>
   );
 };
-
 export default Balance;

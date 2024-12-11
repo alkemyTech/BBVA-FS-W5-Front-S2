@@ -5,21 +5,22 @@ import api from "../../services/api";
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
-import Prestamos from "../../assets/img/Prestamos.jpg";
 import PlazosFijos from "../../assets/img/Plazos Fijos.jpg";
-import CardActionArea from '@mui/material/CardActionArea';
 import CardMedia from '@mui/material/CardMedia';
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
+import { useNavigate, useLocation } from "react-router-dom";
+import Notification from "../Notification/Notification";
 
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const location = useLocation();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [loading, setLoading] = useState(false);
 
   const fetchTransactions = async () => {
     try {
@@ -72,6 +73,14 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (location.state?.success) {
+      setSnackbarMessage("Plazo fijo creado con éxito");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     fetchAccounts();
     fetchTransactions();
   }, []);
@@ -99,142 +108,151 @@ export default function Home() {
   };
 
   return (
-    <Grid container spacing={2} sx={{ marginTop: 1, p: 1 }}>
-      <Grid item size={8}>
-        <Grid container>
-          {accounts.map((account) => (
-            <Grid item size={6} key={account.id}>
-              <Card sx={cardStyle}>
-                <CardHeader
-                  action={
-                    <IconButton arial-label="settings">
-                      <BadgeOutlinedIcon sx={{ color: "#2b6a2f", fontSize: "1.5rem" }} />
-                    </IconButton>
-                  }
-                  title={
-                    <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
-                      {`Cuenta en ${account.currency}`}
-                    </Typography>
-                  }
-                />
-                <CardContent>
-                  <Typography sx={{ fontSize: "1.25rem", color: "#3A3A3A", marginBottom: "8px" }}>
-                    Dinero disponible
-                  </Typography>
-                  <Typography sx={{ fontSize: "2rem", color: "#000000", fontWeight: "bold" }}>
-                    ${account.balance}
-                  </Typography>
-                </CardContent>
-                <Grid container size={12} sx={{ gap: 2, textAlign: "center", marginTop: 2, padding: "10px", justifyContent: "center" }}>
-                  <Grid item size={5}>
-                    <Typography variant="body2" fullWidth sx={buttons}>Depositar</Typography>
-                  </Grid>
-                  <Grid item size={5}>
-                    <Typography variant="body2" sx={buttons}>Transferir</Typography>
-                  </Grid>
-                </Grid>
-              </Card>
-            </Grid>
-          ))}
-          <Grid item>
-            <Grid container>
-              <Grid item size={6}>
+    <div>
+      <Grid container spacing={2} sx={{ marginTop: 1, p: 1 }}>
+        <Grid item size={8}>
+          <Grid container>
+            {accounts.map((account) => (
+              <Grid item size={6} key={account.id}>
                 <Card sx={cardStyle}>
-                  <CardMedia
-                    component="img"
-                    alt="Plazos fijos"
-                    height="140"
-                    image={PlazosFijos}
-                    width="100%"
-                    sx={{ objectFit: 'cover' }}
+                  <CardHeader
+                    action={
+                      <IconButton arial-label="settings">
+                        <BadgeOutlinedIcon sx={{ color: "#2b6a2f", fontSize: "1.5rem" }} />
+                      </IconButton>
+                    }
+                    title={
+                      <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
+                        {`Cuenta en ${account.currency}`}
+                      </Typography>
+                    }
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      Plazos fijos
+                    <Typography sx={{ fontSize: "1.25rem", color: "#3A3A3A", marginBottom: "8px" }}>
+                      Dinero disponible
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      ¡Hacé crecer tu dinero hoy!
-                      Descubrí la seguridad y rentabilidad de nuestro plazo fijo.
-                      Invertí fácil y seguro, ¡tu futuro te lo agradecerá!
+                    <Typography sx={{ fontSize: "2rem", color: "#000000", fontWeight: "bold" }}>
+                      ${account.balance}
                     </Typography>
                   </CardContent>
+                  <Grid container size={12} sx={{ gap: 2, textAlign: "center", marginTop: 2, padding: "10px", justifyContent: "center" }}>
+                    <Grid item size={5}>
+                      <Typography variant="body2" fullWidth sx={buttons}>Depositar</Typography>
+                    </Grid>
+                    <Grid item size={5}>
+                      <Typography variant="body2" sx={buttons}>Transferir</Typography>
+                    </Grid>
+                  </Grid>
                 </Card>
+              </Grid>
+            ))}
+            <Grid item>
+              <Grid container>
+                <Grid item size={6}>
+                  <Card sx={cardStyle}>
+                    <CardMedia
+                      component="img"
+                      alt="Plazos fijos"
+                      height="140"
+                      image={PlazosFijos}
+                      width="100%"
+                      sx={{ objectFit: 'cover' }}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Plazos fijos
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        ¡Hacé crecer tu dinero hoy! Descubrí la seguridad y rentabilidad de nuestro plazo fijo.
+                        Invertí fácil y seguro, ¡tu futuro te lo agradecerá!
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid size={4}>
-        <Card sx={cardStyle}>
-          <CardHeader
-            sx={{
-              display: "flex",
-              textAlign: "center",
-            }}
-            title={
-              <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
-                Últimos movimientos
-              </Typography>
-            }
-          />
-          <CardContent>
-            <Grid container spacing={1}>
-              {transactions.slice(0, 6).map((transaction, index) => (
-                <Grid item size={12} key={index}>
-                  <Grid item size={12}>
-                    <Grid
-                      container
-                      spacing={1}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        padding: "10px 12px",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Grid item size={2}>
-                        {transaction.type === "DEPOSITO" && (
-                          <ArrowCircleUpRoundedIcon sx={{ fontSize: "36px", color: "#43A047" }} />
-                        )}
-                        {transaction.type === "INGRESO" && (
-                          <ArrowUpwardIcon  sx={{ fontSize: "36px", color: "#D32F2F" }} />
-                        )}
-                        {transaction.type === "PAGO" && (
-                          <ArrowCircleDownRoundedIcon sx={{ fontSize: "36px", color: "#FF0000" }} />
-                        )}
-                      </Grid>
-                      <Grid item size={10}>
-                        <Grid container>
-                          <Grid item size={6}>
-                            <Typography sx={{ fontWeight: "bold", color: "#000000", fontSize: "1rem" }}>
-                              {transaction.account.firstName} {transaction.account.lastName}
-                            </Typography>
-                          </Grid>
-                          <Grid item size={6} sx={{ textAlign: "right" }}>
-                            <Typography sx={{ fontWeight: "bold", color: "#000000", fontSize: "1rem" }}>
-                               {transaction.type === "PAGO" ? `- $${transaction.amount}` : `+ $${transaction.amount}`} {transaction.account.currency}
-                            </Typography>
-                          </Grid>
-                          <Grid item size={6}>
-                            <Typography>{transaction.concept}</Typography>
-                          </Grid>
-                          <Grid item size={6} sx={{ textAlign: "right" }}>
-                            <Typography sx={{ color: "text.secondary", fontSize: "0.85rem" }}>
-                              {new Date(transaction.timestamp).toLocaleString("es-ES", {
-                                timeStyle: "short",
-                              })}
-                            </Typography>
+        <Grid size={4}>
+          <Card sx={cardStyle}>
+            <CardHeader
+              sx={{
+                display: "flex",
+                textAlign: "center",
+              }}
+              title={
+                <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
+                  Últimos movimientos
+                </Typography>
+              }
+            />
+            <CardContent>
+              <Grid container spacing={1}>
+                {transactions.slice(0, 6).map((transaction, index) => (
+                  <Grid item size={12} key={index}>
+                    <Grid item size={12}>
+                      <Grid
+                        container
+                        spacing={1}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "10px 12px",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Grid item size={2}>
+                          {transaction.type === "DEPOSITO" && (
+                            <ArrowCircleUpRoundedIcon sx={{ fontSize: "36px", color: "#43A047" }} />
+                          )}
+                          {transaction.type === "INGRESO" && (
+                            <ArrowUpwardIcon sx={{ fontSize: "36px", color: "#D32F2F" }} />
+                          )}
+                          {transaction.type === "PAGO" && (
+                            <ArrowCircleDownRoundedIcon sx={{ fontSize: "36px", color: "#FF0000" }} />
+                          )}
+                        </Grid>
+                        <Grid item size={10}>
+                          <Grid container>
+                            <Grid item size={6}>
+                              <Typography sx={{ fontWeight: "bold", color: "#000000", fontSize: "1rem" }}>
+                                {transaction.account.firstName} {transaction.account.lastName}
+                              </Typography>
+                            </Grid>
+                            <Grid item size={6} sx={{ textAlign: "right" }}>
+                              <Typography sx={{ fontWeight: "bold", color: "#000000", fontSize: "1rem" }}>
+                                {transaction.type === "PAGO" ? `- $${transaction.amount}` : `+ $${transaction.amount}`} {transaction.account.currency}
+                              </Typography>
+                            </Grid>
+                            <Grid item size={6}>
+                              <Typography>{transaction.concept}</Typography>
+                            </Grid>
+                            <Grid item size={6} sx={{ textAlign: "right" }}>
+                              <Typography sx={{ color: "text.secondary", fontSize: "0.85rem" }}>
+                                {new Date(transaction.timestamp).toLocaleString("es-ES", {
+                                  timeStyle: "short",
+                                })}
+                              </Typography>
+                            </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              ))}
-            </Grid>
-          </CardContent>
-        </Card>
+                ))}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+
+      <Notification
+        openSnackbar={openSnackbar}
+        snackbarMessage={snackbarMessage}
+        snackbarSeverity={snackbarSeverity}
+        setOpenSnackbar={setOpenSnackbar}
+        loading={loading}
+      />
+    </div>
   );
 }
