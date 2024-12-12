@@ -4,17 +4,24 @@ import {
   Typography,
   Button,
   Box,
-  Card,
-  CardContent,
-  CardActions,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Notification from "../../components/Notification/Notification";
 import Paginado from "../../Components/Paginate/Paginado";
+import { Card, CardContent, CardActions } from "@mui/material";
+
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -27,10 +34,10 @@ const Users = () => {
     snackbarSeverity: "success",
     loading: false,
   });
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8); // Mantener la cantidad fija de usuarios por página
+  const [itemsPerPage] = useState(8);
   const [totalPages, setTotalPages] = useState(0);
+  const [searchName, setSearchName] = useState("");
 
   const token = localStorage.getItem("token");
   if (!token) {
@@ -39,11 +46,12 @@ const Users = () => {
     return null;
   }
 
-  // Cargar los usuarios desde la API
+  // Cargar los usuarios desde la API con filtro por nombre
   useEffect(() => {
     setNotification((prev) => ({ ...prev, loading: true }));
+    const url = searchName ? `/users/search?name=${searchName}` : "/users";
     api
-      .get("/users")
+      .get(url)
       .then((response) => {
         const totalUsers = response.data.length;
         setUsers(response.data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage));
@@ -60,7 +68,11 @@ const Users = () => {
       .finally(() => {
         setNotification((prev) => ({ ...prev, loading: false }));
       });
-  }, [currentPage]);
+  }, [currentPage, searchName]);
+
+  const handleSearchChange = (event) => {
+    setSearchName(event.target.value);
+  };
 
   const handleShowAccounts = (userId) => {
     const user = users.find((u) => u.id === userId);
@@ -74,12 +86,36 @@ const Users = () => {
       api
         .delete(`/users/${selectedUser.id}`)
         .then(() => {
-          setUsers(users.filter((user) => user.id !== selectedUser.id));
+          // Actualizamos la lista de usuarios después de eliminar uno
+          setUsers((prevUsers) =>
+            prevUsers.filter((user) => user.id !== selectedUser.id)
+          );
           setNotification({
             openSnackbar: true,
             snackbarMessage: "Usuario eliminado correctamente.",
             snackbarSeverity: "success",
           });
+          // Actualizar la paginación y la cantidad total de usuarios
+          const remainingUsers = users.filter((user) => user.id !== selectedUser.id);
+          setTotalPages(Math.ceil(remainingUsers.length / itemsPerPage));
+          if (currentPage > Math.ceil(remainingUsers.length / itemsPerPage)) {
+            setCurrentPage(Math.ceil(remainingUsers.length / itemsPerPage));
+          }
+          // Recargar la lista de usuarios después de la eliminación
+          const url = searchName ? `/users/search?name=${searchName}` : "/users";
+          api
+            .get(url)
+            .then((response) => {
+              setUsers(response.data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage));
+            })
+            .catch((error) => {
+              console.error("Error al recargar los usuarios:", error);
+              setNotification({
+                openSnackbar: true,
+                snackbarMessage: "Error al recargar los usuarios.",
+                snackbarSeverity: "error",
+              });
+            });
         })
         .catch((error) => {
           console.error("Error al eliminar usuario:", error);
@@ -149,58 +185,71 @@ const Users = () => {
         Usuarios
       </Typography>
 
-      <Grid container spacing={3} justifyContent="center">
-        {users.length > 0 ? (
-          users.map((user) => (
-            <Grid item xs={12} sm={6} md={4} key={user.id}>
-              <Card
-                sx={{
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-                  borderRadius: "10px",
-                  width: "100%",
-                }}
-              >
-                <CardContent>
-                  <Typography
-                    variant="h6"
-                    sx={{ color: "#2B6A2F", fontWeight: "bold" }}
-                  >
-                    {user.firstName} {user.lastName}
+      {/* Card para el campo de búsqueda */}
+      <Card sx={{ boxShadow: "0 2px 10px rgba(0,0,0,0.1)", borderRadius: "10px", mb: 3 }}>
+        <CardContent>
+          <TextField
+            label="Buscar por nombre"
+            variant="outlined"
+            fullWidth
+            value={searchName}
+            onChange={handleSearchChange}
+            sx={{
+              width: "100%",
+              marginBottom: "16px",
+            }}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Tabla de Usuarios */}
+      <TableContainer component={Paper} sx={{ mb: 3 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Nombre</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Apellido</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Email</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Rol</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.length > 0 ? (
+              users.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell>{user.firstName}</TableCell>
+                  <TableCell>{user.lastName}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.role?.name}</TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() => handleShowAccounts(user.id)}
+                      sx={buttonStyles}
+                    >
+                      Ver Cuentas
+                    </Button>
+                    <Button
+                      onClick={() => openDeleteDialog(user.id)}
+                      sx={deleteButtonStyles}
+                    >
+                      Eliminar Usuario
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  <Typography variant="body1" color="text.secondary">
+                    No hay usuarios disponibles.
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    <strong>Email:</strong> {user.email}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    <strong>Rol:</strong> {user.role?.name}
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                >
-                  <Button
-                    onClick={() => handleShowAccounts(user.id)}
-                    fullWidth
-                    sx={buttonStyles}
-                  >
-                    Ver Cuentas
-                  </Button>
-                  <Button
-                    onClick={() => openDeleteDialog(user.id)}
-                    fullWidth
-                    sx={deleteButtonStyles}
-                  >
-                    Eliminar Usuario
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Typography variant="body1" color="text.secondary">
-            No hay usuarios disponibles.
-          </Typography>
-        )}
-      </Grid>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       <Paginado
         totalPages={totalPages}
@@ -208,8 +257,9 @@ const Users = () => {
         onPageChange={handlePageChange}
       />
 
+      {/* Dialog para ver cuentas */}
       {selectedUser && (
-        <Dialog open={open} onClose={handleClose} maxWidth="md" >
+        <Dialog open={open} onClose={handleClose} maxWidth="md">
           <DialogTitle sx={{ color: "#2B6A2F", fontWeight: "bold" }}>
             Cuentas de {selectedUser.firstName} {selectedUser.lastName}
           </DialogTitle>
@@ -252,6 +302,7 @@ const Users = () => {
         </Dialog>
       )}
 
+      {/* Dialog para confirmar eliminación */}
       <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
         <DialogTitle sx={{ color: "#C62828", fontWeight: "bold" }}>
           ¿Estás seguro de que deseas eliminar a {selectedUser?.firstName}{" "}
