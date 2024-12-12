@@ -12,6 +12,8 @@ import Page from './Components/Material UI/Page'
 
 
 import './App.css'
+import TransactionSendForm from './Components/Transactions/TransactionSendForm'
+import Transactions from './Components/Transactions/TransactionsList'
 function App() {
   const [count, setCount] = useState(0)
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="/Balance" element={<Balance />} />
           <Route path="/PlazoFijo" element={<PlazoFijo />} />
           <Route path="/Usuarios" element={<Users/>} />
+          <Route path="/Transacciones" element={<Transactions/>}/>
+          <Route path="/enviarTransaccion" element={<TransactionSendForm/>}/>
       </Routes>
     </Page>
   )
