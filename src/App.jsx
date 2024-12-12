@@ -9,11 +9,11 @@ import PlazoFijo from './Components/FixedTermDeposit/FixedTermDeposit'
 import {Routes, Route,} from 'react-router-dom';
 import Users from './Components/Users/Users';
 import Page from './Components/Material UI/Page'
-
-
-import './App.css'
 import TransactionSendForm from './Components/Transactions/TransactionSendForm'
 import Transactions from './Components/Transactions/TransactionsList'
+import UserProfile from './Components/UserProfile/UserProfile'
+import './App.css'
+
 function App() {
   const [count, setCount] = useState(0)
   return (
@@ -27,6 +27,7 @@ function App() {
           <Route path="/Usuarios" element={<Users/>} />
           <Route path="/Transacciones" element={<Transactions/>}/>
           <Route path="/enviarTransaccion" element={<TransactionSendForm/>}/>
+          <Route path="/perfil" element={<UserProfile/>}/>
       </Routes>
     </Page>
   )

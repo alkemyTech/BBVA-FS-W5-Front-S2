@@ -9,6 +9,10 @@ import {
   CardContent,
   CardActions,
   Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid2";
@@ -40,6 +44,7 @@ const FixedTermDepositForm = () => {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [isSimulated, setIsSimulated] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [isSelectedAccount, setIsSelectedAccount] = useState(false);
   const token = localStorage.getItem("token");
@@ -75,6 +80,30 @@ const FixedTermDepositForm = () => {
     borderTop: `4px solid ${isSelected ? "#43A047" : "#9cd99e"}`,
     backgroundColor: isSelected ? "#d3f9d8" : "white",
   });
+
+  const buttonStyles = {
+    background: "#2B6A2F",
+    borderRadius: "25px",
+    padding: "6px 16px",
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#9CD99E",
+      color: "#FFFFFF",
+    },
+  };
+
+  const deleteButtonStyles = {
+    background: "#C62828",
+    borderRadius: "25px",
+    padding: "6px 16px",
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#FF5252",
+      color: "#FFFFFF",
+    },
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -163,6 +192,7 @@ const FixedTermDepositForm = () => {
       setSnackbarMessage("Simulación finalizada");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
+      setOpen(true);
     } catch (err) {
       console.error("Error al realizar la solicitud:", err.response || err);
       setLoading(false);
@@ -206,9 +236,8 @@ const FixedTermDepositForm = () => {
   const handleCancel = () => {
     setShowConfirmation(false);
     setSimulatedData(null);
-    setIsSimulated(false); // Restablecer la simulación
-    setFormData(initialFormData);
-    setIsSelectedAccount(false);
+    setIsSimulated(false);
+    setOpen(false);
   };
 
   function formatDate(dateString) {
@@ -222,7 +251,12 @@ const FixedTermDepositForm = () => {
     <div>
       <Grid container spacing={3} direction="column" class="grid-container">
         <Grid item class="grid-item">
-          <Typography variant="h4" align="center" class="form-title">
+          <Typography
+            variant="h5"
+            gutterBottom
+            textAlign="center"
+            sx={{ color: "#2B6A2F", fontWeight: "bold" }}
+          >
             Crear Plazo Fijo
           </Typography>
 
@@ -230,72 +264,36 @@ const FixedTermDepositForm = () => {
             container
             spacing={3}
             sx={{
-              marginTop: "10px",
-              marginBottom: "20px",
               justifyContent: "center",
             }}
           >
             {accounts.map((account) => (
               <Grid item xs={12} sm={6} md={4} key={account.id}>
                 <Card
-                  sx={cardStyle(
-                    isSelectedAccount && account.id === selectedAccount?.id
-                  )}
+                  sx={{
+                    ...cardStyle(
+                      isSelectedAccount && account.id === selectedAccount?.id
+                    ),
+                    maxWidth: "350px",
+                  }}
                 >
                   <CardHeader
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      alignItems: "center",
-                    }}
                     title={
                       <Typography
-                        sx={{
-                          fontSize: "1.35rem",
-                          color: "#2b6a2f",
-                          fontWeight: "bold",
-                        }}
+                        variant="h7"
+                        textAlign="center"
+                        sx={{ color: "#2B6A2F", fontWeight: "bold" }}
                       >
                         {`Cuenta en ${account.currency}`}
                       </Typography>
                     }
                   />
                   <CardContent>
-                    <Typography
-                      sx={{
-                        fontSize: "1.25rem",
-                        color: "#3A3A3A",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      CBU
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>CBU:</strong> {account.cbu}
                     </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "2rem",
-                        color: "#000000",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {account.cbu}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "1.25rem",
-                        color: "#3A3A3A",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      Dinero disponible
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "2rem",
-                        color: "#000000",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      ${account.balance}
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Dinero disponible:</strong> ${account.balance}
                     </Typography>
                   </CardContent>
                   <CardActions>
@@ -312,7 +310,7 @@ const FixedTermDepositForm = () => {
                         account.id === selectedAccount?.id && isSelectedAccount
                       }
                       sx={{
-                        padding: "15px 35px",
+                        padding: "5px 10px",
                         borderRadius: "25px",
                         fontWeight: "bold",
                         backgroundColor: "#43A047",
@@ -400,11 +398,13 @@ const FixedTermDepositForm = () => {
                     type="submit"
                     variant="contained"
                     sx={{
-                      marginTop: "20px",
-                      background: "#43A047",
-                      padding: "15px 35px",
+                      padding: "5px 30px",
                       borderRadius: "25px",
                       fontWeight: "bold",
+                      backgroundColor: "#43A047",
+                      "&:hover": {
+                        backgroundColor: "#388E3C",
+                      },
                     }}
                     disabled={
                       isSimulated ||
@@ -425,93 +425,75 @@ const FixedTermDepositForm = () => {
           )}
 
           {showConfirmation && (
-            <Box sx={{ textAlign: "center", marginTop: "20px" }}>
-              <Card sx={{ width: "100%", maxWidth: 800, margin: "0 auto" }}>
-                <CardHeader
-                  title={
-                    <Typography variant="h6" align="center">
-                      Resultado de Simulación de Plazo Fijo
+            <Dialog open={open} onClose={handleCancel} maxWidth="md">
+              <DialogTitle sx={{ color: "#2B6A2F", fontWeight: "bold" }}>
+                Resultado de Simulación de Plazo Fijo
+              </DialogTitle>
+              <DialogContent>
+                <Card sx={{ width: "100%", maxWidth: 800, margin: "0 auto" }}>
+                  <CardContent>
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Monto:</strong> {simulatedData.amount}
                     </Typography>
-                  }
-                  sx={{ backgroundColor: "#f4f4f4" }}
-                />
-                <CardContent>
-                  <Typography>
-                    <strong>Monto:</strong> {simulatedData.amount}
-                  </Typography>
-                  <Typography>
-                    <strong>Interés:</strong> {simulatedData.interestRate}
-                  </Typography>
-                  <Typography>
-                    <strong>Total a acreditarse:</strong> {simulatedData.total}
-                  </Typography>
-                  <Typography>
-                    <strong>Cuenta a acreditarse:</strong>{" "}
-                    {simulatedData.accountCBU}
-                  </Typography>
-                  <Typography>
-                    <strong>Fecha de inicio:</strong>{" "}
-                    {formatDate(simulatedData.startDate)}
-                  </Typography>
-                  <Typography>
-                    <strong>Fecha de finalización:</strong>{" "}
-                    {formatDate(formData.days)}
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    padding: "16px",
-                  }}
-                >
-                  <Grid
-                    container
-                    spacing={3}
-                    justifyContent="center"
-                    sx={{ width: "100%" }}
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Interés:</strong> {simulatedData.interestRate}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Total a acreditarse:</strong>{" "}
+                      {simulatedData.total}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Cuenta a acreditarse:</strong>{" "}
+                      {simulatedData.accountCBU}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Fecha de inicio:</strong>{" "}
+                      {formatDate(simulatedData.startDate)}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Fecha de finalización:</strong>{" "}
+                      {formatDate(formData.days)}
+                    </Typography>
+                  </CardContent>
+                  <CardActions
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      padding: "16px",
+                    }}
                   >
-                    <Grid item xs={6}>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        fullWidth
-                        onClick={handleCancel}
-                        sx={{
-                          padding: "15px 35px",
-                          borderRadius: "25px",
-                          fontWeight: "bold",
-                          backgroundColor: "#e53935",
-                          "&:hover": {
-                            backgroundColor: "#d32f2f",
-                          },
-                        }}
-                      >
-                        Cancelar
-                      </Button>
+                    <Grid
+                      container
+                      spacing={3}
+                      justifyContent="center"
+                      sx={{ width: "100%" }}
+                    >
+                      <Grid item xs={6}>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          fullWidth
+                          onClick={handleCancel}
+                          sx={deleteButtonStyles}
+                        >
+                          Cancelar
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          onClick={handleCreateFixedTerm}
+                          sx={buttonStyles}
+                        >
+                          Crear Plazo Fijo
+                        </Button>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={6}>
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        onClick={handleCreateFixedTerm}
-                        sx={{
-                          padding: "15px 35px",
-                          borderRadius: "25px",
-                          fontWeight: "bold",
-                          backgroundColor: "#43A047",
-                          "&:hover": {
-                            backgroundColor: "#388E3C",
-                          },
-                        }}
-                      >
-                        Crear Plazo Fijo
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </CardActions>
-              </Card>
-            </Box>
+                  </CardActions>
+                </Card>
+              </DialogContent>
+            </Dialog>
           )}
         </Grid>
       </Grid>
