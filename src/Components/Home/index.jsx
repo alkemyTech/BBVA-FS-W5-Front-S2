@@ -35,18 +35,12 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = React.useState(false);
 
-  const handleClickShowBalance = () => setBalance((show) => !show);
+  const navigate = useNavigate();
 
+  const handleClickShowBalance = () => setBalance((show) => !show);
+  
   const handleMouseDownBalance = (event) => {
     event.preventDefault();
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   const fetchTransactions = async () => {
@@ -145,12 +139,6 @@ export default function Home() {
     borderTop: "4px solid #9cd99e",
   };
 
-  const cardFixedTermStyle = {
-    borderRadius: "5px",
-    margin: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    borderBottom: "4px solid #9cd99e",
-  };
 
   const buttons = {
     backgroundColor: "#9cd99e",
@@ -231,13 +219,13 @@ export default function Home() {
                       </Grid>
                     </Grid>
                   </CardContent>
-                  <CardActions>
-                    <Typography variant="body2" fullWidth sx={buttons}>
-                      Depositar
-                    </Typography>
-                    <Typography variant="body2" sx={buttons}>
+                  <CardActions sx={{display:"flex",justifyContent:"center",textAlign:"center"}}>
+                    <Button variant="body2" sx={buttons} onClick={() => navigate("/Transacciones")}>
                       Transferir
-                    </Typography>
+                    </Button>
+                    <Button variant="body1" sx={buttons}>
+                      Depositar
+                    </Button>
                   </CardActions>
                 </Card>
               </Grid>
@@ -277,15 +265,19 @@ export default function Home() {
                         </TableHead>
                         <TableBody>
                           {fixedTerms.slice(0, 5).map((fixedTerm, index) => (
-                            <TableRow key={index}>
-                              <TableCell>{fixedTerm.accountCBU}</TableCell>
-                              <TableCell>
+                            <TableRow key={index} sx={{cursor: "pointer",
+                              "&:hover": {
+                                borderRight: "4px solid #9cd99e",
+                                backgroundColor:"#f5f5f5"
+                              },}}>
+                              <TableCell sx={{ textAlign: "center",fontSize: "0.85rem" }}>{fixedTerm.accountCBU}</TableCell>
+                              <TableCell sx={{ textAlign: "center",fontSize: "0.85rem" }}>
                                 {new Date(fixedTerm.endDate).toLocaleString(
                                   "es-ES",
                                   { dateStyle: "medium" }
                                 )}
                               </TableCell>
-                              <TableCell>{`$ ${fixedTerm.amount}`}</TableCell>
+                              <TableCell sx={{ textAlign: "center",fontSize: "0.85rem" }}>{`$ ${fixedTerm.amount}`}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -518,9 +510,7 @@ export default function Home() {
                   Aquí aparecerán tus transacciones
                 </Typography>
               )}
-            </CardContent>
-
-          
+            </CardContent>  
           </Card>
         </Grid>
       </Grid>

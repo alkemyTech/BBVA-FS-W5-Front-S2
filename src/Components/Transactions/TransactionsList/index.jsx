@@ -142,7 +142,7 @@ export default function Transactions() {
                     backgroundColor: "#f5f5f5",
                     cursor: "pointer",
                     "&:hover": {
-                      borderRight: transaction.type === "PAGO" ? "4px solid #FF6666" : "4px solid #9cd99e",
+                      borderRight: transaction.type === "Pago" ? "4px solid #FF6666" : "4px solid #9cd99e",
                     },
                   } }}>
                     <TableCell sx={{ textAlign: "center", display:"flex",alignItems:"center",justifyContent:"space-around", gap:1 }}>
@@ -161,8 +161,7 @@ export default function Transactions() {
                     <TableCell sx={{ textAlign: "center" }}>{transaction.concept}</TableCell>
                     <TableCell sx={{ textAlign: "center" }}>{transaction.cbuOrigen || "N/A"}</TableCell>
                     <TableCell sx={{ textAlign: "center" }}>{transaction.cbuDestino || "N/A"}</TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>{transaction.currency || ""
-                    }</TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>{transaction.accountDestino?.currency}</TableCell>
                     <TableCell align="center" sx={{
                       fontWeight: "bold",
                       color: transaction.type === "Pago" ? "#FF6666" : "#43A047",
