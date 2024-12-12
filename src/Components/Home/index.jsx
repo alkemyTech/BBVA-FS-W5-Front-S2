@@ -133,7 +133,7 @@ export default function Home() {
   }, [location.state]);
 
   const cardStyle = {
-    margin: "8px",
+    margin: "10px",
     borderRadius: "5px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     borderTop: "4px solid #9cd99e",
@@ -148,11 +148,21 @@ export default function Home() {
     fontWeight: "bold",
   };
 
+
+  
+
+  const cardContentStyle = {
+    paddingTop: "6px",
+    "&:last-child": {
+      paddingBottom: "6px",
+    },
+  };
+
   
   return (
     <div>
-      <Grid container spacing={2}>
-        <Grid className="cardsssss" item size={9}>
+      <Grid container spacing={4}>
+        <Grid className="cardsssss" item size={8}>
           <Grid container>
             {accounts.map((account) => (
               <Grid item size={accounts.length === 1 ? 12 : 6} key={account.id}>
@@ -193,7 +203,7 @@ export default function Home() {
                           Dinero disponible
                         </Typography>
                       </Grid>
-                      <Grid item size={4} sx={{ textAlign: "center" }}>
+                      <Grid item size={7} sx={{display:"flex", textAlign: "left" }}>
                         <Typography
                           sx={{
                             fontSize: "2rem",
@@ -203,8 +213,6 @@ export default function Home() {
                         >
                           {showBalance ? `$ ${account.balance}` : "****"}
                         </Typography>
-                      </Grid>
-                      <Grid item size={2}>
                         <IconButton
                           sx={{ color: "#43A047" }}
                           aria-label={
@@ -233,7 +241,7 @@ export default function Home() {
             <Grid item size={6}>
               <Card style={cardStyle}>
                 <CardHeader
-                  style={{ textAlign: "center" }}
+                  style={{textAlign: "center" }}
                   title={
                     <Typography
                       style={{
@@ -246,38 +254,44 @@ export default function Home() {
                     </Typography>
                   }
                 />
-                <CardContent>
+                <CardContent sx={cardContentStyle}>
                   {fixedTerms.length > 0 ? (
                     <TableContainer>
                       <Table>
                         <TableHead>
                           <TableRow>
-                            <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
+                            <TableCell sx={{padding:"8px", textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
                               CBU
                             </TableCell>
-                            <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
-                              Fecha de fin
+                            <TableCell sx={{padding:"8px", textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
+                              Acreditacion
                             </TableCell>
-                            <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
-                              Monto ingresado
+                            <TableCell sx={{padding:"8px", textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
+                              Monto 
                             </TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {fixedTerms.slice(0, 5).map((fixedTerm, index) => (
+                          {fixedTerms.slice(0, 3).map((fixedTerm, index) => (
                             <TableRow key={index} sx={{cursor: "pointer",
                               "&:hover": {
                                 borderRight: "4px solid #9cd99e",
                                 backgroundColor:"#f5f5f5"
                               },}}>
-                              <TableCell sx={{ textAlign: "center",fontSize: "0.85rem" }}>{fixedTerm.accountCBU}</TableCell>
-                              <TableCell sx={{ textAlign: "center",fontSize: "0.85rem" }}>
+                              
+                              <TableCell sx={{padding:"12px", textAlign: "center",}}>
+                                <Tooltip title={` CBU ${fixedTerm.accountCBU}`} arrow>
+                                    <Typography sx={{fontSize: "0.85rem"}}> {`... ${fixedTerm.accountCBU.slice(-4)}`} </Typography>
+                                </Tooltip>
+                              </TableCell>
+                              <TableCell sx={{padding:"12px", textAlign: "center",fontSize: "0.85rem" }}>
                                 {new Date(fixedTerm.endDate).toLocaleString(
                                   "es-ES",
                                   { dateStyle: "medium" }
                                 )}
                               </TableCell>
-                              <TableCell sx={{ textAlign: "center",fontSize: "0.85rem" }}>{`$ ${fixedTerm.amount}`}</TableCell>
+                              <TableCell sx={{padding:"12px", textAlign: "center",fontSize: "0.85rem" }}>  {`$ ${fixedTerm.amount + fixedTerm.interestRate}`}
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -295,14 +309,9 @@ export default function Home() {
                       Aquí aparecerán tus plazos fijos
                     </Typography>
                   )}
-                  <Grid
-                    item
-                    size={12}
-                    justifyContent="center"
-                    style={{ marginTop: 16 }}
-                  >
-                    <Button style={buttons}>Ver más</Button>
-                  </Grid>
+                  <CardActions sx={{display:"flex", justifyContent:"center"}}>
+                    <Button sx={buttons}> Ver mas</Button>
+                  </CardActions>
                 </CardContent>
               </Card>
             </Grid>
@@ -322,7 +331,7 @@ export default function Home() {
                     </Typography>
                   }
                 />
-                <CardContent>
+                <CardContent sx={cardContentStyle}>
                   {fixedTerms.length > 0 ? (
                     <TableContainer>
                       <Table>
@@ -380,7 +389,7 @@ export default function Home() {
           </Grid>
           </Grid>
         </Grid>
-        <Grid size={3}>
+        <Grid size={4}>
           <Card sx={cardStyle}>
             <CardHeader
               sx={{ display: "flex", textAlign: "center" }}
@@ -396,7 +405,7 @@ export default function Home() {
                 </Typography>
               }
             />
-            <CardContent>
+            <CardContent sx={cardContentStyle}>
               {transactions.length > 0 ? (
                 <Grid container spacing={1}>
                   {transactions.slice(0, 8).map((transaction, index) => (

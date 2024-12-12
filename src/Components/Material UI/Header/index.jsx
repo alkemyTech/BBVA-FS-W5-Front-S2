@@ -67,7 +67,7 @@ export default function Header() {
         textAlign: "center",
         padding: "15px 0px",
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-        justifyContent: "space-around",
+        justifyContent: "space-evenly",
         alignItems: "center",
         position: "sticky",
         top: 0,
