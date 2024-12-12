@@ -145,7 +145,7 @@ export default function TransactionSendForm() {
     return (
         <form onSubmit={sendForm}>
             <Grid container justifyContent="center" alignItems="center" sx={{ mt: 8, p: 2 }}>
-                <Grid item size={12} sm={10} md={8} lg={6} xl={4}>
+                <Grid item size={12}>
                     <Card sx={cardStyle}>
                         <Grid container spacing={2} p={2}>
                             <Grid item size={12}>
@@ -169,7 +169,7 @@ export default function TransactionSendForm() {
                                     
                                 />
                             </Grid>
-                            <Grid item size={5} sm={6}>
+                            <Grid item size={5}>
                                 <TextField
                                     fullWidth
                                     label="Monto"
