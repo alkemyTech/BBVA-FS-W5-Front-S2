@@ -118,6 +118,22 @@ export default function Home() {
     }
   };
 
+  const formatCurrency = (amount, currency) => {
+    if (amount == null || currency == null) {
+      return "$ 0.00";
+    }
+    const validCurrency = currency || "USD";
+    try {
+      return  `${new Intl.NumberFormat("en-US").format(
+        amount
+      )}`;
+    } catch (error) {
+      console.error("Error formateando la moneda:", error);
+      return "$0.00";
+    }
+  };
+  
+
   useEffect(() => {
     fetchAccounts();
     fetchTransactions();
@@ -211,7 +227,7 @@ export default function Home() {
                             fontWeight: "bold",
                           }}
                         >
-                          {showBalance ? `$ ${account.balance}` : "****"}
+                          {showBalance ? `$ ${formatCurrency(account.balance, account.currency)}` : "****"}
                         </Typography>
                         <IconButton
                           sx={{ color: "#43A047" }}

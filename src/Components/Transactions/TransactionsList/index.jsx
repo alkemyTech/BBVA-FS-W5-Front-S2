@@ -151,7 +151,7 @@ export default function Transactions() {
                       ) : (
                         <ArrowCircleDownRoundedIcon sx={{ fontSize: "20px", color: "#FF6666" }} />
                       )}
-                      <Typography>{transaction.type}</Typography>
+                      <Typography sx={{fontSize:"0.90rem"}}>{transaction.type}</Typography>
                     </TableCell>
                     <TableCell sx={{ textAlign: "center" }}>
                       {transaction.type === "Pago" || transaction.type === "Deposito"
