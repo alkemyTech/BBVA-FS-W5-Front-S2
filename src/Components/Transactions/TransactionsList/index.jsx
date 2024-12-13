@@ -1,42 +1,72 @@
-import Grid from "@mui/material/Grid2";
 import React, { useState, useEffect } from "react";
-import { Card, Typography, CardHeader, CardContent, Table, TableBody, TableCell, Button, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Card,
+  Typography,
+  CardHeader,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import ArrowCircleDownRoundedIcon from "@mui/icons-material/ArrowCircleDownRounded";
 import ArrowCircleUpRoundedIcon from "@mui/icons-material/ArrowCircleUpRounded";
 import { useNavigate } from "react-router-dom";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import Dialog from '@mui/material/Dialog';
-
-
-import api from "../../../services/api"
+import api from "../../../services/api";
+import Paginado from "../../Paginate/Paginado";
+import TransactionSendForm from "../TransactionSendForm/index.jsx"
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+  const buttons = {
+    backgroundColor: "#9cd99e",
+    borderRadius: "25px",
+    padding: "6px 16px",
+    color: "#2b6a2f",
+    fontWeight: "bold",
+  };
+  
   const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem("token");
-
       if (!token) {
         console.error("Token no encontrado");
         window.location.href = "/";
         return;
       }
-
       const response = await api.get("/transactions/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-
       setTransactions(response.data);
     } catch (error) {
       console.error("Error al obtener datos:", error);
-      if (error.response && error.response.status === 401) {
+      if (error.response?.status === 401) {
         window.location.href = "/";
       }
     }
@@ -46,6 +76,19 @@ export default function Transactions() {
     fetchTransactions();
   }, []);
 
+  const groupByDay = (data) => {
+    return data.reduce((acc, transaction) => {
+      const date = new Date(transaction.timestamp).toLocaleDateString("es-ES");
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(transaction);
+      return acc;
+    }, {});
+  };
+
+  const groupedTransactions = groupByDay(transactions);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedTransactions = transactions.slice(startIndex, startIndex + itemsPerPage);
 
   const cardStyle = {
     margin: "8px",
@@ -60,9 +103,7 @@ export default function Transactions() {
         <Card sx={cardStyle}>
           <CardHeader
             title={
-              <Typography
-                sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}
-              >
+              <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
                 Elegí a qué cuenta transferir
               </Typography>
             }
@@ -80,7 +121,7 @@ export default function Transactions() {
                   cursor: "pointer",
                 },
               }}
-              onClick={() => navigate("/enviarTransaccion")}
+              onClick={handleOpen}
             >
               <Grid item size={3}>
                 <PersonAddAltRoundedIcon sx={{ fontSize: "40px", color: "#43A047" }} />
@@ -92,13 +133,7 @@ export default function Transactions() {
                 </Typography>
               </Grid>
               <Grid item size={2}>
-                <KeyboardArrowRightIcon
-                  sx={{
-                    fontSize: "40px",
-                    color: "#43A047",
-                    "&:hover": { fontSize: "50px" },
-                  }}
-                />
+                <KeyboardArrowRightIcon sx={{ fontSize: "40px", color: "#43A047"}} />
               </Grid>
             </Grid>
           </CardContent>
@@ -109,9 +144,7 @@ export default function Transactions() {
         <Card sx={cardStyle}>
           <CardHeader
             title={
-              <Typography
-                sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}
-              >
+              <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
                 Últimos movimientos
               </Typography>
             }
@@ -130,21 +163,17 @@ export default function Transactions() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {transactions.map((transaction, index) => (
-                  <TableRow key={index} sx={{ "&:hover": {
-                    backgroundColor: "#f5f5f5",
-                    cursor: "pointer",
-                    "&:hover": {
+                {paginatedTransactions.map((transaction, index) => (
+                  <TableRow key={index} sx={{ "&:hover": { backgroundColor: "#f5f5f5", cursor: "pointer", "&:hover": {
                       borderRight: transaction.type === "Pago" ? "4px solid #FF6666" : "4px solid #9cd99e",
-                    },
-                  } }}>
-                    <TableCell sx={{ textAlign: "center", display:"flex",alignItems:"center",justifyContent:"space-around", gap:1 }}>
+                    }, } }}>
+                    <TableCell sx={{ textAlign: "center", display: "flex", alignItems: "center", justifyContent: "space-around", gap: 1 }}>
                       {transaction.type === "Deposito" || transaction.type === "Ingreso" ? (
-                        <ArrowCircleUpRoundedIcon sx={{ fontSize: "16px", color: "#43A047" }} />
+                        <ArrowCircleUpRoundedIcon sx={{ fontSize: "20px", color: "#43A047" }} />
                       ) : (
-                        <ArrowCircleDownRoundedIcon sx={{ fontSize: "16px", color: "#FF6666" }} />
+                        <ArrowCircleDownRoundedIcon sx={{ fontSize: "20px", color: "#FF6666" }} />
                       )}
-                      <Typography sx={{fontSize:"0.90rem"}}>{transaction.type}</Typography>
+                      <Typography sx={{ fontSize: "0.90rem" }}>{transaction.type}</Typography>
                     </TableCell>
                     <TableCell sx={{ textAlign: "center" }}>
                       {transaction.type === "Pago" || transaction.type === "Deposito"
@@ -155,21 +184,36 @@ export default function Transactions() {
                     <TableCell sx={{ textAlign: "center" }}>{transaction.cbuOrigen || "N/A"}</TableCell>
                     <TableCell sx={{ textAlign: "center" }}>{transaction.cbuDestino || "N/A"}</TableCell>
                     <TableCell sx={{ textAlign: "center" }}>{transaction.accountDestino?.currency}</TableCell>
-                    <TableCell align="center" sx={{
-                      fontWeight: "bold",
-                      color: transaction.type === "Pago" ? "#FF6666" : "#43A047",
-                    }}>
-                      {transaction.type === "Pago"
-                        ? `- $${transaction.amount}`
-                        : `+ $${transaction.amount}`}
+                    <TableCell align="center" sx={{ fontWeight: "bold", color: transaction.type === "Pago" ? "#FF6666" : "#43A047" }}>
+                      {transaction.type === "Pago" ? `- $${transaction.amount}` : `+ $${transaction.amount}`}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+
+            <Paginado
+              totalPages={Math.ceil(transactions.length / itemsPerPage)}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              itemsPerPageOptions={""}
+              onItemsPerPageChange={setItemsPerPage}
+            />
           </CardContent>
         </Card>
       </Grid>
+
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>Enviar Transacción</DialogTitle>
+        <DialogContent>
+          <TransactionSendForm />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} sx={buttons}>
+            Cancelar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 }

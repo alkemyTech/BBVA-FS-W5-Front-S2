@@ -75,8 +75,8 @@ export default function Header() {
       }}
     >
       <Grid item size={2} sx={{ 
-            display: "flex",
-            justifyContent: "center",
+display: "flex",
+justifyContent: "center",
             alignItems: "center", }}>
         <Link to="/home">
           <img src={logo} width={"100px"} alt="Logo" />
@@ -104,12 +104,12 @@ export default function Header() {
               Transferencias
             </Typography>
           </Link>
-          <Link to="/Balance" style={{ textDecoration: "none", color: "#" }}>
+                    <Link to="/Balance" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">
               Balance
             </Typography>
           </Link>
-          <Link
+                    <Link
             to="/PlazoFijo"
             style={{ textDecoration: "none", color: "#" }}
           >
