@@ -1,27 +1,67 @@
 import React, { useState, useEffect } from "react";
-import { Card, Typography, CardHeader, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Card,
+  Typography,
+  CardHeader,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  IconButton
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
 import ArrowCircleDownRoundedIcon from "@mui/icons-material/ArrowCircleDownRounded";
 import ArrowCircleUpRoundedIcon from "@mui/icons-material/ArrowCircleUpRounded";
 import { useNavigate } from "react-router-dom";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import api from "../../../services/api";
-import Paginado from "../../Paginate/Paginado"; 
+import api from "../../../services/api.jsx"
+import Paginado from "../../Paginate/Paginado";
+import TransactionSendForm from "../TransactionSendForm/index.jsx"
+
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-
+  const [open, setOpen] = useState(false);
+  const [selectedCBU, setSelectedCBU] = useState(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const token = localStorage.getItem("token"); 
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedTransactions = transactions.slice(startIndex, startIndex + itemsPerPage);
   const navigate = useNavigate();
+  
+  const openConfirmDialog = (cbu) => {
+    setSelectedCBU(cbu);
+    setConfirmDialogOpen(true);
+  };
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
   const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         console.error("Token no encontrado");
-        window.location.href = "/";
+        navigate("/")
         return;
       }
       const response = await api.get("/transactions/user", {
@@ -36,24 +76,33 @@ export default function Transactions() {
     }
   };
 
+  const addBeneficiary = async () =>  {
+    try {
+      if (!token) {
+        navigate("/");
+      }
+      const response = await api.post(
+        "/users/beneficiarios/add",
+        { cbu: selectedCBU },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      console.log("Respuesta de la API:", response.data);
+      alert("Beneficiario agregado exitosamente");
+      setConfirmDialogOpen(false);
+    } catch (error) {
+      console.error("Error al agregar beneficiario:", error);
+      alert("No se pudo agregar el beneficiario.");
+    }
+  };
+
   useEffect(() => {
     fetchTransactions();
   }, []);
-
-  const groupByDay = (data) => {
-    return data.reduce((acc, transaction) => {
-      const date = new Date(transaction.timestamp).toLocaleDateString("es-ES");
-      if (!acc[date]) acc[date] = [];
-      acc[date].push(transaction);
-      return acc;
-    }, {});
-  };
-
-  const groupedTransactions = groupByDay(transactions);
-
-  // Calcular transacciones para la página actual
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedTransactions = transactions.slice(startIndex, startIndex + itemsPerPage);
 
   const cardStyle = {
     margin: "8px",
@@ -62,6 +111,14 @@ export default function Transactions() {
     borderTop: "4px solid #9cd99e",
   };
 
+  const buttons = {
+    backgroundColor: "#9cd99e",
+    borderRadius: "25px",
+    padding: "6px 16px",
+    color: "#2b6a2f",
+    fontWeight: "bold",
+  };
+  
   return (
     <Grid container sx={{ display: "flex", flexDirection: "column" }}>
       <Grid item size={12}>
@@ -86,7 +143,7 @@ export default function Transactions() {
                   cursor: "pointer",
                 },
               }}
-              onClick={() => navigate("/enviarTransaccion")}
+              onClick={handleOpen}
             >
               <Grid item size={3}>
                 <PersonAddAltRoundedIcon sx={{ fontSize: "40px", color: "#43A047" }} />
@@ -98,7 +155,7 @@ export default function Transactions() {
                 </Typography>
               </Grid>
               <Grid item size={2}>
-                <KeyboardArrowRightIcon sx={{ fontSize: "40px", color: "#43A047", "&:hover": { fontSize: "50px" } }} />
+                <KeyboardArrowRightIcon sx={{ fontSize: "40px", color: "#43A047"}} />
               </Grid>
             </Grid>
           </CardContent>
@@ -125,18 +182,21 @@ export default function Transactions() {
                   <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>CBU Destino</TableCell>
                   <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Moneda</TableCell>
                   <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Monto</TableCell>
+                  <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Accion</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {paginatedTransactions.map((transaction, index) => (
-                  <TableRow key={index} sx={{ "&:hover": { backgroundColor: "#f5f5f5", cursor: "pointer" } }}>
+                  <TableRow key={index} sx={{ "&:hover": { backgroundColor: "#f5f5f5", cursor: "pointer", "&:hover": {
+                      borderRight: transaction.type === "Pago" ? "4px solid #FF6666" : "4px solid #9cd99e",
+                    }, } }}>
                     <TableCell sx={{ textAlign: "center", display: "flex", alignItems: "center", justifyContent: "space-around", gap: 1 }}>
                       {transaction.type === "Deposito" || transaction.type === "Ingreso" ? (
-                        <ArrowCircleUpRoundedIcon sx={{ fontSize: "20px", color: "#43A047" }} />
+                        <ArrowCircleUpRoundedIcon sx={{height:"40px", color: "#43A047" }} />
                       ) : (
-                        <ArrowCircleDownRoundedIcon sx={{ fontSize: "20px", color: "#FF6666" }} />
+                        <ArrowCircleDownRoundedIcon sx={{height:"40px",color: "#FF6666" }} />
                       )}
-                      <Typography sx={{ fontSize: "0.90rem" }}>{transaction.type}</Typography>
+                      {transaction.type}
                     </TableCell>
                     <TableCell sx={{ textAlign: "center" }}>
                       {transaction.type === "Pago" || transaction.type === "Deposito"
@@ -150,6 +210,13 @@ export default function Transactions() {
                     <TableCell align="center" sx={{ fontWeight: "bold", color: transaction.type === "Pago" ? "#FF6666" : "#43A047" }}>
                       {transaction.type === "Pago" ? `- $${transaction.amount}` : `+ $${transaction.amount}`}
                     </TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => openConfirmDialog(transaction.cbuDestino)}>
+                        <StarBorderIcon sx={{color: "#43A047" }} />
+                      </IconButton>
+                    </TableCell>
+
+
                   </TableRow>
                 ))}
               </TableBody>
@@ -165,6 +232,36 @@ export default function Transactions() {
           </CardContent>
         </Card>
       </Grid>
+
+      <Dialog open={open} fullWidth maxWidth="sm">
+        <DialogTitle>Enviar Transacción</DialogTitle>
+        <DialogContent>
+          <TransactionSendForm />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} sx={buttons}>
+            Cancelar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={confirmDialogOpen} fullWidth maxWidth="sm">
+        <DialogTitle>Agregar beneficiario</DialogTitle>
+        <DialogContent>
+          <Typography>¿Quieres agregar el CBU {selectedCBU} a tus beneficiarios?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDialogOpen(false)} sx={buttons}>
+            Cancelar
+          </Button>
+          <Button onClick={addBeneficiary} sx={buttons}>
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Grid>
+
   );
 }
+
