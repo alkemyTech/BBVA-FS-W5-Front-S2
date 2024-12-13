@@ -16,9 +16,10 @@ import {
   TableHead,
   TableRow,
   Paper,
+  IconButton
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import Notification from "../../components/Notification/Notification";
+import Notification from "../../Components/Notification/Notification";
 import Paginado from "../../Components/Paginate/Paginado";
 import { Card, CardContent, CardActions } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility'; // Ojo
@@ -233,19 +234,14 @@ const Users = () => {
                       <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>{user.role?.name}</TableCell>
                       <TableCell>
                         <Box sx={{ display: "flex", gap: "10px" }}>
-                          <Button
-                            onClick={() => handleShowAccounts(user.id)}
-                            sx={buttonStyles}
-                            startIcon={<VisibilityIcon />} // Ojo ///////////////////////////////// preguntar ///////////////
-                          >
-                            
-                          </Button>
-                          <Button
-                            onClick={() => openDeleteDialog(user.id)}
-                            sx={ deleteButtonStyles }
-                            startIcon={<DeleteIcon />} // Basura
-                          >
-                          </Button>
+                          <IconButton onClick={() => handleShowAccounts(user.id)}
+                            sx={buttonStyles}>
+                          <VisibilityIcon />
+                          </IconButton>
+                          <IconButton onClick={() => openDeleteDialog(user.id)}
+                            sx={ deleteButtonStyles }>
+                          <DeleteIcon />
+                          </IconButton>
                         </Box>
                       </TableCell>
                     </TableRow>
