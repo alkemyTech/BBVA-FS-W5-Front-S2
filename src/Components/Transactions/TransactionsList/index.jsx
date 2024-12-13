@@ -1,11 +1,14 @@
 import Grid from "@mui/material/Grid2";
 import React, { useState, useEffect } from "react";
-import { Card, Typography, CardHeader, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Card, Typography, CardHeader, CardContent, Table, TableBody, TableCell, Button, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import ArrowCircleDownRoundedIcon from "@mui/icons-material/ArrowCircleDownRounded";
 import ArrowCircleUpRoundedIcon from "@mui/icons-material/ArrowCircleUpRounded";
 import { useNavigate } from "react-router-dom";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import Dialog from '@mui/material/Dialog';
+
 
 import api from "../../../services/api"
 
@@ -43,16 +46,6 @@ export default function Transactions() {
     fetchTransactions();
   }, []);
 
-  const groupByDay = (data) => {
-    return data.reduce((acc, transaction) => {
-      const date = new Date(transaction.timestamp).toLocaleDateString("es-ES");
-      if (!acc[date]) acc[date] = [];
-      acc[date].push(transaction);
-      return acc;
-    }, {});
-  };
-
-  const groupedTransactions = groupByDay(transactions);
 
   const cardStyle = {
     margin: "8px",
@@ -147,9 +140,9 @@ export default function Transactions() {
                   } }}>
                     <TableCell sx={{ textAlign: "center", display:"flex",alignItems:"center",justifyContent:"space-around", gap:1 }}>
                       {transaction.type === "Deposito" || transaction.type === "Ingreso" ? (
-                        <ArrowCircleUpRoundedIcon sx={{ fontSize: "20px", color: "#43A047" }} />
+                        <ArrowCircleUpRoundedIcon sx={{ fontSize: "16px", color: "#43A047" }} />
                       ) : (
-                        <ArrowCircleDownRoundedIcon sx={{ fontSize: "20px", color: "#FF6666" }} />
+                        <ArrowCircleDownRoundedIcon sx={{ fontSize: "16px", color: "#FF6666" }} />
                       )}
                       <Typography sx={{fontSize:"0.90rem"}}>{transaction.type}</Typography>
                     </TableCell>
