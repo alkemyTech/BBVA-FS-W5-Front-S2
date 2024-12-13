@@ -40,7 +40,25 @@ const UserProfile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setBeneficiarios(response.data);
+        const data = response.data;
+        
+        // Agrupar beneficiarios por nombre y apellido (y usuario)
+        const groupedBeneficiarios = data.reduce((acc, beneficiario) => {
+          const key = `${beneficiario.nombreApellido}-${beneficiario.username}`;
+          
+          if (!acc[key]) {
+            acc[key] = {
+              ...beneficiario,
+              accountsDTO: [],
+            };
+          }
+
+          // Concatenar las cuentas si el beneficiario ya está en el acumulador
+          acc[key].accountsDTO = [...acc[key].accountsDTO, ...beneficiario.accountsDTO];
+          return acc;
+        }, {});
+
+        setBeneficiarios(Object.values(groupedBeneficiarios));
         setLoading(false);
       } catch (error) {
         console.error("Error al obtener los beneficiarios:", error);
@@ -57,17 +75,6 @@ const UserProfile = () => {
     borderTop: "4px solid #9cd99e",
   };
 
-  const handleCopyCbu = (cbu) => {
-    navigator.clipboard.writeText(cbu).then(() => {
-      setSnackbarMessage("CBU copiado al portapapeles!");
-      setSnackbarSeverity("success");
-      setOpenSnackbar(true);
-    });
-  };
-
-  const handleRowClick = (account) => {
-    handleCopyCbu(account.cbu);
-  };
 
   return (
     <Container maxWidth="lg">
@@ -138,7 +145,7 @@ const UserProfile = () => {
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  width: "120%", // Ajusta el padding interno del input
+                  width: "125%", // Ajusta el padding interno del input
                 },
               }}
             />
@@ -215,7 +222,7 @@ const UserProfile = () => {
                             textAlign: "center",
                           }}
                         >
-                          Cuenta
+                          CBU(s)
                         </TableCell>
                         <TableCell
                           sx={{
@@ -224,46 +231,58 @@ const UserProfile = () => {
                             textAlign: "center",
                           }}
                         >
-                          Moneda
+                          Moneda(s)
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-  {beneficiarios.map((beneficiario) => (
-    <Tooltip title="Copiar CBU" key={beneficiario.idRecipient}>
-      <TableRow
-        sx={{
-          "&:hover": {
-            backgroundColor: "#f5f5f5",
-            cursor: "pointer",
-            borderRight: "4px solid #9cd99e",
-          },
-        }}
-        onClick={() => handleRowClick(beneficiario.accountsDTO[0])} // Esta función manejará el clic en cualquier parte de la fila
-      >
-        <TableCell sx={{ fontSize: "0.90rem", textAlign: "center" }}>
-          {beneficiario.nombreApellido}
-        </TableCell>
-        <TableCell sx={{ fontSize: "0.90rem", textAlign: "center" }}>
-          {beneficiario.username}
-        </TableCell>
-        <TableCell sx={{ fontSize: "0.90rem", textAlign: "center" }}>
-          {beneficiario.accountsDTO.map((account) => (
-            <span key={account.cbu}>
-              {`CBU: ${account.cbu}`}
-            </span>
-          ))}
-        </TableCell>
-        <TableCell sx={{ fontSize: "0.90rem", textAlign: "center" }}>
-          {beneficiario.accountsDTO
-            .map((account) => account.currency)
-            .join("\n")}
-        </TableCell>
-      </TableRow>
-    </Tooltip>
-  ))}
-</TableBody>
-
+                      {beneficiarios.map((beneficiario) => (
+                        <Tooltip
+                          key={beneficiario.idRecipient}
+                        >
+                          <TableRow
+                            sx={{
+                              "&:hover": {
+                                backgroundColor: "#f5f5f5",
+                                cursor: "pointer",
+                                borderRight: "4px solid #9cd99e",
+                              },
+                            }}
+                          >
+                            <TableCell
+                              sx={{ fontSize: "0.90rem", textAlign: "center" }}
+                            >
+                              {beneficiario.nombreApellido}
+                            </TableCell>
+                            <TableCell
+                              sx={{ fontSize: "0.90rem", textAlign: "center" }}
+                            >
+                              {beneficiario.username}
+                            </TableCell>
+                            <TableCell
+                              sx={{ fontSize: "0.90rem", textAlign: "center" }}
+                            >
+                              {beneficiario.accountsDTO.map((account, index) => (
+                                <div key={account.id}>
+                                  {account.cbu}
+                                  {index < beneficiario.accountsDTO.length - 1 && " "}
+                                </div>
+                              ))}
+                            </TableCell>
+                            <TableCell
+                              sx={{ fontSize: "0.90rem", textAlign: "center" }}
+                            >
+                              {beneficiario.accountsDTO.map((account, index) => (
+                                <div key={account.id}>
+                                  {account.currency}
+                                  {index < beneficiario.accountsDTO.length - 1 && " "}
+                                </div>
+                              ))}
+                            </TableCell>
+                          </TableRow>
+                        </Tooltip>
+                      ))}
+                    </TableBody>
                   </Table>
                 </TableContainer>
               )}
