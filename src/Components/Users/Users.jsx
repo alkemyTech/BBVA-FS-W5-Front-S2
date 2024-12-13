@@ -21,7 +21,8 @@ import Grid from "@mui/material/Grid2";
 import Notification from "../../components/Notification/Notification";
 import Paginado from "../../Components/Paginate/Paginado";
 import { Card, CardContent, CardActions } from "@mui/material";
-
+import VisibilityIcon from '@mui/icons-material/Visibility'; // Ojo
+import DeleteIcon from '@mui/icons-material/Delete'; // Basura
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -186,7 +187,10 @@ const Users = () => {
       </Typography>
 
       {/* Card para el campo de búsqueda */}
-      <Card sx={{ boxShadow: "0 2px 10px rgba(0,0,0,0.1)", borderRadius: "10px", mb: 3 }}>
+      <Card sx={{
+        borderTop: "4px solid #9cd99e",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)", borderRadius: "10px", mb: 3
+      }}>
         <CardContent>
           <TextField
             label="Buscar por nombre"
@@ -196,60 +200,70 @@ const Users = () => {
             onChange={handleSearchChange}
             sx={{
               width: "100%",
-              marginBottom: "16px",
             }}
           />
         </CardContent>
       </Card>
 
       {/* Tabla de Usuarios */}
-      <TableContainer component={Paper} sx={{ mb: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Nombre</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Apellido</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Email</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Rol</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#2B6A2F" }}>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.length > 0 ? (
-              users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.firstName}</TableCell>
-                  <TableCell>{user.lastName}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role?.name}</TableCell>
-                  <TableCell>
-                    <Button
-                      onClick={() => handleShowAccounts(user.id)}
-                      sx={buttonStyles}
-                    >
-                      Ver Cuentas
-                    </Button>
-                    <Button
-                      onClick={() => openDeleteDialog(user.id)}
-                      sx={deleteButtonStyles}
-                    >
-                      Eliminar Usuario
-                    </Button>
-                  </TableCell>
+      <Card sx={{
+        borderTop: "4px solid #9cd99e",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)", borderRadius: "10px", mb: 3
+      }}>
+        <CardContent>
+          {/* Tabla de Usuarios */}
+          <TableContainer component={Paper} sx={{ mb: 1 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ textAlign: "center", fontWeight: "bold", color: "#2B6A2F" }}>Nombre</TableCell>
+                  <TableCell sx={{ textAlign: "center", fontWeight: "bold", color: "#2B6A2F" }}>Apellido</TableCell>
+                  <TableCell sx={{ textAlign: "center", fontWeight: "bold", color: "#2B6A2F" }}>Email</TableCell>
+                  <TableCell sx={{ textAlign: "center", fontWeight: "bold", color: "#2B6A2F" }}>Rol</TableCell>
+                  <TableCell sx={{ textAlign: "center", fontWeight: "bold", color: "#2B6A2F" }}>Acciones</TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  <Typography variant="body1" color="text.secondary">
-                    No hay usuarios disponibles.
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableHead>
+              <TableBody>
+                {users.length > 0 ? (
+                  users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>{user.firstName}</TableCell>
+                      <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>{user.lastName}</TableCell>
+                      <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>{user.email}</TableCell>
+                      <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>{user.role?.name}</TableCell>
+                      <TableCell>
+                        <Box sx={{ display: "flex", gap: "10px" }}>
+                          <Button
+                            onClick={() => handleShowAccounts(user.id)}
+                            sx={buttonStyles}
+                            startIcon={<VisibilityIcon />} // Ojo ///////////////////////////////// preguntar ///////////////
+                          >
+                            
+                          </Button>
+                          <Button
+                            onClick={() => openDeleteDialog(user.id)}
+                            sx={ deleteButtonStyles }
+                            startIcon={<DeleteIcon />} // Basura
+                          >
+                          </Button>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      <Typography variant="body1" color="text.secondary">
+                        No hay usuarios disponibles.
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
 
       <Paginado
         totalPages={totalPages}
@@ -325,7 +339,6 @@ const Users = () => {
         setOpenSnackbar={(value) =>
           setNotification((prev) => ({ ...prev, openSnackbar: value }))
         }
-        loading={notification.loading}
       />
     </Box>
   );
