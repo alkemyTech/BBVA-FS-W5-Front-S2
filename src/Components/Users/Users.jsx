@@ -85,30 +85,36 @@ const Users = () => {
   const handleDeleteUser = () => {
     if (selectedUser) {
       setNotification((prev) => ({ ...prev, loading: true }));
+  
       api
         .delete(`/users/${selectedUser.id}`)
         .then(() => {
-          // Actualizamos la lista de usuarios después de eliminar uno
-          setUsers((prevUsers) =>
-            prevUsers.filter((user) => user.id !== selectedUser.id)
-          );
           setNotification({
             openSnackbar: true,
             snackbarMessage: "Usuario eliminado correctamente.",
             snackbarSeverity: "success",
           });
-          // Actualizar la paginación y la cantidad total de usuarios
-          const remainingUsers = users.filter((user) => user.id !== selectedUser.id);
-          setTotalPages(Math.ceil(remainingUsers.length / itemsPerPage));
-          if (currentPage > Math.ceil(remainingUsers.length / itemsPerPage)) {
-            setCurrentPage(Math.ceil(remainingUsers.length / itemsPerPage));
-          }
-          // Recargar la lista de usuarios después de la eliminación
-          const url = searchName ? `/users/search?name=${searchName}` : "/users";
+  
+          // Recargar usuarios después de eliminar
           api
-            .get(url)
+            .get("/users") 
             .then((response) => {
-              setUsers(response.data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage));
+              const updatedUsers = response.data; 
+              const newTotalPages = Math.ceil(updatedUsers.length / itemsPerPage);
+  
+              // Recalcular página actual
+              if (currentPage > newTotalPages) {
+                setCurrentPage(newTotalPages || 1);
+              }
+  
+              // Actualizar estado
+              setTotalPages(newTotalPages);
+              setUsers(
+                updatedUsers.slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+              );
             })
             .catch((error) => {
               console.error("Error al recargar los usuarios:", error);
@@ -133,6 +139,7 @@ const Users = () => {
         });
     }
   };
+  
 
   const openDeleteDialog = (userId) => {
     const user = users.find((u) => u.id === userId);
@@ -163,6 +170,19 @@ const Users = () => {
       color: "#FFFFFF",
     },
   };
+
+  const eyeButtonStyles = {
+    background: "#9CD99E", 
+    borderRadius: "25px",
+    padding: "6px 16px",
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#7DC87F", 
+      color: "#FFFFFF",
+    },
+  };
+  
 
   const deleteButtonStyles = {
     background: "#C62828",
@@ -235,7 +255,7 @@ const Users = () => {
                       <TableCell>
                         <Box sx={{ display: "flex", gap: "10px" }}>
                           <IconButton onClick={() => handleShowAccounts(user.id)}
-                            sx={buttonStyles}>
+                            sx={eyeButtonStyles}>
                           <VisibilityIcon />
                           </IconButton>
                           <IconButton onClick={() => openDeleteDialog(user.id)}
