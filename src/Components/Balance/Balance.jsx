@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAccountBalance } from "../../services/BalanceSlice";
-import {CircularProgress, Card, CardContent, Typography, Box } from "@mui/material";
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import {
+  CircularProgress,
+  Card,
+  CardContent,
+  Typography
+} from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  Box,
+  TableRow,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Paginado from "../Paginate/Paginado";
 import api from "../../services/api";
-
-
 
 const formatCurrency = (amount, currency) => {
   if (amount == null || currency == null) {
@@ -36,8 +47,10 @@ const Balance = () => {
     return;
   }
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3; // Mostrar 1 plazo fijo por página
+  const [currentPageHistory, setCurrentPageHistory] = useState(1); // Página actual para historial de transacciones
+  const [currentPageFixedTerms, setCurrentPageFixedTerms] = useState(1); // Página actual para plazos fijos
+  const itemsPerPageHistory = 3; // Mostrar 3 transacciones por página
+  const itemsPerPageFixedTerms = 2; // Mostrar 2 plazos fijos por página
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -64,29 +77,84 @@ const Balance = () => {
     borderRadius: "5px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     borderTop: "4px solid #9CD99E",
-    width: "100%",
-    maxWidth: "800px",
-    display: "flex",
-    flexDirection: "column",
   };
 
-  const gridContainerStyle = {
-    display: "flex",
-    justifyContent: "center",
-    gap: "20px",
-  };
-
-  const totalPages = Math.ceil(
-    (balance?.fixedTerms?.length || 0) / itemsPerPage
+  const totalPagesHistory = Math.ceil(
+    (balance?.history?.length || 0) / itemsPerPageHistory
   );
-  const startIndex = (currentPage - 1) * itemsPerPage;
+  const startIndexHistory = (currentPageHistory - 1) * itemsPerPageHistory;
+  const currentHistory =
+    balance?.history?.slice(startIndexHistory, startIndexHistory + itemsPerPageHistory) || [];
+
+  const totalPagesFixedTerms = Math.ceil(
+    (balance?.fixedTerms?.length || 0) / itemsPerPageFixedTerms
+  );
+  const startIndexFixedTerms = (currentPageFixedTerms - 1) * itemsPerPageFixedTerms;
   const currentFixedTerms =
-    balance?.fixedTerms?.slice(startIndex, startIndex + itemsPerPage) || [];
+    balance?.fixedTerms?.slice(startIndexFixedTerms, startIndexFixedTerms + itemsPerPageFixedTerms) || [];
 
   return (
-    <Grid container style={gridContainerStyle}>
+    <Grid container>
       {/* Card para Resumen de Balance */}
-      <Grid item xs={12} sm={5} md={5}>
+      <Grid item size={12}>
+        <Card sx={cardStyle}>
+          <CardContent>
+            <Grid
+              container
+              direction="column"
+              alignItems="center"
+              textAlign="center"
+            >
+              {/* Título */}
+              <Grid item size={12}>
+                <Typography
+                  sx={{
+                    fontSize: "1.35rem",
+                    color: "#2B6A2F",
+                    fontWeight: "bold",
+                  }}
+                  gutterBottom
+                >
+                  Balance de Cuentas
+                </Typography>
+              </Grid>
+              {/* Datos de las cuentas */}
+              <Grid item container spacing={10}>
+                {accounts.map((account, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    xs={12}
+                    sm={6} 
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start", // Alineación al inicio
+                      textAlign: "left", // Alinear texto a la izquierda
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "1.25rem",
+                        color: "#3A3A3A",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {formatCurrency(account.balance, account.currency)}
+                    </Typography>
+                    <Typography sx={{ fontSize: "0.875rem", color: "#6C6C6C" }}>
+                      CBU: {account.cbu}
+                    </Typography>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Card para Historial de Transacciones */}
+      <Grid item size={8}>
         <Card sx={cardStyle}>
           <CardContent>
             <Typography
@@ -97,81 +165,55 @@ const Balance = () => {
               }}
               gutterBottom
             >
-              Balance de Cuentas
+              Historial de Transacciones
             </Typography>
-            {accounts.map((account, index) => (
-              <Box key={index} sx={{ marginBottom: 2 }}>
-                <Typography
-                  sx={{
-                    fontSize: "1.25rem",
-                    color: "#3A3A3A",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {formatCurrency(account.balance, account.currency)}
-                </Typography>
-                <Typography sx={{ fontSize: "0.875rem", color: "#6C6C6C" }}>
-                  CBU: {account.cbu}
-                </Typography>
+            {balance?.history?.length > 0 ? (
+              <Box sx={{ marginTop: 2, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Detalle</TableCell>
+                      <TableCell>CBU Origen</TableCell>
+                      <TableCell>CBU Destino</TableCell>
+                      <TableCell>Moneda</TableCell>
+                      <TableCell>Monto</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {currentHistory.map((transaction, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{transaction.description}</TableCell>
+                        <TableCell>{transaction.cbuOrigen}</TableCell>
+                        <TableCell>{transaction.cbuDestino}</TableCell>
+                        <TableCell>{transaction.currency}</TableCell>
+                        <TableCell>{transaction.amount}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              
+              {/* Componente de paginación para historial de transacciones */}
+              <Box sx={{ marginTop: 2 }}>
+                <Paginado
+                  totalPages={totalPagesHistory}
+                  currentPage={currentPageHistory}
+                  onPageChange={setCurrentPageHistory}
+                />
               </Box>
-            ))}
+            </Box>
+            ) : (
+              <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
+                No tienes transacciones registradas.
+              </Typography>
+            )}
           </CardContent>
         </Card>
       </Grid>
 
-      {/* Card para Historial de Transacciones */}
-      <Grid item xs={12} sm={5} md={5}>
-        <Card sx={cardStyle}>
-        <CardContent>
-  <Typography
-    sx={{
-      fontSize: "1.35rem",
-      color: "#2B6A2F",
-      fontWeight: "bold",
-    }}
-    gutterBottom
-  >
-    Historial de Transacciones
-  </Typography>
-  {balance?.history?.length > 0 ? (
-    <Box sx={{ marginTop: 2 }}>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Detalle</TableCell>
-              <TableCell>CBU Origen</TableCell>
-              <TableCell>CBU Destino</TableCell>
-              <TableCell>Moneda</TableCell>
-              <TableCell>Monto</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {balance.history.map((transaction, index) => (
-              <TableRow key={index}>
-                <TableCell>{transaction.description}</TableCell>
-                <TableCell>{transaction.cbuOrigen}</TableCell>
-                <TableCell>{transaction.cbuDestino}</TableCell>
-                <TableCell>{transaction.currency}</TableCell>
-                <TableCell>{(transaction.amount)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  ) : (
-    <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
-      No tienes transacciones registradas.
-    </Typography>
-  )}
-</CardContent>
-
-        </Card>
-      </Grid>
-
       {/* Card para Plazos Fijos */}
-      <Grid item xs={12} sm={5} md={5}>
+      <Grid item size={4}>
         <Card sx={cardStyle}>
           <CardContent>
             <Typography
@@ -207,14 +249,14 @@ const Balance = () => {
                 No tienes plazos fijos registrados.
               </Typography>
             )}
-            {/* Componente de paginación */}
-            {currentFixedTerms.length > 0 && (
+            {/* Componente de paginación para plazos fijos */}
+            <Box sx={{ marginTop: 6 }}>
               <Paginado
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={setCurrentPage}
+                totalPages={totalPagesFixedTerms}
+                currentPage={currentPageFixedTerms}
+                onPageChange={setCurrentPageFixedTerms}
               />
-            )}
+            </Box>
           </CardContent>
         </Card>
       </Grid>

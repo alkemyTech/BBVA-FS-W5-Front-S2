@@ -16,6 +16,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Box,
   IconButton
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -222,6 +223,7 @@ export default function Transactions() {
               </TableBody>
             </Table>
 
+            <Box sx={{ marginTop: 2 }}>
             <Paginado
               totalPages={Math.ceil(transactions.length / itemsPerPage)}
               currentPage={currentPage}
@@ -229,6 +231,7 @@ export default function Transactions() {
               itemsPerPageOptions={""}
               onItemsPerPageChange={setItemsPerPage}
             />
+            </Box>
           </CardContent>
         </Card>
       </Grid>
