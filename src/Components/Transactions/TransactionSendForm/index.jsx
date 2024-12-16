@@ -126,21 +126,12 @@ export default function TransactionSendForm() {
         fontWeight: "bold"
     };
 
-    const cardStyle = {
-        margin: "8px",
-        borderRadius: "5px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        borderTop: "4px solid #9cd99e",
-        maxWidth: "500px",
-        width: "100%"
-    };
-
+    
     return (
         <div>
             <form onSubmit={sendForm}>
                 <Grid container justifyContent="center" alignItems="center">
                     <Grid item size={12}>
-                        <Card sx={cardStyle}>
                             <Grid container spacing={2} p={2}>
                                 <Grid item size={12}>
                                     <Typography variant="body1" color="text.secondary">
@@ -236,7 +227,6 @@ export default function TransactionSendForm() {
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </Card>
                     </Grid>
                 </Grid>
             </form>

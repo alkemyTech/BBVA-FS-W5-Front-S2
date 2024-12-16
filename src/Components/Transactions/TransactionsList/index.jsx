@@ -17,7 +17,8 @@ import {
   DialogActions,
   Button,
   Box,
-  IconButton
+  IconButton,
+  cardActionAreaClasses
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
@@ -30,9 +31,13 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import api from "../../../services/api.jsx"
 import Paginado from "../../Paginate/Paginado";
 import TransactionSendForm from "../TransactionSendForm/index.jsx"
+import Notification from "../../Notification/Notification";
 
 
 export default function Transactions() {
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");    const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -93,11 +98,18 @@ export default function Transactions() {
       );
   
       console.log("Respuesta de la API:", response.data);
-      alert("Beneficiario agregado exitosamente");
+      setLoading(false);
+      setSnackbarMessage("Transaccion finalizada");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
       setConfirmDialogOpen(false);
     } catch (error) {
-      console.error("Error al agregar beneficiario:", error);
-      alert("No se pudo agregar el beneficiario.");
+      console.error("Error al enviar la transacción:", error);
+      const errorMessage = error.response ? error.response.data.message : "Error desconocido";
+      setSnackbarMessage(errorMessage);
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+      setLoading(false);
     }
   };
 
@@ -119,6 +131,16 @@ export default function Transactions() {
     color: "#2b6a2f",
     fontWeight: "bold",
   };
+
+  const buttonsError = {
+    backgroundColor: "#FF6666",
+    borderRadius: "25px",
+    padding: "6px 16px",
+    color: "#f4f4f4",
+    fontWeight: "bold",
+  };
+
+  
   
   return (
     <Grid container sx={{ display: "flex", flexDirection: "column" }}>
@@ -236,17 +258,19 @@ export default function Transactions() {
         </Card>
       </Grid>
 
-      <Dialog open={open} fullWidth maxWidth="sm">
-        <DialogTitle>Enviar Transacción</DialogTitle>
-        <DialogContent>
-          <TransactionSendForm />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} sx={buttons}>
-            Cancelar
-          </Button>
-        </DialogActions>
+    
+      <Dialog open={open} sx={cardStyle}>
+          <DialogTitle>Enviar Transacción</DialogTitle>
+          <DialogContent>
+            <TransactionSendForm />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} sx={buttonsError}>
+              Cancelar
+            </Button>
+          </DialogActions>
       </Dialog>
+    
 
       <Dialog open={confirmDialogOpen} fullWidth maxWidth="sm">
         <DialogTitle>Agregar beneficiario</DialogTitle>
@@ -262,6 +286,14 @@ export default function Transactions() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Notification
+                openSnackbar={openSnackbar}
+                snackbarMessage={snackbarMessage}
+                snackbarSeverity={snackbarSeverity}
+                setOpenSnackbar={setOpenSnackbar}
+                loading={loading}
+            />
 
     </Grid>
 

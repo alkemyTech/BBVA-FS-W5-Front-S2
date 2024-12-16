@@ -19,9 +19,10 @@ import {
   IconButton
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import SearchIcon from '@mui/icons-material/Search';
 import Notification from "../../Components/Notification/Notification";
 import Paginado from "../../Components/Paginate/Paginado";
-import { Card, CardContent, CardActions } from "@mui/material";
+import { Card, CardContent, CardActions,   InputAdornment,} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility'; // Ojo
 import DeleteIcon from '@mui/icons-material/Delete'; // Basura
 
@@ -160,15 +161,22 @@ const Users = () => {
   };
 
   const buttonStyles = {
-    background: "#2B6A2F",
+    background: "#9cd99e",
     borderRadius: "25px",
     padding: "6px 16px",
     color: "#FFFFFF",
     fontWeight: "bold",
     "&:hover": {
-      backgroundColor: "#9CD99E",
+      backgroundColor: "#2B6A2F",
       color: "#FFFFFF",
     },
+  };
+
+  const cardStyle = {
+    margin: "8px",
+    borderRadius: "5px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    borderTop: "4px solid #9cd99e",
   };
 
   const eyeButtonStyles = {
@@ -185,7 +193,7 @@ const Users = () => {
   
 
   const deleteButtonStyles = {
-    background: "#C62828",
+    background: "#FF6666",
     borderRadius: "25px",
     padding: "6px 16px",
     color: "#FFFFFF",
@@ -208,10 +216,7 @@ const Users = () => {
       </Typography>
 
       {/* Card para el campo de búsqueda */}
-      <Card sx={{
-        borderTop: "4px solid #9cd99e",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.1)", borderRadius: "10px", mb: 3
-      }}>
+      <Card sx={cardStyle}>
         <CardContent>
           <TextField
             label="Buscar por nombre"
@@ -219,21 +224,30 @@ const Users = () => {
             fullWidth
             value={searchName}
             onChange={handleSearchChange}
+            slotProps={{
+              input: {
+                endAdornment:(
+                  <InputAdornment position="end">
+                    <SearchIcon sx={{color:"#43A047"}}/>
+                  </InputAdornment>
+                )
+              }
+            }}
             sx={{
               width: "100%",
+              borderRadius:"25px",
+              "& .MuiOutlinedInput-root": {
+                      borderRadius: "15px",
+                    },
             }}
           />
         </CardContent>
       </Card>
 
       {/* Tabla de Usuarios */}
-      <Card sx={{
-        borderTop: "4px solid #9cd99e",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.1)", borderRadius: "10px", mb: 3
-      }}>
+      <Card sx={cardStyle}>
         <CardContent>
           {/* Tabla de Usuarios */}
-          <TableContainer component={Paper} sx={{ mb: 1 }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -277,7 +291,6 @@ const Users = () => {
                 )}
               </TableBody>
             </Table>
-          </TableContainer>
         </CardContent>
       </Card>
 
