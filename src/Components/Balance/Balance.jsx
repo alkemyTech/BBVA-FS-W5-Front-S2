@@ -195,13 +195,11 @@ const Balance = () => {
               </TableContainer>
               
               {/* Componente de paginación para historial de transacciones */}
-              <Box sx={{ marginTop: 2 }}>
                 <Paginado
                   totalPages={totalPagesHistory}
                   currentPage={currentPageHistory}
                   onPageChange={setCurrentPageHistory}
                 />
-              </Box>
             </Box>
             ) : (
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
@@ -250,13 +248,11 @@ const Balance = () => {
               </Typography>
             )}
             {/* Componente de paginación para plazos fijos */}
-            <Box sx={{ marginTop: 6 }}>
               <Paginado
                 totalPages={totalPagesFixedTerms}
                 currentPage={currentPageFixedTerms}
                 onPageChange={setCurrentPageFixedTerms}
               />
-            </Box>
           </CardContent>
         </Card>
       </Grid>
