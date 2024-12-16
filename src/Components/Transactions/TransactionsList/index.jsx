@@ -16,6 +16,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Box,
   IconButton,
   cardActionAreaClasses,
   TablePagination
@@ -262,7 +263,6 @@ const fetchBeneficiarios = async () => {
                       itemsPerPageOptions={""}
                       onItemsPerPageChange={setItemsPerPage}
                     />
-
           </CardContent>
         </Card>
       </Grid>
