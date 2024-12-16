@@ -18,7 +18,8 @@ import {
   Button,
   Box,
   IconButton,
-  cardActionAreaClasses
+  cardActionAreaClasses,
+  TablePagination
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
@@ -37,6 +38,7 @@ import Notification from "../../Notification/Notification";
 export default function Transactions() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [beneficiarios, setBeneficiarios] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");    const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,6 +64,18 @@ export default function Transactions() {
     setOpen(false);
   };
   
+const fetchBeneficiarios = async () => { 
+  try {
+    const response = await api.get("/users/beneficiarios", 
+      {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setBeneficiarios(response.data);
+  } catch(error) {
+    console.error("Error al obtener datos:", error);
+  }
+}
+
   const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -238,22 +252,17 @@ export default function Transactions() {
                         <StarBorderIcon sx={{color: "#43A047" }} />
                       </IconButton>
                     </TableCell>
-
-
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-
-            <Box sx={{ marginTop: 2 }}>
-            <Paginado
-              totalPages={Math.ceil(transactions.length / itemsPerPage)}
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-              itemsPerPageOptions={""}
-              onItemsPerPageChange={setItemsPerPage}
-            />
-            </Box>
+                      <Paginado
+                      totalPages={Math.ceil(transactions.length / itemsPerPage)}
+                      currentPage={currentPage}
+                      onPageChange={setCurrentPage}
+                      itemsPerPageOptions={""}
+                      onItemsPerPageChange={setItemsPerPage}
+                    />
           </CardContent>
         </Card>
       </Grid>

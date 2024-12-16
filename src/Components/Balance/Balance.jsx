@@ -189,6 +189,7 @@ const Balance = () => {
                         <TableCell>Moneda</TableCell>
                         <TableCell>Monto</TableCell>
                       </TableRow>
+
                     </TableHead>
                     <TableBody>
                       {currentHistory.map((transaction, index) => (
@@ -204,15 +205,13 @@ const Balance = () => {
                   </Table>
                 </TableContainer>
 
-                {/* Componente de paginación para historial de transacciones */}
-                <Box sx={{ marginTop: 2 }}>
-                  <Paginado
-                    totalPages={totalPagesHistory}
-                    currentPage={currentPageHistory}
-                    onPageChange={setCurrentPageHistory}
-                  />
-                </Box>
-              </Box>
+              {/* Componente de paginación para historial de transacciones */}
+                <Paginado
+                  totalPages={totalPagesHistory}
+                  currentPage={currentPageHistory}
+                  onPageChange={setCurrentPageHistory}
+                />
+            </Box>
             ) : (
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
                 No tienes transacciones registradas.
@@ -260,13 +259,11 @@ const Balance = () => {
               </Typography>
             )}
             {/* Componente de paginación para plazos fijos */}
-            <Box sx={{ marginTop: 6 }}>
               <Paginado
                 totalPages={totalPagesFixedTerms}
                 currentPage={currentPageFixedTerms}
                 onPageChange={setCurrentPageFixedTerms}
               />
-            </Box>
           </CardContent>
         </Card>
       </Grid>

@@ -291,14 +291,15 @@ const Users = () => {
                 )}
               </TableBody>
             </Table>
-        </CardContent>
-      </Card>
-
-      <Paginado
+            <Paginado
         totalPages={totalPages}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
+        </CardContent>
+      </Card>
+
+      
 
       {/* Dialog para ver cuentas */}
       {selectedUser && (
