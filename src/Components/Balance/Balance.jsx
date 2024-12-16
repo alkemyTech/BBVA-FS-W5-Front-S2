@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAccountBalance } from "../../services/BalanceSlice";
-import {
-  CircularProgress,
-  Card,
-  CardContent,
-  Typography
-} from "@mui/material";
+import { CircularProgress, Card, CardContent, Typography } from "@mui/material";
 import {
   Table,
   TableBody,
@@ -84,14 +79,21 @@ const Balance = () => {
   );
   const startIndexHistory = (currentPageHistory - 1) * itemsPerPageHistory;
   const currentHistory =
-    balance?.history?.slice(startIndexHistory, startIndexHistory + itemsPerPageHistory) || [];
+    balance?.history?.slice(
+      startIndexHistory,
+      startIndexHistory + itemsPerPageHistory
+    ) || [];
 
   const totalPagesFixedTerms = Math.ceil(
     (balance?.fixedTerms?.length || 0) / itemsPerPageFixedTerms
   );
-  const startIndexFixedTerms = (currentPageFixedTerms - 1) * itemsPerPageFixedTerms;
+  const startIndexFixedTerms =
+    (currentPageFixedTerms - 1) * itemsPerPageFixedTerms;
   const currentFixedTerms =
-    balance?.fixedTerms?.slice(startIndexFixedTerms, startIndexFixedTerms + itemsPerPageFixedTerms) || [];
+    balance?.fixedTerms?.slice(
+      startIndexFixedTerms,
+      startIndexFixedTerms + itemsPerPageFixedTerms
+    ) || [];
 
   return (
     <Grid container>
@@ -125,7 +127,7 @@ const Balance = () => {
                     item
                     key={index}
                     xs={12}
-                    sm={6} 
+                    sm={6}
                     sx={{
                       display: "flex",
                       flexDirection: "column",
@@ -168,41 +170,49 @@ const Balance = () => {
               Historial de Transacciones
             </Typography>
             {balance?.history?.length > 0 ? (
-              <Box sx={{ marginTop: 2, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Detalle</TableCell>
-                      <TableCell>CBU Origen</TableCell>
-                      <TableCell>CBU Destino</TableCell>
-                      <TableCell>Moneda</TableCell>
-                      <TableCell>Monto</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {currentHistory.map((transaction, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{transaction.description}</TableCell>
-                        <TableCell>{transaction.cbuOrigen}</TableCell>
-                        <TableCell>{transaction.cbuDestino}</TableCell>
-                        <TableCell>{transaction.currency}</TableCell>
-                        <TableCell>{transaction.amount}</TableCell>
+              <Box
+                sx={{
+                  marginTop: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Detalle</TableCell>
+                        <TableCell>CBU Origen</TableCell>
+                        <TableCell>CBU Destino</TableCell>
+                        <TableCell>Moneda</TableCell>
+                        <TableCell>Monto</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              
-              {/* Componente de paginación para historial de transacciones */}
-              <Box sx={{ marginTop: 2 }}>
-                <Paginado
-                  totalPages={totalPagesHistory}
-                  currentPage={currentPageHistory}
-                  onPageChange={setCurrentPageHistory}
-                />
+                    </TableHead>
+                    <TableBody>
+                      {currentHistory.map((transaction, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{transaction.description}</TableCell>
+                          <TableCell>{transaction.cbuOrigen}</TableCell>
+                          <TableCell>{transaction.cbuDestino}</TableCell>
+                          <TableCell>{transaction.currency}</TableCell>
+                          <TableCell>{transaction.amount}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+
+                {/* Componente de paginación para historial de transacciones */}
+                <Box sx={{ marginTop: 2 }}>
+                  <Paginado
+                    totalPages={totalPagesHistory}
+                    currentPage={currentPageHistory}
+                    onPageChange={setCurrentPageHistory}
+                  />
+                </Box>
               </Box>
-            </Box>
             ) : (
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
                 No tienes transacciones registradas.
