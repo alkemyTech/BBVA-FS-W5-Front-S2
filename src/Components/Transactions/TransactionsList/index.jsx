@@ -16,6 +16,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Box,
   IconButton,
   cardActionAreaClasses
 } from "@mui/material";
@@ -244,6 +245,7 @@ export default function Transactions() {
               </TableBody>
             </Table>
 
+            <Box sx={{ marginTop: 2 }}>
             <Paginado
               totalPages={Math.ceil(transactions.length / itemsPerPage)}
               currentPage={currentPage}
@@ -251,6 +253,7 @@ export default function Transactions() {
               itemsPerPageOptions={""}
               onItemsPerPageChange={setItemsPerPage}
             />
+            </Box>
           </CardContent>
         </Card>
       </Grid>
