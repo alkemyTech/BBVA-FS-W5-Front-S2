@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAccountBalance } from "../../services/BalanceSlice";
-import { CircularProgress, Card, CardContent, Typography, CardActions } from "@mui/material";
+import {
+  CircularProgress,
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+} from "@mui/material";
 import {
   Table,
   TableBody,
@@ -13,7 +19,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Paginado from "../Paginate/Paginado";
-import api from "../../services/api";
+import api from "../../services/Api";
 
 const formatCurrency = (amount, currency) => {
   if (amount == null || currency == null) {
@@ -189,7 +195,6 @@ const Balance = () => {
                         <TableCell>Moneda</TableCell>
                         <TableCell>Monto</TableCell>
                       </TableRow>
-
                     </TableHead>
                     <TableBody>
                       {currentHistory.map((transaction, index) => (
@@ -212,7 +217,6 @@ const Balance = () => {
                   onPageChange={setCurrentPageHistory}
                 />
               </Box>
-
             ) : (
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
                 No tienes transacciones registradas.
