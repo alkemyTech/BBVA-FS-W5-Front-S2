@@ -21,6 +21,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Notification from "../Notification/Notification";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Graphics from "../Material UI/Graphics";
 
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
@@ -177,7 +178,7 @@ export default function Home() {
   
   return (
     <div>
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         <Grid className="cardsssss" item size={8}>
           <Grid container>
             {accounts.map((account) => (
@@ -319,7 +320,6 @@ export default function Home() {
                         fontSize: "1rem",
                         color: "#3A3A3A",
                         textAlign: "center",
-                        marginTop: "20px",
                       }}
                     >
                       Aquí aparecerán tus plazos fijos
@@ -343,63 +343,12 @@ export default function Home() {
                         fontWeight: "bold",
                       }}
                     >
-                      Plazos fijos
+                      Gastos mensuales
                     </Typography>
                   }
                 />
                 <CardContent sx={cardContentStyle}>
-                  {fixedTerms.length > 0 ? (
-                    <TableContainer>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
-                              CBU
-                            </TableCell>
-                            <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
-                              Fecha de fin
-                            </TableCell>
-                            <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>
-                              Monto ingresado
-                            </TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {fixedTerms.slice(0, 5).map((fixedTerm, index) => (
-                            <TableRow key={index}>
-                              <TableCell>{fixedTerm.accountCBU}</TableCell>
-                              <TableCell>
-                                {new Date(fixedTerm.endDate).toLocaleString(
-                                  "es-ES",
-                                  { dateStyle: "medium" }
-                                )}
-                              </TableCell>
-                              <TableCell>{`$ ${fixedTerm.amount}`}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  ) : (
-                    <Typography
-                      style={{
-                        fontSize: "1rem",
-                        color: "#3A3A3A",
-                        textAlign: "center",
-                        marginTop: "20px",
-                      }}
-                    >
-                      Aquí aparecerán tus plazos fijos
-                    </Typography>
-                  )}
-                  <Grid
-                    item
-                    size={12}
-                    justifyContent="center"
-                    style={{ marginTop: 16 }}
-                  >
-                    <Button style={buttons}>Ver más</Button>
-                  </Grid>
+                  <Graphics/>
                 </CardContent>
               </Card>
           </Grid>
@@ -529,7 +478,6 @@ export default function Home() {
                     fontSize: "1rem",
                     color: "#3A3A3A",
                     textAlign: "center",
-                    marginTop: "20px",
                   }}
                 >
                   Aquí aparecerán tus transacciones
