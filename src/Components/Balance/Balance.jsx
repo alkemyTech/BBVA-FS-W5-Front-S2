@@ -96,7 +96,7 @@ const Balance = () => {
     ) || [];
 
   return (
-    <Grid container>
+    <Grid container sx={{ marginTop: "-90px" }}>
       {/* Card para Resumen de Balance */}
       <Grid item size={12}>
         <Card sx={cardStyle}>
@@ -212,9 +212,18 @@ const Balance = () => {
                         />
                 </CardActions>
 
-              {/* Componente de paginación para historial de transacciones */}
+
+                {/* Componente de paginación para historial de transacciones */}
+                <Paginado
+                  totalPages={totalPagesHistory}
+                  currentPage={currentPageHistory}
+                  onPageChange={setCurrentPageHistory}
+                />
+              </Box>
+          {/* Componente de paginación para historial de transacciones */}
                 
             </Box>
+
             ) : (
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
                 No tienes transacciones registradas.
@@ -262,11 +271,11 @@ const Balance = () => {
               </Typography>
             )}
             {/* Componente de paginación para plazos fijos */}
-              <Paginado
-                totalPages={totalPagesFixedTerms}
-                currentPage={currentPageFixedTerms}
-                onPageChange={setCurrentPageFixedTerms}
-              />
+            <Paginado
+              totalPages={totalPagesFixedTerms}
+              currentPage={currentPageFixedTerms}
+              onPageChange={setCurrentPageFixedTerms}
+            />
           </CardContent>
         </Card>
       </Grid>
