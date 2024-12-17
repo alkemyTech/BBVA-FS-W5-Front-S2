@@ -5,10 +5,12 @@ import {
   DialogContent,
   DialogTitle,
   Button,
+  TextField,
+  Icon,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Card, Typography, CardHeader, CardContent,CardActions, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-
+import EditIcon from '@mui/icons-material/Edit';
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
@@ -28,13 +30,25 @@ export default function Home() {
   const [transactions, setTransactions] = useState([]);
   const [fixedTerms, setFixedTerms] = useState([]);
   const [showBalance, setBalance] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const token = localStorage.getItem("token"); 
+
 
   const location = useLocation();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false)
+  const [form, setForm] = useState({
+    transactionLimit: "",
+  })
+
+
+  const openConfirmDialog = (id) => {
+    setSelectedAccount(id);
+    setOpenDialog(true);
+  };
 
   const navigate = useNavigate();
 
@@ -66,6 +80,34 @@ export default function Home() {
       if (error.response && error.response.status === 401) {
         window.location.href = "/";
       }
+    }
+  };
+
+  const editLimit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      const response = await api.patch(`/accounts/${selectedAccount}`, null, {
+        params: {
+          newTransactionLimit: form.transactionLimit,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Respuesta de la API:", response.data);
+      setLoading(false);
+      setSnackbarMessage("Ya cambiaste tu limite!");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+      setOpenDialog(false);
+    } catch (error) {
+      console.error("Error al editar:", error);
+      setLoading(false);
+      const errorMessage = error.response ? error.response.data.message : "Error desconocido";
+      setSnackbarMessage(errorMessage);
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
     }
   };
 
@@ -184,7 +226,7 @@ export default function Home() {
             {accounts.map((account) => (
               <Grid item size={accounts.length === 1 ? 12 : 6} key={account.id}>
                 <Card sx={cardStyle}>
-                  <CardHeader sx={{textAlign:"left"}}
+                  <CardHeader sx={{textAlign:"left",paddingBottom:"4px"}}
                     action={
                       <Tooltip title={`CBU: ${account.cbu}`} arrow>
                         <IconButton aria-label="settings">
@@ -204,6 +246,14 @@ export default function Home() {
                       >
                         {`Cuenta en ${account.currency}`}
                       </Typography>
+                    }
+                    subheader={
+                      <Grid item size={12} sx={{display:"flex",gap:1, alignItems:"center"}}>
+                        <Typography>Limite de transaccion</Typography>
+                        <IconButton onClick={() => openConfirmDialog(account.id)}>
+                          <EditIcon sx={{fontSize:"medium"}}/>
+                        </IconButton>
+                      </Grid>
                     }
                   />
                   <CardContent>
@@ -487,6 +537,31 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
+
+      <Dialog open={openDialog} fullWidth maxWidth="sm">
+        <DialogTitle>Editar limite de transaccion</DialogTitle>
+        <DialogContent>
+          <form>
+            <TextField
+            fullWidth
+            label="Limite de transaccion"
+            value={form.transactionLimit}
+            onChange={(e) => setForm({ ...form, transactionLimit: e.target.value })}
+            placeholder="Ingresa el nuevo limite"
+            
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} sx={buttons}>
+            Cancelar
+          </Button>
+          <Button  onClick={editLimit} sx={buttons}>
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
 
       <Notification
         openSnackbar={openSnackbar}
