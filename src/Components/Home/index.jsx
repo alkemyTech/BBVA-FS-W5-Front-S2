@@ -262,7 +262,7 @@ export default function Home() {
               <Grid item size={accounts.length === 1 ? 12 : 6} key={account.id}>
                 <Card sx={cardStyle}>
                   <CardHeader
-                    sx={{ textAlign: "left", paddingBottom: "4px" }}
+                    sx={{ textAlign: "left" }}
                     action={
                       <Tooltip title={`CBU: ${account.cbu}`} arrow>
                         <IconButton aria-label="settings">
@@ -361,7 +361,11 @@ export default function Home() {
                     >
                       Transferir
                     </Button>
-                    <Button variant="body1" sx={buttons}>
+                    <Button
+                      variant="body1"
+                      sx={buttons}
+                      onClick={() => navigate(`/depositar/${account.cbu}`)}
+                    >
                       Depositar
                     </Button>
                   </CardActions>
