@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAccountBalance } from "../../services/BalanceSlice";
-import { CircularProgress, Card, CardContent, Typography } from "@mui/material";
+import { CircularProgress, Card, CardContent, Typography, CardActions } from "@mui/material";
 import {
   Table,
   TableBody,
@@ -204,13 +204,16 @@ const Balance = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
+                <CardActions>
+                  <Paginado
+                      totalPages={totalPagesHistory}
+                      currentPage={currentPageHistory}
+                      onPageChange={setCurrentPageHistory}
+                        />
+                </CardActions>
 
               {/* Componente de paginación para historial de transacciones */}
-                <Paginado
-                  totalPages={totalPagesHistory}
-                  currentPage={currentPageHistory}
-                  onPageChange={setCurrentPageHistory}
-                />
+                
             </Box>
             ) : (
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
