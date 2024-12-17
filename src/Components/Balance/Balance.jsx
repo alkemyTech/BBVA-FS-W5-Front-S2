@@ -204,14 +204,6 @@ const Balance = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
-                <CardActions>
-                  <Paginado
-                      totalPages={totalPagesHistory}
-                      currentPage={currentPageHistory}
-                      onPageChange={setCurrentPageHistory}
-                        />
-                </CardActions>
-
 
                 {/* Componente de paginación para historial de transacciones */}
                 <Paginado
@@ -220,9 +212,6 @@ const Balance = () => {
                   onPageChange={setCurrentPageHistory}
                 />
               </Box>
-          {/* Componente de paginación para historial de transacciones */}
-                
-            </Box>
 
             ) : (
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
