@@ -5,6 +5,8 @@ import {
   DialogContent,
   DialogTitle,
   Button,
+  TextField,
+  Icon,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {
@@ -21,7 +23,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-
+import EditIcon from "@mui/icons-material/Edit";
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
@@ -32,24 +34,49 @@ import ArrowCircleDownRoundedIcon from "@mui/icons-material/ArrowCircleDownRound
 import ArrowCircleUpRoundedIcon from "@mui/icons-material/ArrowCircleUpRounded";
 import { useNavigate, useLocation } from "react-router-dom";
 import Notification from "../Notification/Notification";
+import { NumericFormat } from "react-number-format";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Graphics from "../Material UI/Graphics";
+
+const initialFormData = {
+  newTransactionLimit: "",
+};
 
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [fixedTerms, setFixedTerms] = useState([]);
   const [showBalance, setBalance] = useState(false);
-
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [formData, setFormData] = useState(initialFormData);
   const location = useLocation();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [form, setForm] = useState({
+    transactionLimit: "",
+  });
+
+  const openConfirmDialog = (id) => {
+    setSelectedAccount(id);
+    setOpenDialog(true);
+  };
 
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    const numericValue = parseFloat(value.replace(/\./g, "").replace(",", "."));
+
+    setFormData((prev) => ({
+      ...prev,
+      newTransactionLimit: isNaN(numericValue) ? 0.0 : numericValue,
+    }));
+  };
 
   const handleClickShowBalance = () => setBalance((show) => !show);
 
@@ -79,6 +106,39 @@ export default function Home() {
       if (error.response && error.response.status === 401) {
         window.location.href = "/";
       }
+    }
+  };
+
+  const editLimit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const formToSend = {
+        accountId: parseInt(selectedAccount),
+        newTransactionLimit: formData.newTransactionLimit,
+      };
+
+      const response = await api.post("/accounts/editLimit", formToSend, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setLoading(false);
+      setSnackbarMessage("Ya cambiaste tu limite!");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+      setOpenDialog(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      setLoading(false);
+      const errorMessage = error.response
+        ? error.response.data.message
+        : "Error desconocido";
+      setSnackbarMessage(errorMessage);
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
     }
   };
 
@@ -174,6 +234,18 @@ export default function Home() {
     fontWeight: "bold",
   };
 
+  const deleteButtonStyles = {
+    background: "#C62828",
+    borderRadius: "25px",
+    padding: "6px 16px",
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#FF5252",
+      color: "#FFFFFF",
+    },
+  };
+
   const cardContentStyle = {
     paddingTop: "6px",
     "&:last-child": {
@@ -210,6 +282,22 @@ export default function Home() {
                       >
                         {`Cuenta en ${account.currency}`}
                       </Typography>
+                    }
+                    subheader={
+                      <Grid
+                        item
+                        size={12}
+                        sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                      >
+                        <Typography> 
+                        {`Límite de transacción $${formatCurrency(account.transactionLimit, account.currency)}`}
+                        </Typography>
+                        <IconButton
+                          onClick={() => openConfirmDialog(account.id)}
+                        >
+                          <EditIcon sx={{ fontSize: "medium" }} />
+                        </IconButton>
+                      </Grid>
                     }
                   />
                   <CardContent>
@@ -575,6 +663,44 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
+
+      <Dialog open={openDialog} fullWidth maxWidth="sm">
+        <DialogTitle>Editar límite de transacción</DialogTitle>
+        <DialogContent>
+          <form>
+            <NumericFormat
+              fullWidth
+              label="Nuevo límite de transacción"
+              thousandSeparator="."
+              decimalSeparator=","
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={false}
+              customInput={TextField}
+              value={form.transactionLimit}
+              variant="outlined"
+              onChange={handleChange}
+              slotProps={{}}
+              sx={{
+                "& .MuiOutlinedInput-root": { borderRadius: "20px" },
+              }}
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setOpenDialog(false)}
+            sx={deleteButtonStyles}
+          >
+            Cancelar
+          </Button>
+          <Button onClick={editLimit} sx={buttons}>
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Notification
         openSnackbar={openSnackbar}
