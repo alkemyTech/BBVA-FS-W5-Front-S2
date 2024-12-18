@@ -131,7 +131,7 @@ export default function TransactionForm() {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setForm({ ...form, amount: "", description: "", concept: "" });
-      navigate("/home", { state: { success: true, deposit: true, FixedTermDeposit: false, Payment: true } });
+      navigate("/home", { state: { success: true, deposit: true, FixedTermDeposit: false, Payment: false } });
     } catch (error) {
       console.error("Error al realizar el depósito:", error);
       setSnackbarMessage("Error al enviar el depósito");
