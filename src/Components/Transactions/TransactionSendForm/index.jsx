@@ -113,7 +113,6 @@ export default function TransactionSendForm() {
         "Alquiler",
         "Comida",
         "Otros",
-        "Deposito"
     ];
 
     const currencies = ["ARS", "USD"];
