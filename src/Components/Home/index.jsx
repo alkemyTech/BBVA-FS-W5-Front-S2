@@ -167,7 +167,6 @@ export default function Home() {
     }
   };
 
-  
   const fetchAccounts = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -217,9 +216,14 @@ export default function Home() {
       setSnackbarMessage("Plazo fijo creado con éxito");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
-    } 
+    }
     if (location.state?.deposit) {
       setSnackbarMessage("Deposito realizado con éxito");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+    }
+    if (location.state?.Payment) {
+      setSnackbarMessage("Pago registrado exitosamente");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
     }
@@ -268,7 +272,7 @@ export default function Home() {
               <Grid item size={accounts.length === 1 ? 12 : 6} key={account.id}>
                 <Card sx={cardStyle}>
                   <CardHeader
-                    sx={{ textAlign: "left", paddingBottom:"4px" }}
+                    sx={{ textAlign: "left", paddingBottom: "4px" }}
                     action={
                       <Tooltip title={`CBU: ${account.cbu}`} arrow>
                         <IconButton aria-label="settings">
@@ -295,8 +299,11 @@ export default function Home() {
                         size={12}
                         sx={{ display: "flex", gap: 1, alignItems: "center" }}
                       >
-                        <Typography> 
-                        {`Límite de transacción $${formatCurrency(account.transactionLimit, account.currency)}`}
+                        <Typography>
+                          {`Límite de transacción $${formatCurrency(
+                            account.transactionLimit,
+                            account.currency
+                          )}`}
                         </Typography>
                         <IconButton
                           onClick={() => openConfirmDialog(account.id)}
@@ -306,7 +313,7 @@ export default function Home() {
                       </Grid>
                     }
                   />
-                  <CardContent sx={{paddingTop:"4px"}}>
+                  <CardContent sx={{ paddingTop: "4px" }}>
                     <Grid container>
                       <Grid item size={12}>
                         <Typography
@@ -379,9 +386,9 @@ export default function Home() {
               </Grid>
             ))}
             <Grid item size={6}>
-              <Card style={{...cardStyle, minHeight:"400px"}}>
+              <Card style={{ ...cardStyle, minHeight: "400px" }}>
                 <CardHeader
-                  style={{ textAlign: "center", paddingBottom:"0px" }}
+                  style={{ textAlign: "center", paddingBottom: "0px" }}
                   title={
                     <Typography
                       style={{
@@ -399,8 +406,8 @@ export default function Home() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item size={6} >
-              <Card style={{...cardStyle, minHeight:"400px"}}>
+            <Grid item size={6}>
+              <Card style={{ ...cardStyle, minHeight: "400px" }}>
                 <CardHeader
                   style={{ textAlign: "center" }}
                   title={
@@ -528,11 +535,10 @@ export default function Home() {
                 </CardContent>
               </Card>
             </Grid>
-        
           </Grid>
         </Grid>
-        <Grid size={4} sx={{ minHeight:"400px",}}>
-          <Card style={{...cardStyle}}>  
+        <Grid size={4} sx={{ minHeight: "400px" }}>
+          <Card style={{ ...cardStyle }}>
             <CardHeader
               sx={{ display: "flex", textAlign: "center" }}
               title={
@@ -551,106 +557,131 @@ export default function Home() {
               {transactions.length > 0 ? (
                 <Grid container spacing={1}>
                   {transactions.slice(0, 8).map((transaction, index) => (
-                    <Grid item size={12} key={index} sx={{ "&:hover": { backgroundColor: "#f5f5f5", cursor: "pointer", "&:hover": { borderRight: transaction.type === "Pago" ? "4px solid #FF6666" : "4px solid #9cd99e", }, } }}>
-                        <Grid
-                          container
-                          spacing={1}
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            padding: "10px 12px",
-                            justifyContent: "space-around",
-                          }}
-                        >
-                          <Grid item size={2}>
-                            {transaction.type === "Deposito" && (
-                              <ArrowCircleUpRoundedIcon
-                                sx={{ fontSize: "36px", color: "#43A047" }}
-                              />
-                            )}
-                            {transaction.type === "Ingreso" && (
-                              <ArrowCircleUpRoundedIcon
-                                sx={{ fontSize: "36px", color: "#43A047" }}
-                              />
-                            )}
-                            {transaction.type === "Pago" && (
-                              <ArrowCircleDownRoundedIcon
-                                sx={{ fontSize: "36px", color: "#FF0000" }}
-                              />
-                            )}
-                          </Grid>
-                          <Grid item size={10}>
-                            <Grid container>
-                              <Grid item size={6}>
-                                <Typography
-                                  sx={{
-                                    fontWeight: "bold",
-                                    color: "#000000",
-                                    fontSize: "1rem",
-                                    textAlign:"left"
-                                  }}
-                                >
-                                  {transaction.type === "Pago" ||
-                                  transaction.type === "Deposito"
-                                    ? `${
-                                        transaction.accountDestino?.firstName ||
-                                        ""
-                                      } ${
-                                        transaction.accountDestino?.lastName ||
-                                        ""
-                                      }`
-                                    : `${
-                                        transaction.accountOrigen?.firstName ||
-                                        ""
-                                      } ${
-                                        transaction.accountOrigen?.lastName ||
-                                        ""
-                                      }`}
-                                </Typography>
-                              </Grid>
-                              <Grid item size={6} sx={{ textAlign: "right" }}>
-                                <Typography
-                                  sx={{
-                                    fontWeight: "bold",
-                                    color: "#000000",
-                                    fontSize: "1rem",
-                                  }}
-                                >
-                                  {transaction.type === "Pago"
-                                    ? `- $${transaction.amount} ${
-                                        transaction.accountDestino?.currency ||
-                                        ""
-                                      }`
-                                    : `+ $${transaction.amount} ${
-                                        transaction.type === "Ingreso"
-                                          ? transaction.accountOrigen
-                                              ?.currency || ""
-                                          : transaction.accountDestino
-                                              ?.currency || ""
-                                      }`}
-                                </Typography>
-                              </Grid>
+                    <Grid
+                      item
+                      size={12}
+                      key={index}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#f5f5f5",
+                          cursor: "pointer",
+                          "&:hover": {
+                            borderRight:
+                              transaction.type === "Pago"
+                                ? "4px solid #FF6666"
+                                : "4px solid #9cd99e",
+                          },
+                        },
+                      }}
+                    >
+                      <Grid
+                        container
+                        spacing={1}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "10px 12px",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <Grid item size={2}>
+                          {transaction.type === "Deposito" && (
+                            <ArrowCircleUpRoundedIcon
+                              sx={{ fontSize: "36px", color: "#43A047" }}
+                            />
+                          )}
+                          {transaction.type === "Ingreso" && (
+                            <ArrowCircleUpRoundedIcon
+                              sx={{ fontSize: "36px", color: "#43A047" }}
+                            />
+                          )}
+                          {transaction.type === "Pago" && (
+                            <ArrowCircleDownRoundedIcon
+                              sx={{ fontSize: "36px", color: "#FF0000" }}
+                            />
+                          )}
+                        </Grid>
+                        <Grid item size={10}>
+                          <Grid container>
+                            <Grid item size={6}>
+                              <Typography
+                                sx={{
+                                  fontWeight: "bold",
+                                  color: "#000000",
+                                  fontSize: "1rem",
+                                  textAlign: "left",
+                                }}
+                              >
+                                {transaction.type === "Pago" ||
+                                transaction.type === "Deposito"
+                                  ? `${
+                                      transaction.accountDestino?.firstName ||
+                                      transaction.accountOrigen?.firstName
+                                    } ${
+                                      transaction.accountDestino?.lastName ||
+                                      transaction.accountOrigen?.lastName
+                                    }`
+                                  : `${
+                                      transaction.accountOrigen?.firstName || ""
+                                    } ${
+                                      transaction.accountOrigen?.lastName || ""
+                                    }`}
+                              </Typography>
+                            </Grid>
+                            <Grid item size={6} sx={{ textAlign: "right" }}>
+                              <Typography
+                                sx={{
+                                  fontWeight: "bold",
+                                  color: "#000000",
+                                  fontSize: "1rem",
+                                }}
+                              >
+                                {transaction.type === "Pago"
+                                  ? `- $${formatCurrency(
+                                      transaction.amount,
+                                      transaction.accountDestino?.currency ||
+                                        transaction.accountOrigen?.currency
+                                    )} ${
+                                      transaction.accountDestino?.currency ||
+                                      transaction.accountOrigen?.currency
+                                    }`
+                                  : `+ $${formatCurrency(
+                                      transaction.amount,
+                                      transaction.accountDestino?.currency ||
+                                        transaction.accountOrigen?.currency
+                                    )} ${
+                                      transaction.type === "Ingreso"
+                                        ? transaction.accountOrigen?.currency ||
+                                          ""
+                                        : transaction.accountDestino
+                                            ?.currency || ""
+                                    }`}
+                              </Typography>
+                            </Grid>
 
-                              <Grid item size={6}>
-                                <Typography sx={{textAlign:"left"}}>{transaction.concept}</Typography>
-                              </Grid>
-                              <Grid item size={6} sx={{ textAlign: "right" }}>
-                                <Typography
-                                  sx={{
-                                    color: "text.secondary",
-                                    fontSize: "0.85rem",
-                                  }}
-                                >
-                                  {new Date(
-                                    transaction.timestamp
-                                  ).toLocaleString("es-ES", {
+                            <Grid item size={6}>
+                              <Typography sx={{ textAlign: "left" }}>
+                                {transaction.concept}
+                              </Typography>
+                            </Grid>
+                            <Grid item size={6} sx={{ textAlign: "right" }}>
+                              <Typography
+                                sx={{
+                                  color: "text.secondary",
+                                  fontSize: "0.85rem",
+                                }}
+                              >
+                                {new Date(transaction.timestamp).toLocaleString(
+                                  "es-ES",
+                                  {
                                     timeStyle: "short",
-                                  })}
-                                </Typography>
-                              </Grid>
+                                  }
+                                )}
+                              </Typography>
                             </Grid>
                           </Grid>
                         </Grid>
+                      </Grid>
                     </Grid>
                   ))}
                 </Grid>

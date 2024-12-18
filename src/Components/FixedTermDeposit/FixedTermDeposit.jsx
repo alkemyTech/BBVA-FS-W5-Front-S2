@@ -235,7 +235,7 @@ const FixedTermDepositForm = () => {
       setSnackbarMessage("Simulación finalizada");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
-      navigate("/home", { state: { success: true, deposit: false, FixedTermDeposit: true } });
+      navigate("/home", { state: { success: true, deposit: false, FixedTermDeposit: true, Payment: true } });
     } catch (err) {
       const errorMessage = err.response
         ? err.response.data.message

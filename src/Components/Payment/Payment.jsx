@@ -10,9 +10,11 @@ import {
   MenuItem,
   InputAdornment,
 } from "@mui/material";
+import { NumericFormat } from "react-number-format";
 import Grid from "@mui/material/Grid2";
 import api from "../../services/api";
 import Notification from "../Notification/Notification";
+import { useNavigate } from "react-router-dom";
 
 // Logos de las tarjetas (puedes reemplazar las rutas con las tuyas)
 import VisaLogo from "../../assets/img/visa.png";
@@ -37,6 +39,7 @@ const PaymentForm = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   if (!token) {
     console.error("Token no encontrado");
@@ -44,27 +47,15 @@ const PaymentForm = () => {
     return null; // Importante: Evita renderizado innecesario.
   }
 
-  useEffect(() => {
-    const fetchCurrencies = async () => {
-      try {
-        const response = await api.get("/Transactions/payment", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("Currencies fetched:", response.data);
-      } catch (err) {
-        console.error("Error al obtener las monedas:", err);
-      }
-    };
-    fetchCurrencies();
-  }, [token]);
-
   // Función para detectar el tipo de tarjeta
   const detectCardType = (number) => {
     const sanitized = number.replace(/\s+/g, ""); // Elimina espacios
     if (/^4/.test(sanitized)) return "Visa";
-    if (/^5[1-5]/.test(sanitized) || /^2(2[2-9]|[3-6]|7[0-1]|720)/.test(sanitized)) return "Mastercard";
+    if (
+      /^5[1-5]/.test(sanitized) ||
+      /^2(2[2-9]|[3-6]|7[0-1]|720)/.test(sanitized)
+    )
+      return "Mastercard";
     if (/^3[47]/.test(sanitized)) return "American Express";
     if (/^6(011|4[4-9]|5|22)/.test(sanitized)) return "Discover";
     return ""; // No coincide
@@ -93,7 +84,10 @@ const PaymentForm = () => {
     if (!formData.amount || parseFloat(formData.amount) <= 0) {
       errors.amount = "El monto debe ser mayor a cero.";
     }
-    if (!formData.nroTarjeta || formData.nroTarjeta.replace(/\s/g, "").length !== 16) {
+    if (
+      !formData.nroTarjeta ||
+      formData.nroTarjeta.replace(/\s/g, "").length !== 16
+    ) {
       errors.nroTarjeta = "Debe ser una tarjeta válida.";
     }
     if (!formData.currency) {
@@ -112,9 +106,18 @@ const PaymentForm = () => {
       setError(errors);
       return;
     }
+
+    const formToSend = {
+      concept: formData.concept,
+      nroTarjeta: formData.nroTarjeta,
+      amount: parseFloat(formData.amount.replace(/\./g, "").replace(",", ".")),
+      currency: formData.currency,
+      description: formData.description,
+    };
+
     setLoading(true);
     try {
-      await api.post("/transactions/payment", formData, {
+      await api.post("/transactions/payment", formToSend, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -123,6 +126,14 @@ const PaymentForm = () => {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setFormData(initialPaymentData);
+      navigate("/home", {
+        state: {
+          success: true,
+          deposit: false,
+          FixedTermDeposit: false,
+          Payment: true,
+        },
+      });
     } catch (err) {
       console.error("Error al registrar el pago:", err);
       const errorMessage = err.response
@@ -136,16 +147,23 @@ const PaymentForm = () => {
     }
   };
 
+  const handleClose = () => {
+    navigate("/home");
+  };
+
   const cardStyle = {
-    margin: "10px",
     borderRadius: "5px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     borderTop: "4px solid #9CD99E",
-    maxWidth: 600,
+    width: "700px",
+  };
+
+  const inputStyles = {
+    textAlign: "left",
   };
 
   return (
-    <div className="payment-container">
+    <div>
       <Card sx={cardStyle}>
         <CardContent>
           <Typography
@@ -159,7 +177,14 @@ const PaymentForm = () => {
             Registrar Pago
           </Typography>
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center">
+            <Grid
+              container
+              spacing={2}
+              p={2}
+              alignItems="stretch"
+              justifyContent="center"
+              direction="column"
+            >
               <Grid size={12}>
                 <TextField
                   fullWidth
@@ -180,10 +205,10 @@ const PaymentForm = () => {
                               cardType === "Visa"
                                 ? VisaLogo
                                 : cardType === "Mastercard"
-                                  ? MasterCardLogo
-                                  : cardType === "American Express"
-                                    ? AmexLogo
-                                    : null
+                                ? MasterCardLogo
+                                : cardType === "American Express"
+                                ? AmexLogo
+                                : null
                             }
                             alt={cardType}
                             style={{ maxWidth: "40px", height: "auto" }}
@@ -195,39 +220,31 @@ const PaymentForm = () => {
                 />
               </Grid>
 
-              <Grid item size={8}>
-                <TextField
+              <Grid item size={12}>
+                <NumericFormat
+                  customInput={TextField}
                   fullWidth
                   name="amount"
                   label="Monto"
-                  type="number"
                   variant="outlined"
                   value={formData.amount}
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  decimalScale={2}
+                  fixedDecimalScale
                   onChange={handleChange}
                   error={!!error.amount}
                   helperText={error.amount}
-                  sx={{
-                    '& input[type=number]': {
-                      '-moz-appearance': 'textfield', // Elimina las flechas en Firefox
-                      '&::-webkit-outer-spin-button': {
-                        WebkitAppearance: 'none', // Elimina las flechas en Chrome y Safari
-                        margin: 0,
-                      },
-                      '&::-webkit-inner-spin-button': {
-                        WebkitAppearance: 'none', // Elimina las flechas en Chrome y Safari
-                        margin: 0,
-                      },
-                    },
-                  }}
                 />
               </Grid>
-              <Grid item size={4}>
+              <Grid item size={12}>
                 <TextField
                   fullWidth
                   name="currency"
                   label="Moneda"
                   select
                   variant="outlined"
+                  sx={inputStyles}
                   value={formData.currency}
                   onChange={handleChange}
                   error={!!error.currency}
@@ -244,6 +261,7 @@ const PaymentForm = () => {
                   name="concept"
                   label="Concepto"
                   select
+                  sx={inputStyles}
                   variant="outlined"
                   value={formData.concept}
                   onChange={handleChange}
@@ -271,29 +289,55 @@ const PaymentForm = () => {
                   helperText={error.description}
                 />
               </Grid>
-              <Grid item size={12} style={{ textAlign: "center" }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    padding: "5px 30px",
-                    borderRadius: "25px",
-                    fontWeight: "bold",
-                    backgroundColor: "#9cd99e",
-                    "&:hover": {
-                      backgroundColor: "#388E3C",
-                    },
-                  }}
 
-                >
-                  {loading ? (
-                    <CircularProgress size={24} sx={{ color: "#fff" }} />
-                  ) : (
-                    "Pagar"
-                  )}
-                </Button>
+              <Grid
+                item
+                container
+                justifyContent="space-between"
+                spacing={2}
+                mt={2}
+              >
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      padding: "5px 30px",
+                      borderRadius: "25px",
+                      fontWeight: "bold",
+                      backgroundColor: "#9cd99e",
+                      "&:hover": {
+                        backgroundColor: "#388E3C",
+                      },
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} sx={{ color: "#fff" }} />
+                    ) : (
+                      "Pagar"
+                    )}
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    sx={{
+                      padding: "5px 30px",
+                      borderRadius: "25px",
+                      fontWeight: "bold",
+                      backgroundColor: "#FF6666",
+                      "&:hover": {
+                        backgroundColor: "#FF5252",
+                      },
+                    }}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleClose}
+                    fullWidth
+                  >
+                    Cancelar
+                  </Button>
+                </Grid>
               </Grid>
-
             </Grid>
           </form>
         </CardContent>

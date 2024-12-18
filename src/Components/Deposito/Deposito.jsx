@@ -44,10 +44,8 @@ export default function TransactionForm() {
   const buttons = {
     backgroundColor: "#9cd99e", // Verde claro
     borderRadius: "25px",
-    padding: "10px 20px",
     color: "#fff",
     fontWeight: "bold",
-    fontSize: "16px",
     width: "100%",
     transition: "background-color 0.3s ease",
     "&:hover": {
@@ -59,10 +57,8 @@ export default function TransactionForm() {
   const closeButton = {
     backgroundColor: "#FF6666", // Rojo claro
     borderRadius: "25px",
-    padding: "10px 20px",
     color: "#fff",
     fontWeight: "bold",
-    fontSize: "16px",
     transition: "background-color 0.3s ease",
     "&:hover": {
       backgroundColor: "#FF5252", // Hover más oscuro
@@ -135,7 +131,7 @@ export default function TransactionForm() {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setForm({ ...form, amount: "", description: "", concept: "" });
-      navigate("/home", { state: { success: true, deposit: true, FixedTermDeposit: false } });
+      navigate("/home", { state: { success: true, deposit: true, FixedTermDeposit: false, Payment: true } });
     } catch (error) {
       console.error("Error al realizar el depósito:", error);
       setSnackbarMessage("Error al enviar el depósito");
@@ -167,7 +163,7 @@ export default function TransactionForm() {
           direction="column"
           justifyContent="center"
           alignItems="stretch"
-          spacing={3} // Espaciado uniforme entre los campos
+          spacing={2} // Espaciado uniforme entre los campos
           p={2}
         >
           {/* CBU */}

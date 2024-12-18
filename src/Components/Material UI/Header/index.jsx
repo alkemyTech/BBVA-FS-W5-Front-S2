@@ -116,7 +116,7 @@ export default function Header() {
             style={{ textDecoration: "none", color: "#" }}
           >
             <Typography sx={buttonStyles} variant="body1">
-              Nuevo Pago
+              Pagar Tarjeta
             </Typography>
           </Link>
           <Link
