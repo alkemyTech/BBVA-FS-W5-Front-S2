@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAccountBalance } from "../../services/BalanceSlice";
-import {
-  CircularProgress,
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-} from "@mui/material";
+import { CircularProgress, Card, CardContent, Typography, CardActions } from "@mui/material";
 import {
   Table,
   TableBody,
@@ -19,7 +13,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Paginado from "../Paginate/Paginado";
-import api from "../../services/Api";
+import api from "../../services/api";
 
 const formatCurrency = (amount, currency) => {
   if (amount == null || currency == null) {
@@ -102,7 +96,7 @@ const Balance = () => {
     ) || [];
 
   return (
-    <Grid container sx={{ marginTop: "-90px" }}>
+    <Grid container>
       {/* Card para Resumen de Balance */}
       <Grid item size={12}>
         <Card sx={cardStyle}>
@@ -195,6 +189,7 @@ const Balance = () => {
                         <TableCell>Moneda</TableCell>
                         <TableCell>Monto</TableCell>
                       </TableRow>
+
                     </TableHead>
                     <TableBody>
                       {currentHistory.map((transaction, index) => (
@@ -209,14 +204,17 @@ const Balance = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
+                <CardActions>
+                  <Paginado
+                      totalPages={totalPagesHistory}
+                      currentPage={currentPageHistory}
+                      onPageChange={setCurrentPageHistory}
+                        />
+                </CardActions>
 
-                {/* Componente de paginación para historial de transacciones */}
-                <Paginado
-                  totalPages={totalPagesHistory}
-                  currentPage={currentPageHistory}
-                  onPageChange={setCurrentPageHistory}
-                />
-              </Box>
+              {/* Componente de paginación para historial de transacciones */}
+                
+            </Box>
             ) : (
               <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
                 No tienes transacciones registradas.
@@ -264,11 +262,11 @@ const Balance = () => {
               </Typography>
             )}
             {/* Componente de paginación para plazos fijos */}
-            <Paginado
-              totalPages={totalPagesFixedTerms}
-              currentPage={currentPageFixedTerms}
-              onPageChange={setCurrentPageFixedTerms}
-            />
+              <Paginado
+                totalPages={totalPagesFixedTerms}
+                currentPage={currentPageFixedTerms}
+                onPageChange={setCurrentPageFixedTerms}
+              />
           </CardContent>
         </Card>
       </Grid>

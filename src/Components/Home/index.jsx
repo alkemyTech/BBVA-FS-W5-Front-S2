@@ -167,6 +167,7 @@ export default function Home() {
     }
   };
 
+  
   const fetchAccounts = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -267,7 +268,7 @@ export default function Home() {
               <Grid item size={accounts.length === 1 ? 12 : 6} key={account.id}>
                 <Card sx={cardStyle}>
                   <CardHeader
-                    sx={{ textAlign: "left" }}
+                    sx={{ textAlign: "left", paddingBottom:"4px" }}
                     action={
                       <Tooltip title={`CBU: ${account.cbu}`} arrow>
                         <IconButton aria-label="settings">
@@ -305,7 +306,7 @@ export default function Home() {
                       </Grid>
                     }
                   />
-                  <CardContent>
+                  <CardContent sx={{paddingTop:"4px"}}>
                     <Grid container>
                       <Grid item size={12}>
                         <Typography
@@ -378,7 +379,28 @@ export default function Home() {
               </Grid>
             ))}
             <Grid item size={6}>
-              <Card style={cardStyle}>
+              <Card style={{...cardStyle, minHeight:"400px"}}>
+                <CardHeader
+                  style={{ textAlign: "center", paddingBottom:"0px" }}
+                  title={
+                    <Typography
+                      style={{
+                        fontSize: "1.35rem",
+                        color: "#2b6a2f",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Gastos mensuales
+                    </Typography>
+                  }
+                />
+                <CardContent sx={cardContentStyle}>
+                  <Graphics />
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item size={6} >
+              <Card style={{...cardStyle, minHeight:"400px"}}>
                 <CardHeader
                   style={{ textAlign: "center" }}
                   title={
@@ -432,7 +454,7 @@ export default function Home() {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {fixedTerms.slice(0, 3).map((fixedTerm, index) => (
+                          {fixedTerms.slice(0, 4).map((fixedTerm, index) => (
                             <TableRow
                               key={index}
                               sx={{
@@ -506,31 +528,11 @@ export default function Home() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item size={6}>
-              <Card style={cardStyle}>
-                <CardHeader
-                  style={{ textAlign: "center" }}
-                  title={
-                    <Typography
-                      style={{
-                        fontSize: "1.35rem",
-                        color: "#2b6a2f",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Gastos mensuales
-                    </Typography>
-                  }
-                />
-                <CardContent sx={cardContentStyle}>
-                  <Graphics />
-                </CardContent>
-              </Card>
-            </Grid>
+        
           </Grid>
         </Grid>
-        <Grid size={4}>
-          <Card sx={cardStyle}>
+        <Grid size={4} sx={{ minHeight:"400px",}}>
+          <Card style={{...cardStyle}}>  
             <CardHeader
               sx={{ display: "flex", textAlign: "center" }}
               title={
@@ -549,8 +551,7 @@ export default function Home() {
               {transactions.length > 0 ? (
                 <Grid container spacing={1}>
                   {transactions.slice(0, 8).map((transaction, index) => (
-                    <Grid item size={12} key={index}>
-                      <Grid item size={12}>
+                    <Grid item size={12} key={index} sx={{ "&:hover": { backgroundColor: "#f5f5f5", cursor: "pointer", "&:hover": { borderRight: transaction.type === "Pago" ? "4px solid #FF6666" : "4px solid #9cd99e", }, } }}>
                         <Grid
                           container
                           spacing={1}
@@ -586,6 +587,7 @@ export default function Home() {
                                     fontWeight: "bold",
                                     color: "#000000",
                                     fontSize: "1rem",
+                                    textAlign:"left"
                                   }}
                                 >
                                   {transaction.type === "Pago" ||
@@ -630,7 +632,7 @@ export default function Home() {
                               </Grid>
 
                               <Grid item size={6}>
-                                <Typography>{transaction.concept}</Typography>
+                                <Typography sx={{textAlign:"left"}}>{transaction.concept}</Typography>
                               </Grid>
                               <Grid item size={6} sx={{ textAlign: "right" }}>
                                 <Typography
@@ -649,7 +651,6 @@ export default function Home() {
                             </Grid>
                           </Grid>
                         </Grid>
-                      </Grid>
                     </Grid>
                   ))}
                 </Grid>

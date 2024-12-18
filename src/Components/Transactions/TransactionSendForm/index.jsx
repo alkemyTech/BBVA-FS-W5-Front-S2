@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TextField, Button, Typography, Card, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid2";
-import api from "../../../services/Api";
+import api from "../../../services/api";
 import Notification from "../../Notification/Notification";
 import { NumericFormat } from "react-number-format";
 
@@ -113,7 +113,6 @@ export default function TransactionSendForm() {
         "Alquiler",
         "Comida",
         "Otros",
-        "Deposito"
     ];
 
     const currencies = ["ARS", "USD"];
