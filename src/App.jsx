@@ -13,6 +13,8 @@ import Page from './Components/Material UI/Page'
 import TransactionSendForm from './Components/Transactions/TransactionSendForm'
 import Transactions from './Components/Transactions/TransactionsList'
 import UserProfile from './Components/UserProfile/UserProfile'
+import TransactionForm from "./Components/Deposito/Deposito";
+
 import './App.css'
 
 function App() {
@@ -30,6 +32,7 @@ function App() {
           <Route path="/Transacciones" element={<Transactions/>}/>
           <Route path="/enviarTransaccion" element={<TransactionSendForm/>}/>
           <Route path="/perfil" element={<UserProfile/>}/>
+          <Route path="/depositar/:cbu" element={<TransactionForm/>} />
       </Routes>
     </Page>
   )

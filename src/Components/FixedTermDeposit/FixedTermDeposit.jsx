@@ -82,7 +82,7 @@ const FixedTermDepositForm = () => {
   });
 
   const buttonStyles = {
-    background: "#2B6A2F",
+    background: "#9cd99e",
     borderRadius: "25px",
     padding: "6px 16px",
     color: "#FFFFFF",
@@ -94,7 +94,7 @@ const FixedTermDepositForm = () => {
   };
 
   const deleteButtonStyles = {
-    background: "#C62828",
+    background: "#FF6666",
     borderRadius: "25px",
     padding: "6px 16px",
     color: "#FFFFFF",
@@ -103,6 +103,19 @@ const FixedTermDepositForm = () => {
       backgroundColor: "#FF5252",
       color: "#FFFFFF",
     },
+  };
+
+  const formatCurrency = (amount, currency) => {
+    if (amount == null || currency == null) {
+      return "$ 0.00";
+    }
+    const validCurrency = currency || "USD";
+    try {
+      return `${new Intl.NumberFormat("en-US").format(amount)}`;
+    } catch (error) {
+      console.error("Error formateando la moneda:", error);
+      return "$0.00";
+    }
   };
 
   const handleChange = (e) => {
@@ -222,7 +235,7 @@ const FixedTermDepositForm = () => {
       setSnackbarMessage("Simulación finalizada");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
-      navigate("/home", { state: { success: true } });
+      navigate("/home", { state: { success: true, deposit: false, FixedTermDeposit: true } });
     } catch (err) {
       const errorMessage = err.response
         ? err.response.data.message
@@ -293,7 +306,8 @@ const FixedTermDepositForm = () => {
                       <strong>CBU:</strong> {account.cbu}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Dinero disponible:</strong> ${account.balance}
+                      <strong>Dinero disponible:</strong> $
+                      {formatCurrency(account.balance, account.currency)}
                     </Typography>
                   </CardContent>
                   <CardActions>
@@ -313,7 +327,7 @@ const FixedTermDepositForm = () => {
                         padding: "5px 10px",
                         borderRadius: "25px",
                         fontWeight: "bold",
-                        backgroundColor: "#43A047",
+                        backgroundColor: "#9cd99e",
                         "&:hover": {
                           backgroundColor: "#388E3C",
                         },
@@ -401,7 +415,7 @@ const FixedTermDepositForm = () => {
                       padding: "5px 30px",
                       borderRadius: "25px",
                       fontWeight: "bold",
-                      backgroundColor: "#43A047",
+                      backgroundColor: "#9cd99e",
                       "&:hover": {
                         backgroundColor: "#388E3C",
                       },
@@ -433,14 +447,24 @@ const FixedTermDepositForm = () => {
                 <Card sx={{ width: "100%", maxWidth: 800, margin: "0 auto" }}>
                   <CardContent>
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Monto:</strong> {simulatedData.amount}
+                      <strong>Monto:</strong>{" "}
+                      {simulatedData.amount.toLocaleString("es-AR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Interés:</strong> {simulatedData.interestRate}
+                      <strong>Interés:</strong> {simulatedData.interestRate.toLocaleString("es-AR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       <strong>Total a acreditarse:</strong>{" "}
-                      {simulatedData.total}
+                      {simulatedData.total.toLocaleString("es-AR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       <strong>Cuenta a acreditarse:</strong>{" "}
