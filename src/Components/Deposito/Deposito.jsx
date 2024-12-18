@@ -15,6 +15,7 @@ import Notification from "../Notification/Notification";
 import api from "../../services/Api";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import FixedTermDepositForm from "../FixedTermDeposit/FixedTermDeposit";
 
 export default function TransactionForm() {
   const { cbu } = useParams();
@@ -48,14 +49,13 @@ export default function TransactionForm() {
     fontWeight: "bold",
     fontSize: "16px",
     width: "100%",
-    marginTop: "10px",
     transition: "background-color 0.3s ease",
     "&:hover": {
       backgroundColor: "#2B6A2F", // Hover más oscuro
       color: "#FFFFFF",
     },
   };
-  
+
   const closeButton = {
     backgroundColor: "#FF6666", // Rojo claro
     borderRadius: "25px",
@@ -63,32 +63,25 @@ export default function TransactionForm() {
     color: "#fff",
     fontWeight: "bold",
     fontSize: "16px",
-    marginTop: "10px",
     transition: "background-color 0.3s ease",
     "&:hover": {
       backgroundColor: "#FF5252", // Hover más oscuro
       color: "#FFFFFF",
     },
   };
-  
 
   const cardStyle = {
-    margin: "20px auto",
     borderRadius: "15px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    borderTop: "4px solid #4CAF50", // Color de la barra superior
+    borderTop: "4px solid #9cd99e",
     padding: 3,
-    maxWidth: 600,
+    width: "700px",
     fontFamily: "'Roboto', sans-serif",
     backgroundColor: "#fff",
-    marginTop: "40px",
   };
 
   const inputStyles = {
-    fontFamily: "'Roboto', sans-serif",
-    fontSize: "16px",
-    borderRadius: "10px",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+    textAlign: "left"
   };
 
   const labelStyles = {
@@ -141,9 +134,8 @@ export default function TransactionForm() {
       setSnackbarMessage("Depósito enviado con éxito");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
-
       setForm({ ...form, amount: "", description: "", concept: "" });
-      navigate("/home");
+      navigate("/home", { state: { success: true, deposit: true, FixedTermDeposit: false } });
     } catch (error) {
       console.error("Error al realizar el depósito:", error);
       setSnackbarMessage("Error al enviar el depósito");
@@ -170,118 +162,117 @@ export default function TransactionForm() {
         Realizar Depósito
       </Typography>
       <form onSubmit={sendForm}>
-      <Grid
-  container
-  direction="column"
-  justifyContent="center"
-  alignItems="stretch"
-  spacing={3} // Espaciado uniforme entre los campos
-  p={2}
->
-  {/* CBU */}
-  <Grid item>
-    <TextField
-      fullWidth
-      label="CBU"
-      value={form.cbu}
-      InputProps={{ readOnly: true }}
-      InputLabelProps={{ style: labelStyles }}
-      sx={inputStyles}
-    />
-  </Grid>
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3} // Espaciado uniforme entre los campos
+          p={2}
+        >
+          {/* CBU */}
+          <Grid item>
+            <TextField
+              fullWidth
+              label="CBU"
+              value={form.cbu}
+              InputProps={{ readOnly: true }}
+              InputLabelProps={{ style: labelStyles }}
+              sx={inputStyles}
+            />
+          </Grid>
 
-  {/* Monto */}
-  <Grid item>
-    <NumericFormat
-      customInput={TextField}
-      fullWidth
-      label="Monto"
-      value={form.amount}
-      thousandSeparator="."
-      decimalSeparator=","
-      decimalScale={2}
-      fixedDecimalScale
-      allowNegative={false}
-      onChange={(e) => setForm({ ...form, amount: e.target.value })}
-      error={!!errors.amount}
-      helperText={errors.amount}
-      sx={inputStyles}
-    />
-  </Grid>
+          {/* Monto */}
+          <Grid item>
+            <NumericFormat
+              customInput={TextField}
+              fullWidth
+              label="Monto"
+              value={form.amount}
+              thousandSeparator="."
+              decimalSeparator=","
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={false}
+              onChange={(e) => setForm({ ...form, amount: e.target.value })}
+              error={!!errors.amount}
+              helperText={errors.amount}
+              sx={inputStyles}
+            />
+          </Grid>
 
-  {/* Concepto */}
-  <Grid item>
-    <FormControl fullWidth error={!!errors.concept} sx={inputStyles}>
-      <InputLabel id="concept-label" style={labelStyles}>
-        Concepto
-      </InputLabel>
-      <Select
-        labelId="concept-label"
-        value={form.concept}
-        onChange={(e) => setForm({ ...form, concept: e.target.value })}
-      >
-        {concepts.map((concept) => (
-          <MenuItem key={concept} value={concept}>
-            {concept}
-          </MenuItem>
-        ))}
-      </Select>
-      {errors.concept && (
-        <Typography variant="caption" color="error">
-          {errors.concept}
-        </Typography>
-      )}
-    </FormControl>
-  </Grid>
+          {/* Concepto */}
+          <Grid item>
+            <FormControl fullWidth error={!!errors.concept} sx={inputStyles}>
+              <InputLabel id="concept-label">
+                Concepto
+              </InputLabel>
+              <Select
+                labelId="concept-label"
+                value={form.concept}
+                onChange={(e) => setForm({ ...form, concept: e.target.value })}
+              >
+                {concepts.map((concept) => (
+                  <MenuItem key={concept} value={concept} sx={inputStyles}>
+                    {concept}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.concept && (
+                <Typography variant="caption" color="error">
+                  {errors.concept}
+                </Typography>
+              )}
+            </FormControl>
+          </Grid>
 
-  {/* Descripción */}
-  <Grid item>
-    <TextField
-      fullWidth
-      label="Descripción"
-      value={form.description}
-      onChange={(e) =>
-        setForm({ ...form, description: e.target.value })
-      }
-      error={!!errors.description}
-      helperText={errors.description}
-      sx={inputStyles}
-    />
-  </Grid>
+          {/* Descripción */}
+          <Grid item>
+            <TextField
+              fullWidth
+              label="Descripción"
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
+              error={!!errors.description}
+              helperText={errors.description}
+              sx={inputStyles}
+            />
+          </Grid>
 
-  {/* Botones */}
-  <Grid 
-    item 
-    container 
-    justifyContent="space-between" 
-    spacing={2} 
-    mt={2}
-  >
-    <Grid item xs={6}>
-      <Button
-        sx={{ ...buttons }}
-        variant="contained"
-        color="primary"
-        type="submit"
-        fullWidth
-      >
-        Depositar
-      </Button>
-    </Grid>
-    <Grid item xs={6}>
-      <Button
-        sx={{ ...closeButton }}
-        variant="contained"
-        color="secondary"
-        onClick={handleClose}
-        fullWidth
-      >
-        Cancelar
-      </Button>
-    </Grid>
-  </Grid>
-</Grid>
-
+          {/* Botones */}
+          <Grid
+            item
+            container
+            justifyContent="space-between"
+            spacing={2}
+            mt={2}
+          >
+            <Grid item xs={6}>
+              <Button
+                sx={{ ...buttons }}
+                variant="contained"
+                color="primary"
+                type="submit"
+                fullWidth
+              >
+                Depositar
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                sx={{ ...closeButton }}
+                variant="contained"
+                color="secondary"
+                onClick={handleClose}
+                fullWidth
+              >
+                Cancelar
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
       </form>
 
       {/* Notificación */}

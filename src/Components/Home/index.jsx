@@ -212,8 +212,13 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (location.state?.success) {
+    if (location.state?.FixedTermDeposit) {
       setSnackbarMessage("Plazo fijo creado con éxito");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+    } 
+    if (location.state?.deposit) {
+      setSnackbarMessage("Deposito realizado con éxito");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
     }
@@ -235,7 +240,7 @@ export default function Home() {
   };
 
   const deleteButtonStyles = {
-    background: "#C62828",
+    background: "#FF6666",
     borderRadius: "25px",
     padding: "6px 16px",
     color: "#FFFFFF",
