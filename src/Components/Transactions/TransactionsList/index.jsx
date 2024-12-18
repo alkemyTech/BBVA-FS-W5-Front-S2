@@ -18,12 +18,12 @@ import {
   Button,
   Box,
   IconButton,
-  TablePagination
+  TablePagination,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 import ArrowCircleDownRoundedIcon from "@mui/icons-material/ArrowCircleDownRounded";
 import ArrowCircleUpRoundedIcon from "@mui/icons-material/ArrowCircleUpRounded";
 import { useNavigate } from "react-router-dom";
@@ -47,7 +47,10 @@ export default function Transactions() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const token = localStorage.getItem("token");
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedTransactions = transactions.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedTransactions = transactions.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
   const navigate = useNavigate();
 
   const openConfirmDialog = (cbu) => {
@@ -56,7 +59,9 @@ export default function Transactions() {
   };
 
   const isBeneficiary = (cbu) => {
-    return beneficiarios.some(beneficiario => beneficiario.accountsDTO.some(account => account.cbu === cbu));
+    return beneficiarios.some((beneficiario) =>
+      beneficiario.accountsDTO.some((account) => account.cbu === cbu)
+    );
   };
 
   const handleOpen = () => {
@@ -119,10 +124,12 @@ export default function Transactions() {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setConfirmDialogOpen(false);
-      fetchBeneficiarios(); 
+      fetchBeneficiarios();
     } catch (error) {
       console.error("Error al enviar la transacción:", error);
-      const errorMessage = error.response ? error.response.data.message : "Error desconocido";
+      const errorMessage = error.response
+        ? error.response.data.message
+        : "Error desconocido";
       setSnackbarMessage(errorMessage);
       setSnackbarSeverity("error");
       setOpenSnackbar(true);
@@ -164,7 +171,13 @@ export default function Transactions() {
         <Card sx={cardStyle}>
           <CardHeader
             title={
-              <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
+              <Typography
+                sx={{
+                  fontSize: "1.35rem",
+                  color: "#2b6a2f",
+                  fontWeight: "bold",
+                }}
+              >
                 Elegí a qué cuenta transferir
               </Typography>
             }
@@ -185,7 +198,9 @@ export default function Transactions() {
               onClick={handleOpen}
             >
               <Grid item size={3}>
-                <PersonAddAltRoundedIcon sx={{ fontSize: "40px", color: "#43A047" }} />
+                <PersonAddAltRoundedIcon
+                  sx={{ fontSize: "40px", color: "#43A047" }}
+                />
               </Grid>
               <Grid item size={7}>
                 <Typography sx={{ fontSize: "1rem" }}>Nueva cuenta</Typography>
@@ -194,7 +209,9 @@ export default function Transactions() {
                 </Typography>
               </Grid>
               <Grid item size={2}>
-                <KeyboardArrowRightIcon sx={{ fontSize: "40px", color: "#43A047" }} />
+                <KeyboardArrowRightIcon
+                  sx={{ fontSize: "40px", color: "#43A047" }}
+                />
               </Grid>
             </Grid>
           </CardContent>
@@ -205,7 +222,13 @@ export default function Transactions() {
         <Card sx={cardStyle}>
           <CardHeader
             title={
-              <Typography sx={{ fontSize: "1.35rem", color: "#2b6a2f", fontWeight: "bold" }}>
+              <Typography
+                sx={{
+                  fontSize: "1.35rem",
+                  color: "#2b6a2f",
+                  fontWeight: "bold",
+                }}
+              >
                 Últimos movimientos
               </Typography>
             }
@@ -215,51 +238,180 @@ export default function Transactions() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Tipo</TableCell>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Nombre</TableCell>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Concepto</TableCell>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>CBU Origen</TableCell>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>CBU Destino</TableCell>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Moneda</TableCell>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Monto</TableCell>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Fecha</TableCell>
-                    <TableCell sx={{ textAlign: "center", fontWeight: "bold", fontSize: "0.90rem" }}>Acción</TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      Tipo
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      Nombre
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      Concepto
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      CBU Origen
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      CBU Destino
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      Moneda
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      Monto
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      Fecha
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "0.90rem",
+                      }}
+                    >
+                      Acción
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {paginatedTransactions.map((transaction, index) => (
-                    <TableRow key={index} sx={{ "&:hover": { backgroundColor: "#f5f5f5", cursor: "pointer", "&:hover": { borderRight: transaction.type === "Pago" ? "4px solid #FF6666" : "4px solid #9cd99e", }, } }}>
-                      <TableCell sx={{ textAlign: "center", display: "flex", alignItems: "center", justifyContent: "space-around", gap: 1 }}>
-                        {transaction.type === "Deposito" || transaction.type === "Ingreso" ? (
-                          <ArrowCircleUpRoundedIcon sx={{ height: "40px", color: "#43A047" }} />
+                    <TableRow
+                      key={index}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#f5f5f5",
+                          cursor: "pointer",
+                          "&:hover": {
+                            borderRight:
+                              transaction.type === "Pago"
+                                ? "4px solid #FF6666"
+                                : "4px solid #9cd99e",
+                          },
+                        },
+                      }}
+                    >
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-around",
+                          gap: 1,
+                        }}
+                      >
+                        {transaction.type === "Deposito" ||
+                        transaction.type === "Ingreso" ? (
+                          <ArrowCircleUpRoundedIcon
+                            sx={{ height: "40px", color: "#43A047" }}
+                          />
                         ) : (
-                          <ArrowCircleDownRoundedIcon sx={{ height: "40px", color: "#FF6666" }} />
+                          <ArrowCircleDownRoundedIcon
+                            sx={{ height: "40px", color: "#FF6666" }}
+                          />
                         )}
                         {transaction.type}
                       </TableCell>
                       <TableCell sx={{ textAlign: "center" }}>
-                        {transaction.type === "Pago" || transaction.type === "Deposito"
-                          ? `${transaction.accountDestino?.firstName || ""} ${transaction.accountDestino?.lastName || ""}`
-                          : `${transaction.accountOrigen?.firstName || ""} ${transaction.accountOrigen?.lastName || ""}`}
-                      </TableCell>
-                      <TableCell sx={{ textAlign: "center" }}>{transaction.concept}</TableCell>
-                      <TableCell sx={{ textAlign: "center" }}>{transaction.cbuOrigen || "N/A"}</TableCell>
-                      <TableCell sx={{ textAlign: "center" }}>{transaction.cbuDestino || "N/A"}</TableCell>
-                      <TableCell sx={{ textAlign: "center" }}>{transaction.accountDestino?.currency}</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: "bold", color: transaction.type === "Pago" ? "#FF6666" : "#43A047" }}>
-                        {transaction.type === "Pago" ? `- $${transaction.amount}` : `+ $${transaction.amount}`}
+                        {transaction.type === "Pago" ||
+                        transaction.type === "Deposito"
+                          ? `${transaction.accountDestino?.firstName || transaction.accountOrigen?.firstName} ${
+                              transaction.accountDestino?.lastName || transaction.accountOrigen?.lastName
+                            }`
+                          : `${transaction.accountOrigen?.firstName || transaction.accountDestino?.firstName} ${
+                              transaction.accountOrigen?.lastName || transaction.accountDestino?.lastName
+                            }`}
                       </TableCell>
                       <TableCell sx={{ textAlign: "center" }}>
-                        {new Date(transaction.timestamp).toLocaleString("es-ES", {
-                          day: '2-digit',
-                          month: '2-digit',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          hour12: false
-                        })}
+                        {transaction.concept}
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        {transaction.cbuOrigen || "N/A"}
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        {transaction.cbuDestino || "N/A"}
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        {transaction.accountDestino?.currency ||
+                          transaction.accountOrigen?.currency}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontWeight: "bold",
+                          color:
+                            transaction.type === "Pago" ? "#FF6666" : "#43A047",
+                        }}
+                      >
+                        {transaction.type === "Pago"
+                          ? `- $${transaction.amount}`
+                          : `+ $${transaction.amount}`}
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        {new Date(transaction.timestamp).toLocaleString(
+                          "es-ES",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          }
+                        )}
                       </TableCell>
                       <TableCell>
-                        <IconButton onClick={() => openConfirmDialog(transaction.cbuDestino)}>
+                        <IconButton
+                          onClick={() =>
+                            openConfirmDialog(transaction.cbuDestino)
+                          }
+                        >
                           {isBeneficiary(transaction.cbuDestino) ? (
                             <StarIcon sx={{ color: "#43A047" }} />
                           ) : (
@@ -298,7 +450,9 @@ export default function Transactions() {
       <Dialog open={confirmDialogOpen} fullWidth maxWidth="sm">
         <DialogTitle>Agregar beneficiario</DialogTitle>
         <DialogContent>
-          <Typography>¿Quieres agregar el CBU {selectedCBU} a tus beneficiarios?</Typography>
+          <Typography>
+            ¿Quieres agregar el CBU {selectedCBU} a tus beneficiarios?
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmDialogOpen(false)} sx={buttons}>
