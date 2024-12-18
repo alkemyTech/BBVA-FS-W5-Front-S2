@@ -96,6 +96,7 @@ const fetchBeneficiarios = async () => {
     }
   };
 
+
   const addBeneficiary = async () =>  {
     try {
       if (!token) {

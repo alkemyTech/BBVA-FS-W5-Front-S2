@@ -89,7 +89,7 @@ export default function Home() {
   
       const response = await api.patch(`/accounts/${selectedAccount}`, null, {
         params: {
-          newTransactionLimit: form.transactionLimit,
+          transactionLimit: form.transactionLimit,
         },
         headers: {
           Authorization: `Bearer ${token}`,
