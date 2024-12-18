@@ -5,6 +5,7 @@ import Login from './Components/Login'
 import Home from './Components/Home'
 import SignUp from './Components/SignUp/signUp'
 import Balance from './Components/Balance/Balance'
+import Payment from './Components/Payment/Payment'
 import PlazoFijo from './Components/FixedTermDeposit/FixedTermDeposit'
 import {Routes, Route,} from 'react-router-dom';
 import Users from './Components/Users/Users';
@@ -23,6 +24,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/signup" element={<SignUp/>}/>
           <Route path="/Balance" element={<Balance />} />
+          <Route path="/Payment" element={<Payment />} />
           <Route path="/PlazoFijo" element={<PlazoFijo />} />
           <Route path="/Usuarios" element={<Users/>} />
           <Route path="/Transacciones" element={<Transactions/>}/>

@@ -74,10 +74,11 @@ export default function Header() {
         zIndex: 1000,
       }}
     >
-      <Grid item size={2} sx={{ 
-display: "flex",
-justifyContent: "center",
-            alignItems: "center", }}>
+      <Grid item size={2} sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
         <Link to="/home">
           <img src={logo} width={"100px"} alt="Logo" />
         </Link>
@@ -104,12 +105,21 @@ justifyContent: "center",
               Transferencias
             </Typography>
           </Link>
-                    <Link to="/Balance" style={{ textDecoration: "none", color: "#" }}>
+          <Link to="/Balance" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">
               Balance
             </Typography>
+            
           </Link>
-                    <Link
+          <Link
+            to="/Payment"
+            style={{ textDecoration: "none", color: "#" }}
+          >
+            <Typography sx={buttonStyles} variant="body1">
+              Nuevo Pago
+            </Typography>
+          </Link>
+          <Link
             to="/PlazoFijo"
             style={{ textDecoration: "none", color: "#" }}
           >
