@@ -7,12 +7,18 @@ import {
   Card,
   CardContent,
   CardActions,
-  Box,
   MenuItem,
+  InputAdornment,
 } from "@mui/material";
-import Grid from '@mui/material/Grid2';
+import Grid from "@mui/material/Grid2";
 import api from "../../services/api";
 import Notification from "../Notification/Notification";
+
+// Logos de las tarjetas (puedes reemplazar las rutas con las tuyas)
+import VisaLogo from "../../assets/img/visa.png";
+import MasterCardLogo from "../../assets/img/mastercard.png";
+import AmexLogo from "../../assets/img/amess.png";
+//import DiscoverLogo from "./logos/discover.png";
 
 const initialPaymentData = {
   concept: "",
@@ -25,6 +31,7 @@ const initialPaymentData = {
 const PaymentForm = () => {
   const [formData, setFormData] = useState(initialPaymentData);
   const [error, setError] = useState({});
+  const [cardType, setCardType] = useState(""); // Tipo de tarjeta
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -53,34 +60,47 @@ const PaymentForm = () => {
     fetchCurrencies();
   }, [token]);
 
+  // Función para detectar el tipo de tarjeta
+  const detectCardType = (number) => {
+    const sanitized = number.replace(/\s+/g, ""); // Elimina espacios
+    if (/^4/.test(sanitized)) return "Visa";
+    if (/^5[1-5]/.test(sanitized) || /^2(2[2-9]|[3-6]|7[0-1]|720)/.test(sanitized)) return "Mastercard";
+    if (/^3[47]/.test(sanitized)) return "American Express";
+    if (/^6(011|4[4-9]|5|22)/.test(sanitized)) return "Discover";
+    return ""; // No coincide
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Limita a 16 caracteres
-    if (name === "nroTarjeta" && value.length > 16) {
-      return; // No hace nada si el valor tiene más de 16 caracteres
+
+    if (name === "nroTarjeta") {
+      let sanitized = value.replace(/\s+/g, ""); // Elimina espacios
+      if (/^\d*$/.test(sanitized) && sanitized.length <= 16) {
+        sanitized = sanitized.replace(/(\d{4})(?=\d)/g, "$1 "); // Formatea con espacios cada 4 dígitos
+        setFormData((prev) => ({ ...prev, nroTarjeta: sanitized }));
+        setCardType(detectCardType(sanitized)); // Detecta el tipo de tarjeta
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
   const validate = () => {
     const errors = {};
     if (!formData.concept || formData.concept.length > 100) {
-      errors.concept = "El concepto es obligatorio";
+      errors.concept = "Concepto es obligatorio";
     }
     if (!formData.amount || parseFloat(formData.amount) <= 0) {
       errors.amount = "El monto debe ser mayor a cero.";
     }
-    if (!formData.nroTarjeta || formData.nroTarjeta.length !== 16) {
-      errors.nroTarjeta = "Debe ser una tarjeta válida";
+    if (!formData.nroTarjeta || formData.nroTarjeta.replace(/\s/g, "").length !== 16) {
+      errors.nroTarjeta = "Debe ser una tarjeta válida.";
     }
     if (!formData.currency) {
-      errors.currency = "La moneda es obligatoria.";
-    }
-    if (!formData.concept) {
-      errors.concept = "El concepto es obligatorio.";
+      errors.currency = "Moneda es obligatoria.";
     }
     if (!formData.description) {
-      errors.concept = "El pago debe tener una descripcion.";
+      errors.description = "Descripción es obligatoria.";
     }
     return errors;
   };
@@ -139,23 +159,42 @@ const PaymentForm = () => {
             Registrar Pago
           </Typography>
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item size={12}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid size={12}>
                 <TextField
                   fullWidth
                   name="nroTarjeta"
-                  label="Numero de tarjeta"
-                  type="number"
+                  label="Número de tarjeta"
+                  type="text"
                   variant="outlined"
                   value={formData.nroTarjeta}
                   onChange={handleChange}
                   error={!!error.nroTarjeta}
                   helperText={error.nroTarjeta}
-                  sx={{
-                    maxLength: 16
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {cardType && (
+                          <img
+                            src={
+                              cardType === "Visa"
+                                ? VisaLogo
+                                : cardType === "Mastercard"
+                                  ? MasterCardLogo
+                                  : cardType === "American Express"
+                                    ? AmexLogo
+                                    : null
+                            }
+                            alt={cardType}
+                            style={{ maxWidth: "40px", height: "auto" }}
+                          />
+                        )}
+                      </InputAdornment>
+                    ),
                   }}
                 />
               </Grid>
+
               <Grid item size={8}>
                 <TextField
                   fullWidth
@@ -167,6 +206,19 @@ const PaymentForm = () => {
                   onChange={handleChange}
                   error={!!error.amount}
                   helperText={error.amount}
+                  sx={{
+                    '& input[type=number]': {
+                      '-moz-appearance': 'textfield', // Elimina las flechas en Firefox
+                      '&::-webkit-outer-spin-button': {
+                        WebkitAppearance: 'none', // Elimina las flechas en Chrome y Safari
+                        margin: 0,
+                      },
+                      '&::-webkit-inner-spin-button': {
+                        WebkitAppearance: 'none', // Elimina las flechas en Chrome y Safari
+                        margin: 0,
+                      },
+                    },
+                  }}
                 />
               </Grid>
               <Grid item size={4}>
@@ -223,17 +275,25 @@ const PaymentForm = () => {
                 <Button
                   type="submit"
                   variant="contained"
-                  color="primary"
-                  disabled={loading}
-                  style={{
-                    padding: "10px 30px",
-                    fontWeight: "bold",
+                  sx={{
+                    padding: "5px 30px",
                     borderRadius: "25px",
+                    fontWeight: "bold",
+                    backgroundColor: "#9cd99e",
+                    "&:hover": {
+                      backgroundColor: "#388E3C",
+                    },
                   }}
+
                 >
-                  {loading ? <CircularProgress size={24} color="inherit" /> : "Pagar"}
+                  {loading ? (
+                    <CircularProgress size={24} sx={{ color: "#fff" }} />
+                  ) : (
+                    "Pagar"
+                  )}
                 </Button>
               </Grid>
+
             </Grid>
           </form>
         </CardContent>
@@ -243,6 +303,7 @@ const PaymentForm = () => {
         snackbarMessage={snackbarMessage}
         snackbarSeverity={snackbarSeverity}
         setOpenSnackbar={setOpenSnackbar}
+        loading={loading}
       />
     </div>
   );

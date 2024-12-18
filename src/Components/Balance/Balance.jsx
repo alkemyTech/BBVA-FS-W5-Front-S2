@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Paginado from "../Paginate/Paginado";
-import api from "../../services/Api";
+import api from "../../services/api";
 
 const formatCurrency = (amount, currency) => {
   if (amount == null || currency == null) {
