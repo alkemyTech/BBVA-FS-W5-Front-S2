@@ -202,9 +202,6 @@ const FixedTermDepositForm = () => {
       setIsSimulated(true);
       setShowConfirmation(true);
       setLoading(false);
-      setSnackbarMessage("Simulación finalizada");
-      setSnackbarSeverity("success");
-      setOpenSnackbar(true);
       setOpen(true);
     } catch (err) {
       console.error("Error al realizar la solicitud:", err.response || err);
@@ -232,9 +229,6 @@ const FixedTermDepositForm = () => {
         },
       });
       setFormData(initialFormData);
-      setSnackbarMessage("Simulación finalizada");
-      setSnackbarSeverity("success");
-      setOpenSnackbar(true);
       navigate("/home", { state: { success: true, deposit: false, FixedTermDeposit: true, Payment: false } });
     } catch (err) {
       const errorMessage = err.response
