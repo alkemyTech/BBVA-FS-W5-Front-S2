@@ -438,6 +438,7 @@ export default function Home() {
                             >
                               CBU
                             </TableCell>
+                            
                             <TableCell
                               sx={{
                                 padding: "8px",
@@ -446,7 +447,17 @@ export default function Home() {
                                 fontSize: "0.90rem",
                               }}
                             >
-                              Acreditacion
+                              Fecha
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                padding: "8px",
+                                textAlign: "center",
+                                fontWeight: "bold",
+                                fontSize: "0.90rem",
+                              }}
+                            >
+                              Estado
                             </TableCell>
                             <TableCell
                               sx={{
@@ -458,6 +469,7 @@ export default function Home() {
                             >
                               Monto
                             </TableCell>
+
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -498,6 +510,15 @@ export default function Home() {
                                   "es-ES",
                                   { dateStyle: "medium" }
                                 )}
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  padding: "12px",
+                                  textAlign: "center",
+                                  fontSize: "0.85rem",
+                                }}
+                              >
+                                {fixedTerm.processed ? "Acreditado" : "En curso"}
                               </TableCell>
                               <TableCell
                                 sx={{
