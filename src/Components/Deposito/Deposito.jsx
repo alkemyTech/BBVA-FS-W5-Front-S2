@@ -247,17 +247,6 @@ export default function TransactionForm() {
           >
             <Grid item xs={6}>
               <Button
-                sx={{ ...buttons }}
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-              >
-                Depositar
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
                 sx={{ ...closeButton }}
                 variant="contained"
                 color="secondary"
@@ -265,6 +254,17 @@ export default function TransactionForm() {
                 fullWidth
               >
                 Cancelar
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                sx={{ ...buttons }}
+                variant="contained"
+                color="primary"
+                type="submit"
+                fullWidth
+              >
+                Depositar
               </Button>
             </Grid>
           </Grid>
