@@ -438,11 +438,14 @@ export default function Transactions() {
       <Dialog open={open} sx={cardStyle}>
         <DialogTitle>Enviar Transacción</DialogTitle>
         <DialogContent>
-          <TransactionSendForm />
+          <TransactionSendForm/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} sx={buttonsError}>
             Cancelar
+          </Button>
+          <Button sx={buttons} variant="contained" color="primary" type="submit">
+            Enviar
           </Button>
         </DialogActions>
       </Dialog>

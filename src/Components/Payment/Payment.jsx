@@ -265,6 +265,26 @@ const PaymentForm = () => {
                 spacing={2}
                 mt={2}
               >
+                
+                <Grid item xs={6}>
+                  <Button
+                    sx={{
+                      padding: "5px 30px",
+                      borderRadius: "25px",
+                      fontWeight: "bold",
+                      backgroundColor: "#FF6666",
+                      "&:hover": {
+                        backgroundColor: "#FF5252",
+                      },
+                    }}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleClose}
+                    fullWidth
+                  >
+                    Cancelar
+                  </Button>
+                </Grid>
                 <Grid item xs={6}>
                   <Button
                     sx={{
