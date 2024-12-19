@@ -6,20 +6,13 @@ import api from "../../../services/api";
 import Notification from "../../Notification/Notification";
 import { NumericFormat } from "react-number-format";
 
-export default function TransactionSendForm() {
+export default function TransactionSendForm({form, setForm, loading}) {
     const [errors, setErrors] = useState("");
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-    const [loading, setLoading] = useState(false);
     
-    const [form, setForm] = useState({
-        destinationCbu: "",
-        amount: "",
-        currency: "",
-        description: "",
-        concept: ""
-    });
+    
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
@@ -40,71 +33,9 @@ export default function TransactionSendForm() {
         setErrors("");
     }, [token]);
 
-    const validate = () => {
-        const errors = {};
-        if (!form.destinationCbu) errors.destinationCbu = "CBU es obligatorio";
-        if (!form.amount) {
-            errors.amount = "Monto es obligatorio";
-        }
-        if (!form.currency) errors.currency = "Moneda es obligatoria";
-        if (!form.description) errors.description = "Descripción es obligatoria";
-        if (!form.concept) errors.concept = "Concepto es obligatorio";
-        return errors;
-    };
+   
 
-    const formatAmountForServer = (amount) => {
-        return parseFloat(amount.replace(/\./g, "").replace(",", ".")); 
-    };
-
-    const sendForm = async (e) => {
-        e.preventDefault();
-        const { destinationCbu, amount, currency, description, concept } = form;
     
-        const errors = validate();
-        if (Object.keys(errors).length > 0) {
-            setErrors(errors);
-            return;
-        }
-        setLoading(true);
-        try {
-            const response = await api.post(
-                "/transactions/send",
-                {
-                    destinationCbu,
-                    amount: formatAmountForServer(amount),
-                    currency,
-                    description,
-                    concept
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-            setForm({
-                destinationCbu: "",
-                amount: "",
-                currency: "",
-                description: "",
-                concept: ""
-            });
-            setLoading(false);
-            setSnackbarMessage("Transaccion finalizada");
-            setSnackbarSeverity("success");
-            setOpenSnackbar(true);
-            setTimeout(() => {
-                navigate("/home");
-            }, 500);
-        } catch (error) {
-            console.error("Error al enviar la transacción:", error);
-            const errorMessage = error.response ? error.response.data.message : "Error desconocido";
-            setSnackbarMessage(errorMessage);
-            setSnackbarSeverity("error");
-            setOpenSnackbar(true);
-            setLoading(false);
-        }
-    };
 
     const concepts = [
         "Servicios",
@@ -128,7 +59,6 @@ export default function TransactionSendForm() {
     
     return (
         <div>
-            <form onSubmit={sendForm}>
                 <Grid container justifyContent="center" alignItems="center">
                     <Grid item size={12}>
                             <Grid container spacing={2} p={2}>
@@ -220,15 +150,9 @@ export default function TransactionSendForm() {
                                         helperText={errors.description}
                                     />
                                 </Grid>
-                                <Grid item size={12} sx={{textAlign:"center"}}>
-                                    <Button sx={buttons} variant="contained" color="primary" type="submit">
-                                        Enviar
-                                    </Button>
-                                </Grid>
                             </Grid>
                     </Grid>
                 </Grid>
-            </form>
 
             <Notification
                 openSnackbar={openSnackbar}

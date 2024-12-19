@@ -47,6 +47,13 @@ export default function Transactions() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const token = localStorage.getItem("token");
   const startIndex = (currentPage - 1) * itemsPerPage;
+  const [form, setForm] = useState({
+    destinationCbu: "",
+    amount: "",
+    currency: "",
+    description: "",
+    concept: ""
+});
   const paginatedTransactions = transactions.slice(
     startIndex,
     startIndex + itemsPerPage
@@ -102,6 +109,74 @@ export default function Transactions() {
       }
     }
   };
+
+  const sendForm = async () => {
+    const { destinationCbu, amount, currency, description, concept } = form;
+
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+        setErrors(errors);
+        return;
+    }
+    setLoading(true);
+    setOpen(false);
+
+    try {
+        const response = await api.post(
+            "/transactions/send",
+            {
+                destinationCbu,
+                amount: formatAmountForServer(amount),
+                currency,
+                description,
+                concept
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        setForm({
+            destinationCbu: "",
+            amount: "",
+            currency: "",
+            description: "",
+            concept: ""
+        });
+        setLoading(false);
+        setSnackbarMessage("Transaccion finalizada");
+        setSnackbarSeverity("success");
+        setOpenSnackbar(true);
+        setTimeout(() => {
+            navigate("/home");
+        }, 500);
+    } catch (error) {
+        console.error("Error al enviar la transacción:", error);
+        const errorMessage = error.response ? error.response.data.message : "Error desconocido";
+        setSnackbarMessage(errorMessage);
+        setSnackbarSeverity("error");
+        setOpenSnackbar(true);
+        setLoading(false);
+    }
+  };
+
+  const validate = () => {
+    const errors = {};
+    if (!form.destinationCbu) errors.destinationCbu = "CBU es obligatorio";
+    if (!form.amount) {
+        errors.amount = "Monto es obligatorio";
+    }
+    if (!form.currency) errors.currency = "Moneda es obligatoria";
+    if (!form.description) errors.description = "Descripción es obligatoria";
+    if (!form.concept) errors.concept = "Concepto es obligatorio";
+    return errors;
+};
+
+  const formatAmountForServer = (amount) => {
+    return parseFloat(amount.replace(/\./g, "").replace(",", ".")); 
+  };
+
 
   const addBeneficiary = async () => {
     try {
@@ -205,7 +280,7 @@ export default function Transactions() {
               <Grid item size={7}>
                 <Typography sx={{ fontSize: "1rem" }}>Nueva cuenta</Typography>
                 <Typography sx={{ fontSize: "0.85rem", color: "#3A3A3A" }}>
-                  Con CBU o alias.
+                  Con CBU.
                 </Typography>
               </Grid>
               <Grid item size={2}>
@@ -326,15 +401,14 @@ export default function Transactions() {
                     <TableRow
                       key={index}
                       sx={{
-                        "&:hover": {
-                          backgroundColor: "#f5f5f5",
-                          cursor: "pointer",
-                          "&:hover": {
-                            borderRight:
+                        borderLeft:
                               transaction.type === "Pago"
                                 ? "4px solid #FF6666"
                                 : "4px solid #9cd99e",
-                          },
+                        "&:hover": {
+                          backgroundColor: "#f5f5f5",
+                          cursor: "pointer",
+                          
                         },
                       }}
                     >
@@ -438,13 +512,13 @@ export default function Transactions() {
       <Dialog open={open} sx={cardStyle}>
         <DialogTitle>Enviar Transacción</DialogTitle>
         <DialogContent>
-          <TransactionSendForm/>
+          <TransactionSendForm form={form} setForm={setForm}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} sx={buttonsError}>
             Cancelar
           </Button>
-          <Button sx={buttons} variant="contained" color="primary" type="submit">
+          <Button  onClick={sendForm} sx={buttons} type="submit">
             Enviar
           </Button>
         </DialogActions>

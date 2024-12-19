@@ -128,10 +128,9 @@ export default function Home() {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setOpenDialog(false);
-      fetchAccounts();
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 1000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       setLoading(false);
       const errorMessage = error.response
@@ -387,7 +386,7 @@ export default function Home() {
               </Grid>
             ))}
             <Grid item size={6}>
-              <Card style={{ ...cardStyle, minHeight: "400px" }}>
+              <Card style={{ ...cardStyle, minHeight: "500px" }}>
                 <CardHeader
                   style={{ textAlign: "center", paddingBottom: "0px" }}
                   title={
@@ -408,7 +407,7 @@ export default function Home() {
               </Card>
             </Grid>
             <Grid item size={6}>
-              <Card style={{ ...cardStyle, minHeight: "400px" }}>
+              <Card style={{ ...cardStyle, minHeight: "500px" }}>
                 <CardHeader
                   style={{ textAlign: "center" }}
                   title={
@@ -468,13 +467,13 @@ export default function Home() {
                                 fontSize: "0.90rem",
                               }}
                             >
-                              Liquidación
+                              Liquidacion
                             </TableCell>
 
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {fixedTerms.slice(0, 4).map((fixedTerm, index) => (
+                          {fixedTerms.slice(0, 7).map((fixedTerm, index) => (
                             <TableRow
                               key={index}
                               sx={{
@@ -550,7 +549,7 @@ export default function Home() {
                     </Typography>
                   )}
                   <CardActions
-                    sx={{ display: "flex", justifyContent: "center" }}
+                    sx={{ display: "flex", justifyContent: "center", alignItems:"center" }}
                   >
                     <Button sx={buttons}> Ver mas</Button>
                   </CardActions>
@@ -559,8 +558,8 @@ export default function Home() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid size={4} sx={{ minHeight: "400px" }}>
-          <Card style={{ ...cardStyle }}>
+        <Grid size={4} >
+          <Card style={{ ...cardStyle,  minHeight: "768px" }}>
             <CardHeader
               sx={{ display: "flex", textAlign: "center" }}
               title={
@@ -578,7 +577,7 @@ export default function Home() {
             <CardContent sx={cardContentStyle}>
               {transactions.length > 0 ? (
                 <Grid container spacing={1}>
-                  {transactions.slice(0, 8).map((transaction, index) => (
+                  {transactions.slice(0, 9).map((transaction, index) => (
                     <Grid
                       item
                       size={12}
@@ -587,12 +586,10 @@ export default function Home() {
                         "&:hover": {
                           backgroundColor: "#f5f5f5",
                           cursor: "pointer",
-                          "&:hover": {
-                            borderRight:
-                              transaction.type === "Pago"
-                                ? "4px solid #FF6666"
-                                : "4px solid #9cd99e",
-                          },
+                          borderLeft:
+                            transaction.type === "Pago"
+                              ? "4px solid #FF6666"
+                              : "4px solid #9cd99e",
                         },
                       }}
                     >
