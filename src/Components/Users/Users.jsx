@@ -73,6 +73,19 @@ const Users = () => {
       });
   }, [currentPage, searchName]);
 
+  const formatCurrency = (amount, currency) => {
+    if (amount == null || currency == null) {
+      return "$ 0.00";
+    }
+    const validCurrency = currency || "USD";
+    try {
+      return `${new Intl.NumberFormat("en-US").format(amount)}`;
+    } catch (error) {
+      console.error("Error formateando la moneda:", error);
+      return "$0.00";
+    }
+  };
+
   const handleSearchChange = (event) => {
     setSearchName(event.target.value);
   };
@@ -327,10 +340,10 @@ const Users = () => {
                         <strong>Moneda:</strong> {account.currency}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        <strong>Límite:</strong> {account.transactionLimit}
+                        <strong>Límite:</strong> {formatCurrency(account.transactionLimit, account.currency)}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        <strong>Saldo:</strong> {account.balance}
+                        <strong>Saldo:</strong> {formatCurrency(account.balance, account.currency)}
                       </Typography>
                     </CardContent>
                   </Card>
