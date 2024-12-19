@@ -63,17 +63,7 @@ const PaymentForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "nroTarjeta") {
-      let sanitized = value.replace(/\s+/g, ""); // Elimina espacios
-      if (/^\d*$/.test(sanitized) && sanitized.length <= 16) {
-        sanitized = sanitized.replace(/(\d{4})(?=\d)/g, "$1 "); // Formatea con espacios cada 4 dígitos
-        setFormData((prev) => ({ ...prev, nroTarjeta: sanitized }));
-        setCardType(detectCardType(sanitized)); // Detecta el tipo de tarjeta
-      }
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const validate = () => {
@@ -85,10 +75,9 @@ const PaymentForm = () => {
       errors.amount = "El monto debe ser mayor a cero.";
     }
     if (
-      !formData.nroTarjeta ||
-      formData.nroTarjeta.replace(/\s/g, "").length !== 16
+      !formData.nroTarjeta 
     ) {
-      errors.nroTarjeta = "Debe ser una tarjeta válida.";
+      errors.nroTarjeta = "La factura es obligatoria.";
     }
     if (!formData.currency) {
       errors.currency = "Moneda es obligatoria.";
@@ -189,34 +178,13 @@ const PaymentForm = () => {
                 <TextField
                   fullWidth
                   name="nroTarjeta"
-                  label="Número de tarjeta"
+                  label="Número de factura"
                   type="text"
                   variant="outlined"
                   value={formData.nroTarjeta}
                   onChange={handleChange}
                   error={!!error.nroTarjeta}
                   helperText={error.nroTarjeta}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {cardType && (
-                          <img
-                            src={
-                              cardType === "Visa"
-                                ? VisaLogo
-                                : cardType === "Mastercard"
-                                ? MasterCardLogo
-                                : cardType === "American Express"
-                                ? AmexLogo
-                                : null
-                            }
-                            alt={cardType}
-                            style={{ maxWidth: "40px", height: "auto" }}
-                          />
-                        )}
-                      </InputAdornment>
-                    ),
-                  }}
                 />
               </Grid>
 
@@ -281,7 +249,7 @@ const PaymentForm = () => {
                 <TextField
                   fullWidth
                   name="description"
-                  label="Descripcion"
+                  label="Descripción"
                   variant="outlined"
                   value={formData.description}
                   onChange={handleChange}
@@ -298,6 +266,25 @@ const PaymentForm = () => {
                 mt={2}
               >
                 
+                <Grid item xs={6}>
+                  <Button
+                    sx={{
+                      padding: "5px 30px",
+                      borderRadius: "25px",
+                      fontWeight: "bold",
+                      backgroundColor: "#FF6666",
+                      "&:hover": {
+                        backgroundColor: "#FF5252",
+                      },
+                    }}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleClose}
+                    fullWidth
+                  >
+                    Cancelar
+                  </Button>
+                </Grid>
                 <Grid item xs={6}>
                   <Button
                     sx={{

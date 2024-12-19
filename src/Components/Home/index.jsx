@@ -128,9 +128,10 @@ export default function Home() {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setOpenDialog(false);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      fetchAccounts();
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000);
     } catch (error) {
       setLoading(false);
       const errorMessage = error.response
@@ -467,7 +468,7 @@ export default function Home() {
                                 fontSize: "0.90rem",
                               }}
                             >
-                              Monto
+                              Liquidación
                             </TableCell>
 
                           </TableRow>

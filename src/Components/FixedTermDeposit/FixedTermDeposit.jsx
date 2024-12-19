@@ -504,7 +504,7 @@ const FixedTermDepositForm = () => {
                           onClick={handleCreateFixedTerm}
                           sx={buttonStyles}
                         >
-                          Crear Plazo Fijo
+                          Crear
                         </Button>
                       </Grid>
                     </Grid>
