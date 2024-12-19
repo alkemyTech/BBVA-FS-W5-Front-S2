@@ -12,7 +12,7 @@ import {
 import { NumericFormat } from "react-number-format";
 import Grid from "@mui/material/Grid2";
 import Notification from "../Notification/Notification";
-import api from "../../services/Api";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import FixedTermDepositForm from "../FixedTermDeposit/FixedTermDeposit";
@@ -44,8 +44,10 @@ export default function TransactionForm() {
   const buttons = {
     backgroundColor: "#9cd99e", // Verde claro
     borderRadius: "25px",
+    padding: "10px 20px",
     color: "#fff",
     fontWeight: "bold",
+    fontSize: "16px",
     width: "100%",
     transition: "background-color 0.3s ease",
     "&:hover": {
@@ -57,8 +59,10 @@ export default function TransactionForm() {
   const closeButton = {
     backgroundColor: "#FF6666", // Rojo claro
     borderRadius: "25px",
+    padding: "10px 20px",
     color: "#fff",
     fontWeight: "bold",
+    fontSize: "16px",
     transition: "background-color 0.3s ease",
     "&:hover": {
       backgroundColor: "#FF5252", // Hover más oscuro
@@ -131,7 +135,7 @@ export default function TransactionForm() {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setForm({ ...form, amount: "", description: "", concept: "" });
-      navigate("/home", { state: { success: true, deposit: true, FixedTermDeposit: false, Payment: false } });
+      navigate("/home", { state: { success: true, deposit: true, FixedTermDeposit: false } });
     } catch (error) {
       console.error("Error al realizar el depósito:", error);
       setSnackbarMessage("Error al enviar el depósito");
@@ -160,26 +164,24 @@ export default function TransactionForm() {
       <form onSubmit={sendForm}>
         <Grid
           container
-          direction="column"
           justifyContent="center"
-          alignItems="stretch"
-          spacing={2} // Espaciado uniforme entre los campos
+          spacing={3} // Espaciado uniforme entre los campos
           p={2}
         >
           {/* CBU */}
-          <Grid item>
+          <Grid item size={12}>
             <TextField
               fullWidth
               label="CBU"
               value={form.cbu}
-              InputProps={{ readOnly: true }}
-              InputLabelProps={{ style: labelStyles }}
+              slotProps={{ readOnly: true }}
+              InputLabel={{ style: labelStyles }}
               sx={inputStyles}
             />
           </Grid>
 
           {/* Monto */}
-          <Grid item>
+          <Grid item size={6}>
             <NumericFormat
               customInput={TextField}
               fullWidth
@@ -198,32 +200,29 @@ export default function TransactionForm() {
           </Grid>
 
           {/* Concepto */}
-          <Grid item>
-            <FormControl fullWidth error={!!errors.concept} sx={inputStyles}>
-              <InputLabel id="concept-label">
-                Concepto
-              </InputLabel>
+          <Grid item size={6}>
+            <FormControl fullWidth>
+              <InputLabel id="concept-label">Concepto</InputLabel>
               <Select
                 labelId="concept-label"
+                id="concept-select"
                 value={form.concept}
+
+                name="concept"
                 onChange={(e) => setForm({ ...form, concept: e.target.value })}
+                label="Concepto"
+                error={!!errors.concept}
               >
                 {concepts.map((concept) => (
-                  <MenuItem key={concept} value={concept} sx={inputStyles}>
+                  <MenuItem key={concept} value={concept}>
                     {concept}
                   </MenuItem>
                 ))}
               </Select>
-              {errors.concept && (
-                <Typography variant="caption" color="error">
-                  {errors.concept}
-                </Typography>
-              )}
             </FormControl>
           </Grid>
 
-          {/* Descripción */}
-          <Grid item>
+          <Grid item size={12}>
             <TextField
               fullWidth
               label="Descripción"
@@ -247,17 +246,6 @@ export default function TransactionForm() {
           >
             <Grid item xs={6}>
               <Button
-                sx={{ ...closeButton }}
-                variant="contained"
-                color="secondary"
-                onClick={handleClose}
-                fullWidth
-              >
-                Cancelar
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
                 sx={{ ...buttons }}
                 variant="contained"
                 color="primary"
@@ -265,6 +253,17 @@ export default function TransactionForm() {
                 fullWidth
               >
                 Depositar
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                sx={{ ...closeButton }}
+                variant="contained"
+                color="secondary"
+                onClick={handleClose}
+                fullWidth
+              >
+                Cancelar
               </Button>
             </Grid>
           </Grid>

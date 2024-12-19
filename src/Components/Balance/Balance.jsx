@@ -30,6 +30,8 @@ const formatCurrency = (amount, currency) => {
   }
 };
 
+
+
 const Balance = () => {
   const dispatch = useDispatch();
   const { balance, loading, error } = useSelector((state) => state.balance);
@@ -186,19 +188,22 @@ const Balance = () => {
                         <TableCell>Detalle</TableCell>
                         <TableCell>CBU Origen</TableCell>
                         <TableCell>CBU Destino</TableCell>
-                        <TableCell>Moneda</TableCell>
                         <TableCell>Monto</TableCell>
                       </TableRow>
 
                     </TableHead>
                     <TableBody>
                       {currentHistory.map((transaction, index) => (
-                        <TableRow key={index}>
+                        <TableRow key={index} sx={{
+                          borderLeft:
+                                  transaction.type === "Pago"
+                                    ? "4px solid #FF6666"
+                                    : "4px solid #9cd99e",
+                        }}>
                           <TableCell>{transaction.description}</TableCell>
                           <TableCell>{transaction.cbuOrigen}</TableCell>
                           <TableCell>{transaction.cbuDestino}</TableCell>
-                          <TableCell>{transaction.currency}</TableCell>
-                          <TableCell>{transaction.amount}</TableCell>
+                          <TableCell>{formatCurrency(transaction.amount, transaction.currency)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -242,7 +247,9 @@ const Balance = () => {
               currentFixedTerms.map((term, index) => (
                 <Box key={index} sx={{ marginBottom: 2 }}>
                   <Typography sx={{ fontSize: "1rem", color: "#3A3A3A" }}>
-                    Monto: {term.amount} {term.currency}
+                  Monto: {term.currency} ${new Intl.NumberFormat("en-US").format(
+                      term.amount
+                    )}
                   </Typography>
                   <Typography sx={{ fontSize: "0.875rem", color: "#6C6C6C" }}>
                     Fecha de inicio:{" "}

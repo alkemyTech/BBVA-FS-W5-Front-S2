@@ -82,7 +82,7 @@ export default function Graphics() {
     return (
         <div>
             <Typography sx={{fontWeight:"bold", fontSize:"1.35rem"}}>${totalExpenses.toFixed(2)} ARS</Typography>
-            <canvas id="myChart" width="400" height="400"></canvas>
+            <canvas id="myChart" maxWidth="400" maxHeight="400"></canvas>
 
         </div>
     );

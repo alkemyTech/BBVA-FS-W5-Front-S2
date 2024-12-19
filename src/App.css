@@ -6,5 +6,21 @@
 
 body, html {
   height: 100%;
-  background-color: #F4F4F4; /* Fondo gris para toda la página */
+  background-color: #F4F4F4; 
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #9dc99e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #559256;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #427744;
 }

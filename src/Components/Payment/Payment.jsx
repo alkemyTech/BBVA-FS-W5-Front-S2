@@ -170,9 +170,7 @@ const PaymentForm = () => {
               container
               spacing={2}
               p={2}
-              alignItems="stretch"
               justifyContent="center"
-              direction="column"
             >
               <Grid size={12}>
                 <TextField
@@ -188,7 +186,7 @@ const PaymentForm = () => {
                 />
               </Grid>
 
-              <Grid item size={12}>
+              <Grid item size={5}>
                 <NumericFormat
                   customInput={TextField}
                   fullWidth
@@ -205,7 +203,7 @@ const PaymentForm = () => {
                   helperText={error.amount}
                 />
               </Grid>
-              <Grid item size={12}>
+              <Grid item size={4}>
                 <TextField
                   fullWidth
                   name="currency"
@@ -218,12 +216,11 @@ const PaymentForm = () => {
                   error={!!error.currency}
                   helperText={error.currency}
                 >
-                  <MenuItem value="">Seleccione una moneda</MenuItem>
                   <MenuItem value="ARS">ARS</MenuItem>
                   <MenuItem value="USD">USD</MenuItem>
                 </TextField>
               </Grid>
-              <Grid item size={12}>
+              <Grid item size={3}>
                 <TextField
                   fullWidth
                   name="concept"
@@ -236,7 +233,6 @@ const PaymentForm = () => {
                   error={!!error.concept}
                   helperText={error.concept}
                 >
-                  <MenuItem value="">Seleccione concepto</MenuItem>
                   <MenuItem value="Servicios">Servicios</MenuItem>
                   <MenuItem value="Salud">Salud</MenuItem>
                   <MenuItem value="Alquiler">Alquiler</MenuItem>
@@ -265,26 +261,6 @@ const PaymentForm = () => {
                 spacing={2}
                 mt={2}
               >
-                
-                <Grid item xs={6}>
-                  <Button
-                    sx={{
-                      padding: "5px 30px",
-                      borderRadius: "25px",
-                      fontWeight: "bold",
-                      backgroundColor: "#FF6666",
-                      "&:hover": {
-                        backgroundColor: "#FF5252",
-                      },
-                    }}
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleClose}
-                    fullWidth
-                  >
-                    Cancelar
-                  </Button>
-                </Grid>
                 <Grid item xs={6}>
                   <Button
                     sx={{
