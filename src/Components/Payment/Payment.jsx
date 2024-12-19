@@ -75,10 +75,9 @@ const PaymentForm = () => {
       errors.amount = "El monto debe ser mayor a cero.";
     }
     if (
-      !formData.nroTarjeta ||
-      formData.nroTarjeta.replace(/\s/g, "").length !== 16
+      !formData.nroTarjeta 
     ) {
-      errors.nroTarjeta = "Debe ser una factura válida.";
+      errors.nroTarjeta = "La factura es obligatoria.";
     }
     if (!formData.currency) {
       errors.currency = "Moneda es obligatoria.";
