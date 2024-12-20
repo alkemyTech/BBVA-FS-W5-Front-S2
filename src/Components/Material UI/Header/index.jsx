@@ -30,6 +30,7 @@ export default function Header() {
   }, [dispatch]);
   useEffect(() => {
     if (isAuthenticated) {
+
       const capitalizeWords = (text) =>
         text
           .split(" ")
@@ -41,6 +42,7 @@ export default function Header() {
       const formattedName = capitalizeWords(user.nombre || "");
       const formattedSurname = capitalizeWords(user.apellido || "");
       setUserName(`${formattedName} ${formattedSurname}`);
+
       setUserRole(user.rol);
     }
   }, [isAuthenticated, user]);
