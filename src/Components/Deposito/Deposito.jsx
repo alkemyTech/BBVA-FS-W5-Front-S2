@@ -38,7 +38,6 @@ export default function TransactionForm() {
     "Alquiler",
     "Comida",
     "Otros",
-    "Deposito",
   ];
 
   const buttons = {
