@@ -30,10 +30,14 @@ export default function Header() {
   }, [dispatch]);
   useEffect(() => {
     if (isAuthenticated) {
-      const capitalize = (text) =>
-        text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-      const formattedName = capitalize(user.nombre || "");
-      const formattedSurname = capitalize(user.apellido || "");
+      const capitalizeWords = (text) =>
+        text
+          .split(" ") 
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) 
+          .join(" "); 
+  
+      const formattedName = capitalizeWords(user.nombre || "");
+      const formattedSurname = capitalizeWords(user.apellido || "");
       setUserName(`${formattedName} ${formattedSurname}`);
       setUserRole(user.rol);
     }
