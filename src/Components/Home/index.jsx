@@ -128,9 +128,7 @@ export default function Home() {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setOpenDialog(false);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      fetchAccounts();
     } catch (error) {
       setLoading(false);
       const errorMessage = error.response
