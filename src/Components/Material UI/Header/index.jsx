@@ -30,11 +30,11 @@ export default function Header() {
   }, [dispatch]);
   useEffect(() => {
     if (isAuthenticated) {
-      const capitalize = (text) =>
-        text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-      const formattedName = capitalize(user.nombre || "");
-      const formattedSurname = capitalize(user.apellido || "");
-      setUserName(`${formattedName} ${formattedSurname}`);
+      //const capitalize = (text) =>
+        //text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+      //const formattedName = capitalize(user.nombre || "");
+      //const formattedSurname = capitalize(user.apellido || "");
+      setUserName(`${user.nombre} ${user.apellido}`);
       setUserRole(user.rol);
     }
   }, [isAuthenticated, user]);
