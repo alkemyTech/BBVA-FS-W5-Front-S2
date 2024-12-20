@@ -30,11 +30,19 @@ export default function Header() {
   }, [dispatch]);
   useEffect(() => {
     if (isAuthenticated) {
-      //const capitalize = (text) =>
-        //text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-      //const formattedName = capitalize(user.nombre || "");
-      //const formattedSurname = capitalize(user.apellido || "");
-      setUserName(`${user.nombre} ${user.apellido}`);
+
+      const capitalizeWords = (text) =>
+        text
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(" ");
+
+      const formattedName = capitalizeWords(user.nombre || "");
+      const formattedSurname = capitalizeWords(user.apellido || "");
+      setUserName(`${formattedName} ${formattedSurname}`);
+
       setUserRole(user.rol);
     }
   }, [isAuthenticated, user]);
@@ -74,11 +82,15 @@ export default function Header() {
         zIndex: 1000,
       }}
     >
-      <Grid item size={2} sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}>
+      <Grid
+        item
+        size={2}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Link to="/home">
           <img src={logo} width={"100px"} alt="Logo" />
         </Link>
@@ -109,20 +121,13 @@ export default function Header() {
             <Typography sx={buttonStyles} variant="body1">
               Balance
             </Typography>
-            
           </Link>
-          <Link
-            to="/Payment"
-            style={{ textDecoration: "none", color: "#" }}
-          >
+          <Link to="/Payment" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">
               Pagar Servicio
             </Typography>
           </Link>
-          <Link
-            to="/PlazoFijo"
-            style={{ textDecoration: "none", color: "#" }}
-          >
+          <Link to="/PlazoFijo" style={{ textDecoration: "none", color: "#" }}>
             <Typography sx={buttonStyles} variant="body1">
               Plazo Fijo
             </Typography>
