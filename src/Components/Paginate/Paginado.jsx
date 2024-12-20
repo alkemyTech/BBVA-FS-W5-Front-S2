@@ -5,6 +5,8 @@ import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid2";
 
 const Paginado = ({ totalPages, currentPage, onPageChange, itemsPerPageOptions, onItemsPerPageChange }) => {
+  if (totalPages <= 1) return null;
+
   return (
     <Grid item size={12} sx={{marginTop:"15px", textAlign:"center", display:"flex", justifyContent:"center"}}>
       <Stack spacing={2} direction="column" alignItems="center">
