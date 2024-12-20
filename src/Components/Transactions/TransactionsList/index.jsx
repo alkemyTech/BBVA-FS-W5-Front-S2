@@ -193,9 +193,8 @@ export default function Transactions() {
         }
       );
 
-      console.log("Respuesta de la API:", response.data);
       setLoading(false);
-      setSnackbarMessage("Transacción finalizada");
+      setSnackbarMessage("Beneficiario agregado con éxito");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setConfirmDialogOpen(false);

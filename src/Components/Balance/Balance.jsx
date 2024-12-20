@@ -259,7 +259,7 @@ const Balance = () => {
                     Fecha de fin: {new Date(term.endDate).toLocaleDateString()}
                   </Typography>
                   <Typography sx={{ fontSize: "0.875rem", color: "#6C6C6C" }}>
-                    Tasa de interés: {term.interestRate}%
+                    Liquidación: ${term.interestRate}
                   </Typography>
                 </Box>
               ))

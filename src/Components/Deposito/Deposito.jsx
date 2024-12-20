@@ -44,10 +44,8 @@ export default function TransactionForm() {
   const buttons = {
     backgroundColor: "#9cd99e", // Verde claro
     borderRadius: "25px",
-    padding: "10px 20px",
     color: "#fff",
     fontWeight: "bold",
-    fontSize: "16px",
     width: "100%",
     transition: "background-color 0.3s ease",
     "&:hover": {
@@ -207,7 +205,7 @@ export default function TransactionForm() {
                 labelId="concept-label"
                 id="concept-select"
                 value={form.concept}
-
+                sx={inputStyles}
                 name="concept"
                 onChange={(e) => setForm({ ...form, concept: e.target.value })}
                 label="Concepto"
@@ -246,24 +244,40 @@ export default function TransactionForm() {
           >
             <Grid item xs={6}>
               <Button
-                sx={{ ...buttons }}
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-              >
-                Depositar
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                sx={{ ...closeButton }}
+                sx={{
+                  padding: "5px 30px",
+                  borderRadius: "25px",
+                  fontWeight: "bold",
+                  backgroundColor: "#FF6666",
+                  "&:hover": {
+                    backgroundColor: "#FF5252",
+                  },
+                }}
                 variant="contained"
                 color="secondary"
                 onClick={handleClose}
                 fullWidth
               >
                 Cancelar
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                sx={{
+                  padding: "5px 30px",
+                  borderRadius: "25px",
+                  fontWeight: "bold",
+                  backgroundColor: "#9cd99e",
+                  "&:hover": {
+                    backgroundColor: "#388E3C",
+                  },
+                }}
+                variant="contained"
+                color="primary"
+                type="submit"
+                fullWidth
+              >
+                Depositar
               </Button>
             </Grid>
           </Grid>
