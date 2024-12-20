@@ -218,7 +218,7 @@ export default function Home() {
       setOpenSnackbar(true);
     }
     if (location.state?.deposit) {
-      setSnackbarMessage("Deposito realizado con éxito");
+      setSnackbarMessage("Depósito realizado con éxito");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
     }
@@ -604,7 +604,7 @@ export default function Home() {
                         }}
                       >
                         <Grid item size={2}>
-                          {transaction.type === "Deposito" && (
+                          {transaction.type === "Depósito" && (
                             <ArrowCircleUpRoundedIcon
                               sx={{ fontSize: "36px", color: "#43A047" }}
                             />
@@ -632,7 +632,7 @@ export default function Home() {
                                 }}
                               >
                                 {transaction.type === "Pago" ||
-                                transaction.type === "Deposito"
+                                transaction.type === "Depósito"
                                   ? `${
                                       transaction.accountDestino?.firstName ||
                                       transaction.accountOrigen?.firstName
